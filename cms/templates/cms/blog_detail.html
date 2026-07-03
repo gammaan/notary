@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ post.title }} | {{ notary.brand.name }} {% trans "Notary" %}{% endblock %}
+{% block meta_description %}{{ post.summary|default:post.title }}{% endblock %}
+{% block main_class %}main-inner{% endblock %}
+
+{% block content %}
+<article class="cms-article">
+    <header class="cms-article__header page-hero page-hero--compact" data-reveal>
+        <div class="page-hero__inner">
+            <a class="cms-back" href="{% url 'blog_list' %}">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M15 9H3M8 4L3 9l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {% trans "All news" %}
+            </a>
+            <div class="cms-card__meta cms-card__meta--header">
+                <span class="cms-badge cms-badge--{{ post.category }}">{{ post.get_category_display }}</span>
+                {% if post.published_at %}
+                <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"F j, Y" }}</time>
+                {% endif %}
+            </div>
+            <h1>{{ post.title }}</h1>
+            {% if post.summary %}
+            <p class="page-hero__lede">{{ post.summary }}</p>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="cms-article__body section" data-reveal>
+        <div class="cms-prose">{{ post.body|linebreaks }}</div>
+    </div>
+
+    {% if related_posts %}
+    <section class="section cms-related">
+        <div class="section-intro" data-reveal>
+            <h2>{% trans "More" %} <em>{% trans "to read" %}</em></h2>
+        </div>
+        <div class="cms-grid cms-grid--posts cms-grid--compact" data-reveal data-stagger>
+            {% for related in related_posts %}
+            <article class="cms-card cms-card--post">
+                <div class="cms-card__meta">
+                    <span class="cms-badge cms-badge--{{ related.category }}">{{ related.get_category_display }}</span>
+                </div>
+                <h3><a href="{% url 'blog_detail' slug=related.slug %}">{{ related.title }}</a></h3>
+                <a class="cms-card__link" href="{% url 'blog_detail' slug=related.slug %}">{% trans "Read more" %}</a>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</article>
+{% endblock %}

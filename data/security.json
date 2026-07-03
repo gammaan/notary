@@ -1,0 +1,66 @@
+{
+  "items": [
+    {
+      "icon": "●",
+      "title": "Licensed & accountable",
+      "detail": "A registered notary public bound by professional standards and a clear code of conduct."
+    },
+    {
+      "icon": "◇",
+      "title": "Confidential handling",
+      "detail": "Your personal information and documents are handled discreetly, stored securely, and never shared without consent."
+    },
+    {
+      "icon": "⬡",
+      "title": "Proper record keeping",
+      "detail": "Every notarial act is logged in an official journal with the details required for audit and legal proof."
+    },
+    {
+      "icon": "✦",
+      "title": "Transparent policies",
+      "detail": "Fees, timelines, and document requirements are explained upfront — no surprises when you arrive."
+    }
+  ],
+  "translations": {
+    "so": {
+      "items": [
+        {
+          "title": "Ruqsad leh oo lala xisaabtami karo",
+          "detail": "Nootaayo dadweyne oo diiwaangashan, kuna xiran heerar xirfadeed iyo xeer anshax oo cad."
+        },
+        {
+          "title": "Maarayn qarsoodi ah",
+          "detail": "Macluumaadkaaga gaarka ah iyo dukumeentiyadaada si asturan ayaa loo maareeyaa, si ammaan ah ayaa loo kaydiyaa, lamana wadaago oggolaansho la'aan."
+        },
+        {
+          "title": "Diiwaan-hayn sax ah",
+          "detail": "Fal kasta oo nootaayo ah waxaa lagu qori doonaa diiwaan rasmi ah oo leh faahfaahinta looga baahan yahay baaritaan iyo caddeyn sharci."
+        },
+        {
+          "title": "Siyaasado hufan",
+          "detail": "Khidmadaha, waqtiyada, iyo shuruudaha dukumeentiyada horay ayaa loo sharxaa — lama kulmaysid wax lama filaan ah markaad timaaddo."
+        }
+      ]
+    },
+    "ar": {
+      "items": [
+        {
+          "title": "مرخص وخاضع للمساءلة",
+          "detail": "كاتب عدل مسجل ملتزم بالمعايير المهنية ومدونة سلوك واضحة."
+        },
+        {
+          "title": "تعامل سري",
+          "detail": "تُعامل معلوماتك الشخصية ومستنداتك بسرية، وتُحفظ بأمان، ولا تُشارك أبداً دون موافقة."
+        },
+        {
+          "title": "حفظ سجلات سليم",
+          "detail": "يُسجل كل إجراء توثيقي في سجل رسمي يتضمن التفاصيل المطلوبة للتدقيق والإثبات القانوني."
+        },
+        {
+          "title": "سياسات شفافة",
+          "detail": "تُشرح الرسوم والجداول الزمنية ومتطلبات المستندات مسبقاً — دون مفاجآت عند وصولك."
+        }
+      ]
+    }
+  }
+}

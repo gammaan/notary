@@ -1,0 +1,628 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-04 01:47+0300\n"
+"PO-Revision-Date: 2026-07-04 00:20+0300\n"
+"Last-Translator: Codex <codex@openai.com>\n"
+"Language-Team: so <so@li.org>\n"
+"Language: so\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\cms\admin.py:17 .\cms\admin.py:31
+#, fuzzy
+#| msgid "Contact"
+msgid "Content"
+msgstr "Xiriir"
+
+#: .\cms\admin.py:18 .\cms\admin.py:32
+msgid "Publishing"
+msgstr ""
+
+#: .\cms\models.py:9
+msgid "Blog"
+msgstr ""
+
+#: .\cms\models.py:10 .\templates\includes\footer.html:21
+#: .\templates\includes\header.html:21 .\templates\includes\header.html:98
+msgid "News"
+msgstr ""
+
+#: .\cms\models.py:11
+msgid "Notice"
+msgstr ""
+
+#: .\cms\models.py:14 .\cms\models.py:64
+msgid "Draft"
+msgstr ""
+
+#: .\cms\models.py:15 .\cms\models.py:65
+msgid "Published"
+msgstr ""
+
+#: .\cms\models.py:38
+msgid "post"
+msgstr ""
+
+#: .\cms\models.py:39
+msgid "posts"
+msgstr ""
+
+#: .\cms\models.py:72
+msgid "e.g. Real estate, Affidavit, Business contract"
+msgstr ""
+
+#: .\cms\models.py:77
+msgid "Optional longer description. Keep client details anonymous."
+msgstr ""
+
+#: .\cms\models.py:91
+msgid "portfolio item"
+msgstr ""
+
+#: .\cms\models.py:92
+msgid "portfolio items"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:4 .\cms\templates\cms\blog_list.html:4
+#: .\cms\templates\cms\portfolio_detail.html:4
+#: .\cms\templates\cms\portfolio_list.html:4
+#: .\pages\templates\pages\home.html:57 .\templates\includes\footer.html:4
+#: .\templates\includes\footer.html:13 .\templates\includes\header.html:4
+#: .\templates\includes\header.html:13
+msgid "Notary"
+msgstr "Nootaayo"
+
+#: .\cms\templates\cms\blog_detail.html:16
+msgid "All news"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:38
+#: .\cms\templates\cms\portfolio_detail.html:40
+msgid "More"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:38
+msgid "to read"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:47
+#: .\cms\templates\cms\blog_list.html:47
+msgid "Read more"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:4
+msgid "News & updates"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:5
+msgid ""
+"News, blog posts, and notices from Himilo Notary — updates, guidance, and "
+"announcements for clients."
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:13
+msgid "News & insights"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:15
+msgid "Updates for"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:15
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "our clients"
+msgstr "macaamiisha maalinlaha ah."
+
+#: .\cms\templates\cms\blog_list.html:17
+msgid ""
+"Blog articles, office news, and important notices — everything you need to "
+"stay informed before your visit."
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:24
+msgid "Filter by category"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:25
+msgid "All"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:57
+msgid "No posts published yet. Check back soon."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:16
+msgid "All work"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:33
+#, fuzzy
+#| msgid "Clear help for the documents"
+msgid "Need similar help with your documents?"
+msgstr "Caawimo cad oo ku saabsan dukumeentiyada"
+
+#: .\cms\templates\cms\portfolio_detail.html:34
+#: .\templates\includes\header.html:60 .\templates\includes\header.html:101
+msgid "Contact us"
+msgstr "Nala soo xiriir"
+
+#: .\cms\templates\cms\portfolio_detail.html:40
+msgid "highlights"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:49
+#: .\cms\templates\cms\portfolio_list.html:33
+msgid "View details"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:4
+msgid "Our work"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:5
+msgid ""
+"Anonymized highlights of document types and notarial work handled by Himilo "
+"Notary — experience you can trust."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:13
+#: .\templates\includes\footer.html:20 .\templates\includes\header.html:20
+#: .\templates\includes\header.html:97
+msgid "Portfolio"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:15
+msgid "Work we"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:15
+msgid "handle"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:17
+msgid ""
+"Anonymized examples of the documents and services we support — no private "
+"client details, just the kind of work we do every day."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:43
+msgid "Portfolio highlights will appear here once published."
+msgstr ""
+
+#: .\notary\settings.py:108
+msgid "English"
+msgstr "Ingiriisi"
+
+#: .\notary\settings.py:109
+msgid "Somali"
+msgstr "Soomaali"
+
+#: .\notary\settings.py:110
+msgid "Arabic"
+msgstr "Carabi"
+
+#: .\pages\templates\pages\home.html:18
+msgid "Trusted notary services"
+msgstr "Adeegyo nootaayo oo lagu kalsoon yahay"
+
+#: .\pages\templates\pages\home.html:21
+msgid "Documents"
+msgstr "Dukumeentiyo"
+
+#: .\pages\templates\pages\home.html:22
+msgid "notarized"
+msgstr "la nootaayeeyey"
+
+#: .\pages\templates\pages\home.html:23
+msgid "with clarity and care."
+msgstr "si cad oo daryeel leh."
+
+#: .\pages\templates\pages\home.html:26
+msgid ""
+"Himilo Notary helps you prepare, sign, and certify documents the right way — "
+"with a defined process, transparent policies, and a team that makes visiting "
+"the office straightforward."
+msgstr ""
+"Himilo Nootaayo waxay kaa caawisaa inaad si sax ah u diyaariso, u saxiixdo, "
+"una caddeyso dukumeentiyada — hannaan qeexan, siyaasado hufan, iyo koox ka "
+"dhigta booqashada xafiiska mid fudud."
+
+#: .\pages\templates\pages\home.html:30 .\pages\templates\pages\home.html:300
+msgid "Request appointment"
+msgstr "Codso ballan"
+
+#: .\pages\templates\pages\home.html:35
+msgid "See the process"
+msgstr "Eeg habka"
+
+#: .\pages\templates\pages\home.html:40
+msgid "Years experience"
+msgstr "Sanado khibrad"
+
+#: .\pages\templates\pages\home.html:44
+msgid "Documents notarized"
+msgstr "Dukumeentiyo la nootaayeeyey"
+
+#: .\pages\templates\pages\home.html:48
+msgid "Client focus"
+msgstr "Diiradda macaamilka"
+
+#: .\pages\templates\pages\home.html:53
+msgid "Office information"
+msgstr "Macluumaadka xafiiska"
+
+#: .\pages\templates\pages\home.html:56
+msgid "Visit us"
+msgstr "Noo kaalay"
+
+#: .\pages\templates\pages\home.html:67 .\pages\templates\pages\home.html:255
+msgid "Phone"
+msgstr "Telefoon"
+
+#: .\pages\templates\pages\home.html:75 .\pages\templates\pages\home.html:259
+msgid "Email"
+msgstr "Iimayl"
+
+#: .\pages\templates\pages\home.html:83 .\pages\templates\pages\home.html:267
+msgid "Hours"
+msgstr "Saacadaha shaqada"
+
+#: .\pages\templates\pages\home.html:91 .\pages\templates\pages\home.html:263
+msgid "Address"
+msgstr "Cinwaan"
+
+#: .\pages\templates\pages\home.html:97
+msgid "Send a message"
+msgstr "Fariin dir"
+
+#: .\pages\templates\pages\home.html:109
+msgid "Scroll"
+msgstr "Hoos u rog"
+
+#: .\pages\templates\pages\home.html:128
+msgid "Our services"
+msgstr "Adeegyadayada"
+
+#: .\pages\templates\pages\home.html:131
+msgid "Clear help for the documents"
+msgstr "Caawimo cad oo ku saabsan dukumeentiyada"
+
+#: .\pages\templates\pages\home.html:132
+msgid "that matter most."
+msgstr "kuwa ugu muhiimsan."
+
+#: .\pages\templates\pages\home.html:135
+msgid ""
+"From everyday affidavits to business and property papers — we explain what "
+"you need, prepare you for your visit, and notarize with care."
+msgstr ""
+
+#: .\pages\templates\pages\home.html:156
+msgid "Your journey"
+msgstr "Safarkaaga"
+
+#: .\pages\templates\pages\home.html:159
+msgid "From first contact"
+msgstr "Laga bilaabo xiriirka koowaad"
+
+#: .\pages\templates\pages\home.html:160
+msgid "to notarized documents."
+msgstr "ilaa dukumeentiyo la nootaayeeyey."
+
+#: .\pages\templates\pages\home.html:163
+msgid ""
+"A simple, defined path so you always know what happens next — before you "
+"visit, during your appointment, and when you leave with your documents."
+msgstr ""
+"Hannaan fudud oo qeexan si aad mar walba u ogaato waxa xiga — ka hor "
+"booqashada, inta ballankaagu socdo, iyo marka aad dukumeentiyadaada la baxdo."
+
+#: .\pages\templates\pages\home.html:186
+msgid "Experience"
+msgstr "Khibrad"
+
+#: .\pages\templates\pages\home.html:189
+msgid "A notary office built"
+msgstr "Xafiis nootaayo oo loo dhisay"
+
+#: .\pages\templates\pages\home.html:190
+msgid "for everyday clients."
+msgstr "macaamiisha maalinlaha ah."
+
+#: .\pages\templates\pages\home.html:193
+msgid ""
+"Whether you need a single affidavit or a stack of business papers, Himilo "
+"Notary brings the same attention to detail — explaining requirements in "
+"plain language and making your visit efficient."
+msgstr ""
+"Haddii aad u baahan tahay hal dhaar-caddeyn ama xirmo waraaqo ganacsi ah, "
+"Himilo Nootaayo waxay keentaa taxaddar isku mid ah — iyadoo shuruudaha ku "
+"sharxaysa luqad cad, booqashadaadana ka dhigaysa mid hufan."
+
+#: .\pages\templates\pages\home.html:209
+msgid "Trust & policy"
+msgstr "Kalsooni iyo siyaasad"
+
+#: .\pages\templates\pages\home.html:212
+msgid "Professional standards"
+msgstr "Heerarka xirfadeed"
+
+#: .\pages\templates\pages\home.html:213
+msgid "you can count on."
+msgstr "aad ku kalsoonaan karto."
+
+#: .\pages\templates\pages\home.html:216
+msgid ""
+"We follow proper notarial practice, keep accurate records, and treat every "
+"document with confidentiality — so you leave with confidence, not "
+"uncertainty."
+msgstr ""
+"Waxaan raacnaa hab-dhaqanka saxda ah ee nootaayada, waxaan haynaa diiwaanno "
+"sax ah, dukumeenti kastana waxaan ula dhaqannaa si qarsoodi ah — si aad uga "
+"tagto adigoo kalsooni qaba, oo aan hubanti la'aan jirin."
+
+#: .\pages\templates\pages\home.html:239
+msgid "Get in touch"
+msgstr "Nala xiriir"
+
+#: .\pages\templates\pages\home.html:242
+msgid "Ready to visit"
+msgstr "Diyaar ma u tahay inaad booqato"
+
+#: .\pages\templates\pages\home.html:243
+msgid "the notary?"
+msgstr "nootaayada?"
+
+#: .\pages\templates\pages\home.html:246
+msgid ""
+"Send us a message with the document type and your preferred time. We will "
+"confirm what to bring and schedule your appointment."
+msgstr ""
+"Noo soo dir fariin ay ku qoran yihiin nooca dukumeentiga iyo waqtiga aad "
+"doorbidayso. Waxaan xaqiijin doonaa waxa aad soo qaadanayso, kadibna "
+"ballankaaga waan jadwaleyn doonaa."
+
+#: .\pages\templates\pages\home.html:249
+msgid "Response within one business day"
+msgstr "Jawaab hal maalin shaqo gudahood"
+
+#: .\pages\templates\pages\home.html:250
+msgid "No obligation to proceed"
+msgstr "Waajib kuguma aha inaad sii waddo"
+
+#: .\pages\templates\pages\home.html:251
+msgid "Clear guidance before you visit"
+msgstr "Hagid cad ka hor booqashadaada"
+
+#: .\pages\templates\pages\home.html:276
+msgid "Full name"
+msgstr "Magaca oo buuxa"
+
+#: .\pages\templates\pages\home.html:280
+msgid "Email address"
+msgstr "Ciwaanka iimaylka"
+
+#: .\pages\templates\pages\home.html:285
+msgid "Service needed"
+msgstr "Adeegga loo baahan yahay"
+
+#: .\pages\templates\pages\home.html:294
+msgid "Message"
+msgstr "Fariin"
+
+#: .\pages\templates\pages\home.html:295
+msgid "(optional)"
+msgstr "(ikhtiyaari)"
+
+#: .\templates\base.html:5 .\templates\includes\header.html:50
+#: .\templates\includes\header.html:90 .\templates\includes\header.html:91
+msgid "Light mode"
+msgstr "Hab iftiin"
+
+#: .\templates\base.html:6
+msgid "Dark mode"
+msgstr "Hab mugdi"
+
+#: .\templates\base.html:10
+msgid "Himilo Notary | The Art of Certainty"
+msgstr "Himilo Nootaayo | Farshaxanka Hubnida"
+
+#: .\templates\base.html:11
+msgid ""
+"Himilo Notary — trusted notarial services, a clear process from first "
+"contact to sealed documents, and an easy way to book your appointment."
+msgstr ""
+"Himilo Nootaayo — adeegyo nootaayo oo lagu kalsoon yahay, hannaan cad laga "
+"bilaabo xiriirka koowaad ilaa dukumeentiyada la shaabadeeyo, iyo hab fudud "
+"oo aad ballankaaga ku qabsan karto."
+
+#: .\templates\includes\footer.html:16
+msgid "The art of certainty."
+msgstr "Farshaxanka hubnida."
+
+#: .\templates\includes\footer.html:17
+msgid "Footer navigation"
+msgstr "Hagitaanka hoose"
+
+#: .\templates\includes\footer.html:18 .\templates\includes\header.html:18
+#: .\templates\includes\header.html:95
+msgid "Services"
+msgstr "Adeegyada"
+
+#: .\templates\includes\footer.html:19 .\templates\includes\header.html:19
+#: .\templates\includes\header.html:96
+msgid "Process"
+msgstr "Habka"
+
+#: .\templates\includes\footer.html:22 .\templates\includes\header.html:22
+#: .\templates\includes\header.html:99
+msgid "Contact"
+msgstr "Xiriir"
+
+#: .\templates\includes\footer.html:25
+msgid "Social media"
+msgstr ""
+
+#: .\templates\includes\footer.html:47
+msgid "Himilo Notary. All rights reserved."
+msgstr "Himilo Nootaayo. Xuquuqda oo dhan waa la ilaaliyey."
+
+#: .\templates\includes\header.html:17
+msgid "Primary navigation"
+msgstr "Hagitaanka ugu muhiimsan"
+
+#: .\templates\includes\header.html:26 .\templates\includes\header.html:70
+msgid "Language"
+msgstr "Luqadda"
+
+#: .\templates\includes\header.html:61
+msgid "Open menu"
+msgstr "Fur liiska"
+
+#: .\templates\includes\header.html:94
+msgid "Mobile navigation"
+msgstr "Hagitaanka mobilka"
+
+#~ msgid "Trust"
+#~ msgstr "Kalsoonida"
+
+#~ msgid ""
+#~ "A premium notarial workspace for modern professionals — remote sessions, "
+#~ "identity verification, e-seals, and compliance vaults in one refined "
+#~ "experience."
+#~ msgstr ""
+#~ "Goob shaqo oo heer sare ah oo loogu talagalay xirfadlayaasha casriga ah — "
+#~ "kalfadhiyo fog, xaqiijinta aqoonsiga, shaabado elektaroonig ah, iyo "
+#~ "kaydka waafaqsanaanta hal meel oo dhammaystiran."
+
+#~ msgid "Book session"
+#~ msgstr "Ballan qabso"
+
+#~ msgid "Digital-first notarial command center"
+#~ msgstr "Xarunta amarka ee dhijitaalka ah ee nootaayada"
+
+#~ msgid "Notarization"
+#~ msgstr "Nootaayada"
+
+#~ msgid "reimagined"
+#~ msgstr "dib loo qaabeeyey"
+
+#~ msgid "with absolute precision."
+#~ msgstr "si sax ah oo buuxda."
+
+#~ msgid ""
+#~ "Himilo unites appointment booking, identity verification, live video "
+#~ "sessions, e-signatures, seal management, and compliance records into one "
+#~ "workspace worthy of the seal you place."
+#~ msgstr ""
+#~ "Himilo waxay isku xirtaa ballansashada, xaqiijinta aqoonsiga, "
+#~ "kalfadhiyada fiidiyowga tooska ah, saxiixyada elektarooniga ah, maamulka "
+#~ "shaabadada, iyo diiwaannada waafaqsanaanta hal goob shaqo oo mudan "
+#~ "shaabadda aad saarto."
+
+#~ msgid "Start a notarization"
+#~ msgstr "Bilow nootaayada"
+
+#~ msgid "Step guided flow"
+#~ msgstr "Tallaabooyin hagid ah"
+
+#~ msgid "Bit encryption"
+#~ msgstr "Sir-qoris bit"
+
+#~ msgid "Live session preview"
+#~ msgstr "Hordhaca kalfadhiga tooska ah"
+
+#~ msgid "Session · Live"
+#~ msgstr "Kalfadhi · Toos"
+
+#~ msgid "Verified"
+#~ msgstr "La xaqiijiyey"
+
+#~ msgid "Identity"
+#~ msgstr "Aqoonsi"
+
+#~ msgid "Passed"
+#~ msgstr "Gudbay"
+
+#~ msgid "Journal"
+#~ msgstr "Diiwaanka"
+
+#~ msgid "Ready"
+#~ msgstr "Diyaar"
+
+#~ msgid "Seal"
+#~ msgstr "Shaabad"
+
+#~ msgid "Awaiting"
+#~ msgstr "Sugaya"
+
+#~ msgid "One platform"
+#~ msgstr "Hal madal"
+
+#~ msgid "Everything a serious notary needs,"
+#~ msgstr "Wax kasta oo nootaayo dhab ah u baahan yahay,"
+
+#~ msgid "beautifully connected."
+#~ msgstr "si qurux badan loo xiray."
+
+#~ msgid "Guided confidence"
+#~ msgstr "Kalsooni hagid ah"
+
+#~ msgid "From request to sealed record"
+#~ msgstr "Codsiga ilaa diiwaanka la shaabadeeyey"
+
+#~ msgid "without losing the thread."
+#~ msgstr "adigoon lumin xariiqda."
+
+#~ msgid ""
+#~ "Every step visible. Every action logged. The interface stays calm even "
+#~ "when the work demands legal precision."
+#~ msgstr ""
+#~ "Tallaabo kasta waa la arki karaa. Ficil kasta waa la diiwaangeliyaa. "
+#~ "Interface-ku wuu deggan yahay xitaa marka shaqadu u baahan tahay saxnaan "
+#~ "sharci."
+
+#~ msgid "Built around the evidence"
+#~ msgstr "Lagu dhisay caddeynta"
+
+#~ msgid "behind every seal."
+#~ msgstr "ka dambeysa shaabad kasta."
+
+#~ msgid ""
+#~ "Your reputation rests on proof. Himilo preserves it with bank-grade "
+#~ "infrastructure and notary-first compliance design."
+#~ msgstr ""
+#~ "Sumcaddaadu waxay ku tiirsan tahay caddeyn. Himilo waxay ilaalinaysaa "
+#~ "iyadoo la adeegsanayo kaab-dhismeed heer bangi ah iyo naqshad "
+#~ "waafaqsanaan oo nootaayada u horraysa."
+
+#~ msgid "Ready when clients are"
+#~ msgstr "Diyaar marka macaamiishu diyaar yihiin"
+
+#~ msgid "Offer a premium notarial experience"
+#~ msgstr "Bixi khibrad nootaayo heer sare ah"
+
+#~ msgid ""
+#~ "Start with this foundation as your public presence, then extend into "
+#~ "booking, client portals, payments, video verification, and document "
+#~ "vaults."
+#~ msgstr ""
+#~ "Ka bilow aasaaskan sidii joogitaankaaga dadweynaha, ka dibna u ballaarso "
+#~ "ballansashada, albaabbada macaamiisha, lacag bixinta, xaqiijinta "
+#~ "fiidiyowga, iyo kaydka dukumeentiyada."
+
+#~ msgid "No commitment consultation"
+#~ msgstr "La-talin aan ballan qaad lahayn"
+
+#~ msgid "Tailored to your jurisdiction"
+#~ msgstr "Loo habeeyey xukunkaaga"

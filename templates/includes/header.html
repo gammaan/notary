@@ -1,0 +1,102 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<header class="site-header">
+    <a class="brand" href="{% url 'home' %}" aria-label="{{ notary.brand.name }} {% trans 'Notary' %}">
+        <span class="brand-seal" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3"/>
+                <text x="20" y="25" text-anchor="middle" font-size="14" font-family="Cormorant Garamond, serif" fill="currentColor">{{ notary.brand.seal_letter }}</text>
+            </svg>
+        </span>
+        <span class="brand-text">
+            <strong>{{ notary.brand.name }}</strong>
+            <small>{% trans "Notary" %}</small>
+        </span>
+    </a>
+
+    <nav class="nav-links" aria-label="{% trans 'Primary navigation' %}">
+        <a href="{% url 'home' %}#services">{% trans "Services" %}</a>
+        <a href="{% url 'home' %}#workflow">{% trans "Process" %}</a>
+        <a href="{% url 'portfolio_list' %}"{% if request.resolver_match.url_name == 'portfolio_list' or request.resolver_match.url_name == 'portfolio_detail' %} class="is-active"{% endif %}>{% trans "Portfolio" %}</a>
+        <a href="{% url 'blog_list' %}"{% if request.resolver_match.url_name == 'blog_list' or request.resolver_match.url_name == 'blog_detail' %} class="is-active"{% endif %}>{% trans "News" %}</a>
+        <a href="{% url 'home' %}#contact">{% trans "Contact" %}</a>
+    </nav>
+
+    <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="{% trans 'Language' %}">
+            {% get_available_languages as LANGUAGES %}
+            {% for code, name in LANGUAGES %}
+                {% language code %}
+                {% if request.resolver_match.url_name == 'blog_detail' %}
+                    <a href="{% url 'blog_detail' slug=request.resolver_match.kwargs.slug %}"
+                {% elif request.resolver_match.url_name == 'portfolio_detail' %}
+                    <a href="{% url 'portfolio_detail' slug=request.resolver_match.kwargs.slug %}"
+                {% elif request.resolver_match.url_name == 'blog_list' %}
+                    <a href="{% url 'blog_list' %}{% if request.GET.category %}?category={{ request.GET.category }}{% endif %}"
+                {% elif request.resolver_match.url_name == 'portfolio_list' %}
+                    <a href="{% url 'portfolio_list' %}"
+                {% else %}
+                    <a href="{% url 'home' %}"
+                {% endif %}
+                       class="lang-btn{% if code == LANGUAGE_CODE %} is-active{% endif %}"
+                       hreflang="{{ code }}"
+                       lang="{{ code }}"
+                       aria-label="{{ name }}"
+                       title="{{ name }}">{{ code|upper }}</a>
+                {% endlanguage %}
+            {% endfor %}
+        </div>
+
+        <button class="theme-toggle" type="button" aria-label="{% trans 'Light mode' %}">
+            <svg class="icon-sun" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <circle cx="9" cy="9" r="3.5" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.4 3.4l1.4 1.4M13.2 13.2l1.4 1.4M3.4 14.6l1.4-1.4M13.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            <svg class="icon-moon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M15.2 10.4A6.5 6.5 0 0 1 7.6 2.8 6.5 6.5 0 1 0 15.2 10.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+        </button>
+
+        <a class="header-action" href="{% url 'home' %}#contact">{% trans "Contact us" %}</a>
+        <button class="menu-toggle" type="button" aria-label="{% trans 'Open menu' %}" aria-expanded="false">
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</header>
+
+<div class="mobile-nav" hidden>
+    <div class="mobile-controls">
+        <div class="lang-switch lang-switch--mobile" role="group" aria-label="{% trans 'Language' %}">
+            {% for code, name in LANGUAGES %}
+                {% language code %}
+                {% if request.resolver_match.url_name == 'blog_detail' %}
+                    <a href="{% url 'blog_detail' slug=request.resolver_match.kwargs.slug %}"
+                {% elif request.resolver_match.url_name == 'portfolio_detail' %}
+                    <a href="{% url 'portfolio_detail' slug=request.resolver_match.kwargs.slug %}"
+                {% elif request.resolver_match.url_name == 'blog_list' %}
+                    <a href="{% url 'blog_list' %}"
+                {% elif request.resolver_match.url_name == 'portfolio_list' %}
+                    <a href="{% url 'portfolio_list' %}"
+                {% else %}
+                    <a href="{% url 'home' %}"
+                {% endif %}
+                   class="lang-btn{% if code == LANGUAGE_CODE %} is-active{% endif %}"
+                   hreflang="{{ code }}"
+                   lang="{{ code }}">{{ name }}</a>
+                {% endlanguage %}
+            {% endfor %}
+        </div>
+        <button class="theme-toggle theme-toggle--mobile" type="button" aria-label="{% trans 'Light mode' %}">
+            <span class="theme-toggle__label">{% trans "Light mode" %}</span>
+        </button>
+    </div>
+    <nav aria-label="{% trans 'Mobile navigation' %}">
+        <a href="{% url 'home' %}#services">{% trans "Services" %}</a>
+        <a href="{% url 'home' %}#workflow">{% trans "Process" %}</a>
+        <a href="{% url 'portfolio_list' %}">{% trans "Portfolio" %}</a>
+        <a href="{% url 'blog_list' %}">{% trans "News" %}</a>
+        <a href="{% url 'home' %}#contact">{% trans "Contact" %}</a>
+    </nav>
+    <a class="button primary" href="{% url 'home' %}#contact">{% trans "Contact us" %}</a>
+</div>

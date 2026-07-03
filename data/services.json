@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "metric": "Same day",
+      "title": "Document notarization",
+      "copy": "Affidavits, powers of attorney, contracts, and statutory declarations — reviewed, witnessed, and sealed with care."
+    },
+    {
+      "metric": "Flexible",
+      "title": "Real estate & business",
+      "copy": "Deeds, leases, corporate resolutions, and commercial agreements prepared for signing with clear guidance on what to bring."
+    },
+    {
+      "metric": "Secure",
+      "title": "Identity & records",
+      "copy": "Government ID verification, journal entries, and certified copies so your documents stand up to scrutiny."
+    }
+  ],
+  "translations": {
+    "so": {
+      "items": [
+        {
+          "metric": "Isla maalinta",
+          "title": "Nootaayeynta dukumeentiyada",
+          "copy": "Dhaar-caddeynno, wakiilasho sharci, qandaraasyo, iyo bayaanno sharci — dib loo eego, la markhaati furo, lana shaabadeeyo si taxaddar leh."
+        },
+        {
+          "metric": "Dabacsan",
+          "title": "Guryo, dhul iyo ganacsi",
+          "copy": "Heshiisyada mulkiyadda, kirada, go'aannada shirkadaha, iyo heshiisyada ganacsiga oo loo diyaariyo saxiix, iyadoo si cad laguugu sheegayo waxa aad soo qaadanayso."
+        },
+        {
+          "metric": "Ammaan ah",
+          "title": "Aqoonsi iyo diiwaanno",
+          "copy": "Xaqiijinta aqoonsiga dowladda, gelinta diiwaanka, iyo nuqullo la caddeeyey si dukumeentiyadaadu u adkaystaan baaritaan kasta."
+        }
+      ]
+    },
+    "ar": {
+      "items": [
+        {
+          "metric": "في اليوم نفسه",
+          "title": "توثيق المستندات",
+          "copy": "الإفادات الخطية، والتوكيلات، والعقود، والتصريحات النظامية — تتم مراجعتها والشهادة عليها وختمها بعناية."
+        },
+        {
+          "metric": "مرن",
+          "title": "العقارات والأعمال",
+          "copy": "الصكوك، وعقود الإيجار، وقرارات الشركات، والاتفاقيات التجارية تُجهز للتوقيع مع إرشاد واضح حول ما يجب إحضاره."
+        },
+        {
+          "metric": "آمن",
+          "title": "الهوية والسجلات",
+          "copy": "التحقق من الهوية الحكومية، وإدخالات السجل، والنسخ المصدقة حتى تصمد مستنداتك أمام التدقيق."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "items": [
+    {
+      "title": "Get in touch",
+      "detail": "Call, email, or use the contact form. Tell us what you need and when you are available."
+    },
+    {
+      "title": "Prepare your visit",
+      "detail": "Bring valid government ID and the unsigned documents. We will confirm any extra requirements before your appointment."
+    },
+    {
+      "title": "Review together",
+      "detail": "We walk through each page, verify identity, and answer questions so you sign with full understanding."
+    },
+    {
+      "title": "Sign & notarize",
+      "detail": "You sign in our presence. We apply the notarial seal and complete the journal entry required by law."
+    },
+    {
+      "title": "Leave with confidence",
+      "detail": "Receive your notarized documents and any certified copies. Records are kept securely for future reference."
+    }
+  ],
+  "translations": {
+    "so": {
+      "items": [
+        {
+          "title": "Nala soo xiriir",
+          "detail": "Wac, iimayl dir, ama isticmaal foomka xiriirka. Noo sheeg waxa aad u baahan tahay iyo waqtiga aad heli karto."
+        },
+        {
+          "title": "U diyaargarow booqashadaada",
+          "detail": "Soo qaado aqoonsi dowladeed oo ansax ah iyo dukumeentiyada aan wali la saxiixin. Waxaan xaqiijin doonaa shuruud kasta oo dheeraad ah ka hor ballankaaga."
+        },
+        {
+          "title": "Si wadajir ah u eegis",
+          "detail": "Waxaan isla mari doonaa bog kasta, aqoonsiga waan xaqiijin doonaa, su'aalahana waan ka jawaabi doonaa si aad u saxiixdo adigoo si buuxda u fahamsan."
+        },
+        {
+          "title": "Saxiix oo nootaayee",
+          "detail": "Waxaad ku saxiixi doontaa hortayada. Waxaan saari doonaa shaabadda nootaayada, waxaana dhammaystiri doonaa gelinta diiwaanka uu sharcigu baahan yahay."
+        },
+        {
+          "title": "Ka tag adigoo kalsooni qaba",
+          "detail": "Qaado dukumeentiyadaada la nootaayeeyey iyo nuqullo kasta oo la caddeeyey. Diiwaannada si ammaan ah ayaa loo hayaa si mustaqbalka loogu tixraaco."
+        }
+      ]
+    },
+    "ar": {
+      "items": [
+        {
+          "title": "تواصل معنا",
+          "detail": "اتصل أو أرسل بريداً إلكترونياً أو استخدم نموذج التواصل. أخبرنا بما تحتاجه ومتى تكون متاحاً."
+        },
+        {
+          "title": "حضّر زيارتك",
+          "detail": "أحضر هوية حكومية سارية والمستندات غير الموقعة. سنؤكد أي متطلبات إضافية قبل موعدك."
+        },
+        {
+          "title": "نراجع معاً",
+          "detail": "نمر على كل صفحة، ونتحقق من الهوية، ونجيب عن الأسئلة حتى توقّع وأنت تفهم كل شيء بوضوح."
+        },
+        {
+          "title": "وقّع ووثّق",
+          "detail": "توقّع بحضورنا. نضع ختم التوثيق ونكمل إدخال السجل المطلوب نظاماً."
+        },
+        {
+          "title": "غادر بثقة",
+          "detail": "استلم مستنداتك الموثقة وأي نسخ مصدقة. تُحفظ السجلات بأمان للرجوع إليها مستقبلاً."
+        }
+      ]
+    }
+  }
+}

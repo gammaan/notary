@@ -1,0 +1,38 @@
+{
+  "items": [
+    "Affidavits",
+    "Power of Attorney",
+    "Real Estate Deeds",
+    "Business Contracts",
+    "Certified Copies",
+    "Identity Verification",
+    "Statutory Declarations",
+    "Apostille Guidance"
+  ],
+  "translations": {
+    "so": {
+      "items": [
+        "Dhaar-caddeynno",
+        "Wakiilasho sharci",
+        "Heshiisyada mulkiyadda guryaha",
+        "Qandaraasyada ganacsiga",
+        "Nuqullo la caddeeyey",
+        "Xaqiijinta aqoonsiga",
+        "Bayaanno sharci",
+        "Hagidda Apostille"
+      ]
+    },
+    "ar": {
+      "items": [
+        "إفادات خطية",
+        "توكيل رسمي",
+        "صكوك عقارية",
+        "عقود تجارية",
+        "نسخ مصدقة",
+        "التحقق من الهوية",
+        "تصريحات نظامية",
+        "إرشاد الأبوستيل"
+      ]
+    }
+  }
+}

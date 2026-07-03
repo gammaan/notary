@@ -1,0 +1,621 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-04 01:47+0300\n"
+"PO-Revision-Date: 2026-07-04 00:20+0300\n"
+"Last-Translator: Codex <codex@openai.com>\n"
+"Language-Team: ar <ar@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: .\cms\admin.py:17 .\cms\admin.py:31
+#, fuzzy
+#| msgid "Contact"
+msgid "Content"
+msgstr "تواصل"
+
+#: .\cms\admin.py:18 .\cms\admin.py:32
+msgid "Publishing"
+msgstr ""
+
+#: .\cms\models.py:9
+msgid "Blog"
+msgstr ""
+
+#: .\cms\models.py:10 .\templates\includes\footer.html:21
+#: .\templates\includes\header.html:21 .\templates\includes\header.html:98
+msgid "News"
+msgstr ""
+
+#: .\cms\models.py:11
+msgid "Notice"
+msgstr ""
+
+#: .\cms\models.py:14 .\cms\models.py:64
+msgid "Draft"
+msgstr ""
+
+#: .\cms\models.py:15 .\cms\models.py:65
+msgid "Published"
+msgstr ""
+
+#: .\cms\models.py:38
+msgid "post"
+msgstr ""
+
+#: .\cms\models.py:39
+msgid "posts"
+msgstr ""
+
+#: .\cms\models.py:72
+msgid "e.g. Real estate, Affidavit, Business contract"
+msgstr ""
+
+#: .\cms\models.py:77
+msgid "Optional longer description. Keep client details anonymous."
+msgstr ""
+
+#: .\cms\models.py:91
+msgid "portfolio item"
+msgstr ""
+
+#: .\cms\models.py:92
+msgid "portfolio items"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:4 .\cms\templates\cms\blog_list.html:4
+#: .\cms\templates\cms\portfolio_detail.html:4
+#: .\cms\templates\cms\portfolio_list.html:4
+#: .\pages\templates\pages\home.html:57 .\templates\includes\footer.html:4
+#: .\templates\includes\footer.html:13 .\templates\includes\header.html:4
+#: .\templates\includes\header.html:13
+msgid "Notary"
+msgstr "كاتب عدل"
+
+#: .\cms\templates\cms\blog_detail.html:16
+msgid "All news"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:38
+#: .\cms\templates\cms\portfolio_detail.html:40
+msgid "More"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:38
+msgid "to read"
+msgstr ""
+
+#: .\cms\templates\cms\blog_detail.html:47
+#: .\cms\templates\cms\blog_list.html:47
+msgid "Read more"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:4
+msgid "News & updates"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:5
+msgid ""
+"News, blog posts, and notices from Himilo Notary — updates, guidance, and "
+"announcements for clients."
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:13
+msgid "News & insights"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:15
+msgid "Updates for"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:15
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "our clients"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\cms\templates\cms\blog_list.html:17
+msgid ""
+"Blog articles, office news, and important notices — everything you need to "
+"stay informed before your visit."
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:24
+msgid "Filter by category"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:25
+msgid "All"
+msgstr ""
+
+#: .\cms\templates\cms\blog_list.html:57
+msgid "No posts published yet. Check back soon."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:16
+msgid "All work"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:33
+#, fuzzy
+#| msgid "Clear help for the documents"
+msgid "Need similar help with your documents?"
+msgstr "مساعدة واضحة للمستندات"
+
+#: .\cms\templates\cms\portfolio_detail.html:34
+#: .\templates\includes\header.html:60 .\templates\includes\header.html:101
+msgid "Contact us"
+msgstr "تواصل معنا"
+
+#: .\cms\templates\cms\portfolio_detail.html:40
+msgid "highlights"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_detail.html:49
+#: .\cms\templates\cms\portfolio_list.html:33
+msgid "View details"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:4
+msgid "Our work"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:5
+msgid ""
+"Anonymized highlights of document types and notarial work handled by Himilo "
+"Notary — experience you can trust."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:13
+#: .\templates\includes\footer.html:20 .\templates\includes\header.html:20
+#: .\templates\includes\header.html:97
+msgid "Portfolio"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:15
+msgid "Work we"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:15
+msgid "handle"
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:17
+msgid ""
+"Anonymized examples of the documents and services we support — no private "
+"client details, just the kind of work we do every day."
+msgstr ""
+
+#: .\cms\templates\cms\portfolio_list.html:43
+msgid "Portfolio highlights will appear here once published."
+msgstr ""
+
+#: .\notary\settings.py:108
+msgid "English"
+msgstr "الإنجليزية"
+
+#: .\notary\settings.py:109
+msgid "Somali"
+msgstr "الصومالية"
+
+#: .\notary\settings.py:110
+msgid "Arabic"
+msgstr "العربية"
+
+#: .\pages\templates\pages\home.html:18
+msgid "Trusted notary services"
+msgstr "خدمات توثيق موثوقة"
+
+#: .\pages\templates\pages\home.html:21
+msgid "Documents"
+msgstr "مستندات"
+
+#: .\pages\templates\pages\home.html:22
+msgid "notarized"
+msgstr "موثقة"
+
+#: .\pages\templates\pages\home.html:23
+msgid "with clarity and care."
+msgstr "بوضوح وعناية."
+
+#: .\pages\templates\pages\home.html:26
+msgid ""
+"Himilo Notary helps you prepare, sign, and certify documents the right way — "
+"with a defined process, transparent policies, and a team that makes visiting "
+"the office straightforward."
+msgstr ""
+"تساعدك Himilo Notary على إعداد المستندات وتوقيعها وتصديقها بالطريقة الصحيحة "
+"— من خلال إجراءات محددة، وسياسات شفافة، وفريق يجعل زيارة المكتب سهلة وواضحة."
+
+#: .\pages\templates\pages\home.html:30 .\pages\templates\pages\home.html:300
+msgid "Request appointment"
+msgstr "اطلب موعداً"
+
+#: .\pages\templates\pages\home.html:35
+msgid "See the process"
+msgstr "اطّلع على الإجراءات"
+
+#: .\pages\templates\pages\home.html:40
+msgid "Years experience"
+msgstr "سنوات من الخبرة"
+
+#: .\pages\templates\pages\home.html:44
+msgid "Documents notarized"
+msgstr "مستندات موثقة"
+
+#: .\pages\templates\pages\home.html:48
+msgid "Client focus"
+msgstr "تركيز على العميل"
+
+#: .\pages\templates\pages\home.html:53
+msgid "Office information"
+msgstr "معلومات المكتب"
+
+#: .\pages\templates\pages\home.html:56
+msgid "Visit us"
+msgstr "زرنا"
+
+#: .\pages\templates\pages\home.html:67 .\pages\templates\pages\home.html:255
+msgid "Phone"
+msgstr "الهاتف"
+
+#: .\pages\templates\pages\home.html:75 .\pages\templates\pages\home.html:259
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: .\pages\templates\pages\home.html:83 .\pages\templates\pages\home.html:267
+msgid "Hours"
+msgstr "ساعات العمل"
+
+#: .\pages\templates\pages\home.html:91 .\pages\templates\pages\home.html:263
+msgid "Address"
+msgstr "العنوان"
+
+#: .\pages\templates\pages\home.html:97
+msgid "Send a message"
+msgstr "أرسل رسالة"
+
+#: .\pages\templates\pages\home.html:109
+msgid "Scroll"
+msgstr "مرّر"
+
+#: .\pages\templates\pages\home.html:128
+msgid "Our services"
+msgstr "خدماتنا"
+
+#: .\pages\templates\pages\home.html:131
+msgid "Clear help for the documents"
+msgstr "مساعدة واضحة للمستندات"
+
+#: .\pages\templates\pages\home.html:132
+msgid "that matter most."
+msgstr "الأكثر أهمية."
+
+#: .\pages\templates\pages\home.html:135
+msgid ""
+"From everyday affidavits to business and property papers — we explain what "
+"you need, prepare you for your visit, and notarize with care."
+msgstr ""
+
+#: .\pages\templates\pages\home.html:156
+msgid "Your journey"
+msgstr "رحلتك"
+
+#: .\pages\templates\pages\home.html:159
+msgid "From first contact"
+msgstr "من أول تواصل"
+
+#: .\pages\templates\pages\home.html:160
+msgid "to notarized documents."
+msgstr "إلى مستندات موثقة."
+
+#: .\pages\templates\pages\home.html:163
+msgid ""
+"A simple, defined path so you always know what happens next — before you "
+"visit, during your appointment, and when you leave with your documents."
+msgstr ""
+"مسار بسيط ومحدد حتى تعرف دائماً ما الخطوة التالية — قبل زيارتك، وأثناء موعدك، "
+"وعندما تغادر ومعك مستنداتك."
+
+#: .\pages\templates\pages\home.html:186
+msgid "Experience"
+msgstr "التجربة"
+
+#: .\pages\templates\pages\home.html:189
+msgid "A notary office built"
+msgstr "مكتب توثيق مصمم"
+
+#: .\pages\templates\pages\home.html:190
+msgid "for everyday clients."
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\pages\templates\pages\home.html:193
+msgid ""
+"Whether you need a single affidavit or a stack of business papers, Himilo "
+"Notary brings the same attention to detail — explaining requirements in "
+"plain language and making your visit efficient."
+msgstr ""
+"سواء كنت بحاجة إلى إفادة خطية واحدة أو مجموعة من أوراق الأعمال، تقدم Himilo "
+"Notary العناية نفسها بالتفاصيل — مع شرح المتطلبات بلغة واضحة وجعل زيارتك "
+"أكثر كفاءة."
+
+#: .\pages\templates\pages\home.html:209
+msgid "Trust & policy"
+msgstr "الثقة والسياسات"
+
+#: .\pages\templates\pages\home.html:212
+msgid "Professional standards"
+msgstr "معايير مهنية"
+
+#: .\pages\templates\pages\home.html:213
+msgid "you can count on."
+msgstr "يمكنك الاعتماد عليها."
+
+#: .\pages\templates\pages\home.html:216
+msgid ""
+"We follow proper notarial practice, keep accurate records, and treat every "
+"document with confidentiality — so you leave with confidence, not "
+"uncertainty."
+msgstr ""
+"نلتزم بالممارسات التوثيقية السليمة، ونحافظ على سجلات دقيقة، ونتعامل مع كل "
+"مستند بسرية — لتغادر بثقة لا بحيرة."
+
+#: .\pages\templates\pages\home.html:239
+msgid "Get in touch"
+msgstr "تواصل معنا"
+
+#: .\pages\templates\pages\home.html:242
+msgid "Ready to visit"
+msgstr "هل أنت مستعد لزيارة"
+
+#: .\pages\templates\pages\home.html:243
+msgid "the notary?"
+msgstr "كاتب العدل؟"
+
+#: .\pages\templates\pages\home.html:246
+msgid ""
+"Send us a message with the document type and your preferred time. We will "
+"confirm what to bring and schedule your appointment."
+msgstr ""
+"أرسل لنا رسالة تتضمن نوع المستند والوقت الذي تفضله. سنؤكد لك ما يجب إحضاره "
+"ونحدد موعدك."
+
+#: .\pages\templates\pages\home.html:249
+msgid "Response within one business day"
+msgstr "الرد خلال يوم عمل واحد"
+
+#: .\pages\templates\pages\home.html:250
+msgid "No obligation to proceed"
+msgstr "لا يوجد التزام بالمتابعة"
+
+#: .\pages\templates\pages\home.html:251
+msgid "Clear guidance before you visit"
+msgstr "إرشادات واضحة قبل زيارتك"
+
+#: .\pages\templates\pages\home.html:276
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#: .\pages\templates\pages\home.html:280
+msgid "Email address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: .\pages\templates\pages\home.html:285
+msgid "Service needed"
+msgstr "الخدمة المطلوبة"
+
+#: .\pages\templates\pages\home.html:294
+msgid "Message"
+msgstr "رسالة"
+
+#: .\pages\templates\pages\home.html:295
+msgid "(optional)"
+msgstr "(اختياري)"
+
+#: .\templates\base.html:5 .\templates\includes\header.html:50
+#: .\templates\includes\header.html:90 .\templates\includes\header.html:91
+msgid "Light mode"
+msgstr "الوضع الفاتح"
+
+#: .\templates\base.html:6
+msgid "Dark mode"
+msgstr "الوضع الداكن"
+
+#: .\templates\base.html:10
+msgid "Himilo Notary | The Art of Certainty"
+msgstr "Himilo Notary | فن اليقين"
+
+#: .\templates\base.html:11
+msgid ""
+"Himilo Notary — trusted notarial services, a clear process from first "
+"contact to sealed documents, and an easy way to book your appointment."
+msgstr ""
+"Himilo Notary — خدمات توثيق موثوقة، وإجراءات واضحة من أول تواصل حتى "
+"المستندات المختومة، وطريقة سهلة لحجز موعدك."
+
+#: .\templates\includes\footer.html:16
+msgid "The art of certainty."
+msgstr "فن اليقين."
+
+#: .\templates\includes\footer.html:17
+msgid "Footer navigation"
+msgstr "تنقل التذييل"
+
+#: .\templates\includes\footer.html:18 .\templates\includes\header.html:18
+#: .\templates\includes\header.html:95
+msgid "Services"
+msgstr "الخدمات"
+
+#: .\templates\includes\footer.html:19 .\templates\includes\header.html:19
+#: .\templates\includes\header.html:96
+msgid "Process"
+msgstr "الإجراءات"
+
+#: .\templates\includes\footer.html:22 .\templates\includes\header.html:22
+#: .\templates\includes\header.html:99
+msgid "Contact"
+msgstr "تواصل"
+
+#: .\templates\includes\footer.html:25
+msgid "Social media"
+msgstr ""
+
+#: .\templates\includes\footer.html:47
+msgid "Himilo Notary. All rights reserved."
+msgstr "Himilo Notary. جميع الحقوق محفوظة."
+
+#: .\templates\includes\header.html:17
+msgid "Primary navigation"
+msgstr "التنقل الرئيسي"
+
+#: .\templates\includes\header.html:26 .\templates\includes\header.html:70
+msgid "Language"
+msgstr "اللغة"
+
+#: .\templates\includes\header.html:61
+msgid "Open menu"
+msgstr "افتح القائمة"
+
+#: .\templates\includes\header.html:94
+msgid "Mobile navigation"
+msgstr "التنقل على الجوال"
+
+#~ msgid "Trust"
+#~ msgstr "الثقة"
+
+#~ msgid ""
+#~ "A premium notarial workspace for modern professionals — remote sessions, "
+#~ "identity verification, e-seals, and compliance vaults in one refined "
+#~ "experience."
+#~ msgstr ""
+#~ "مساحة توثيق فاخرة للمهنيين العصريين — جلسات عن بُعد، التحقق من الهوية، "
+#~ "الأختام الإلكترونية، وخزائن الامتثال في تجربة واحدة راقية."
+
+#~ msgid "Book session"
+#~ msgstr "احجز جلسة"
+
+#~ msgid "Digital-first notarial command center"
+#~ msgstr "مركز القيادة الرقمي للتوثيق"
+
+#~ msgid "Notarization"
+#~ msgstr "التوثيق"
+
+#~ msgid "reimagined"
+#~ msgstr "بإعادة ابتكار"
+
+#~ msgid "with absolute precision."
+#~ msgstr "بدقة مطلقة."
+
+#~ msgid ""
+#~ "Himilo unites appointment booking, identity verification, live video "
+#~ "sessions, e-signatures, seal management, and compliance records into one "
+#~ "workspace worthy of the seal you place."
+#~ msgstr ""
+#~ "يجمع Himilo حجز المواعيد، التحقق من الهوية، جلسات الفيديو المباشرة، "
+#~ "التوقيعات الإلكترونية، إدارة الأختام، وسجلات الامتثال في مساحة عمل واحدة "
+#~ "تليق بالختم الذي تضعه."
+
+#~ msgid "Start a notarization"
+#~ msgstr "ابدأ التوثيق"
+
+#~ msgid "Step guided flow"
+#~ msgstr "خطوات موجّهة"
+
+#~ msgid "Bit encryption"
+#~ msgstr "بت تشفير"
+
+#~ msgid "Live session preview"
+#~ msgstr "معاينة الجلسة المباشرة"
+
+#~ msgid "Session · Live"
+#~ msgstr "جلسة · مباشرة"
+
+#~ msgid "Verified"
+#~ msgstr "تم التحقق"
+
+#~ msgid "Identity"
+#~ msgstr "الهوية"
+
+#~ msgid "Passed"
+#~ msgstr "اجتاز"
+
+#~ msgid "Journal"
+#~ msgstr "السجل"
+
+#~ msgid "Ready"
+#~ msgstr "جاهز"
+
+#~ msgid "Seal"
+#~ msgstr "الختم"
+
+#~ msgid "Awaiting"
+#~ msgstr "في الانتظار"
+
+#~ msgid "One platform"
+#~ msgstr "منصة واحدة"
+
+#~ msgid "Everything a serious notary needs,"
+#~ msgstr "كل ما يحتاجه الموثّق الجاد،"
+
+#~ msgid "beautifully connected."
+#~ msgstr "مرتبط بأناقة."
+
+#~ msgid "Guided confidence"
+#~ msgstr "ثقة موجّهة"
+
+#~ msgid "From request to sealed record"
+#~ msgstr "من الطلب إلى السجل المختوم"
+
+#~ msgid "without losing the thread."
+#~ msgstr "دون فقدان الخيط."
+
+#~ msgid ""
+#~ "Every step visible. Every action logged. The interface stays calm even "
+#~ "when the work demands legal precision."
+#~ msgstr ""
+#~ "كل خطوة مرئية. كل إجراء مسجّل. تبقى الواجهة هادئة حتى عندما يتطلب العمل "
+#~ "دقة قانونية."
+
+#~ msgid "Built around the evidence"
+#~ msgstr "مبني حول الأدلة"
+
+#~ msgid "behind every seal."
+#~ msgstr "وراء كل ختم."
+
+#~ msgid ""
+#~ "Your reputation rests on proof. Himilo preserves it with bank-grade "
+#~ "infrastructure and notary-first compliance design."
+#~ msgstr ""
+#~ "سمعتك تقوم على الإثبات. يحفظها Himilo ببنية تحتية بمستوى مصرفي وتصميم "
+#~ "امتثال يركز على التوثيق."
+
+#~ msgid "Ready when clients are"
+#~ msgstr "جاهزون عندما يكون العملاء كذلك"
+
+#~ msgid "Offer a premium notarial experience"
+#~ msgstr "قدّم تجربة توثيق فاخرة"
+
+#~ msgid ""
+#~ "Start with this foundation as your public presence, then extend into "
+#~ "booking, client portals, payments, video verification, and document "
+#~ "vaults."
+#~ msgstr ""
+#~ "ابدأ بهذا الأساس كحضورك العام، ثم وسّعه إلى الحجز، بوابات العملاء، "
+#~ "المدفوعات، التحقق بالفيديو، وخزائن المستندات."
+
+#~ msgid "No commitment consultation"
+#~ msgstr "استشارة دون التزام"
+
+#~ msgid "Tailored to your jurisdiction"
+#~ msgstr "مصمّم لاختصاصك القضائي"
