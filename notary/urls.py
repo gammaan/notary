@@ -6,10 +6,9 @@ from django.contrib import admin
 
 from django.urls import include, path
 
-
+from django.conf.urls.static import static
 
 from cms.views import blog_detail, blog_list, portfolio_detail, portfolio_list
-
 from pages.views import home
 
 
@@ -17,6 +16,8 @@ from pages.views import home
 urlpatterns = [
 
     path("i18n/", include("django.conf.urls.i18n")),
+
+    path("staff/", include("operations.urls")),
 
 ]
 
@@ -47,4 +48,7 @@ admin.site.site_header = "Himilo Notary"
 admin.site.site_title = "Himilo Notary"
 
 admin.site.index_title = "Dashboard"
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,0 +1,12 @@
+<nav class="staff-stepper staff-stepper--matter" aria-label="Matter progress">
+    {% for s in workflow_steps %}
+    <a href="{% url s.url_name matter.pk %}" class="staff-stepper__item staff-stepper__item--link{% if s.number == current_step %} is-active{% endif %}{% if s.done %} is-done{% endif %}">
+        <span class="staff-stepper__num">{% if s.done %}✓{% else %}{{ s.number }}{% endif %}</span>
+        <span class="staff-stepper__text">
+            <strong>{{ s.label }}</strong>
+            <small>{{ s.description }}</small>
+        </span>
+    </a>
+    {% if not forloop.last %}<span class="staff-stepper__line" aria-hidden="true"></span>{% endif %}
+    {% endfor %}
+</nav>

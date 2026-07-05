@@ -1,0 +1,208 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}{{ matter.reference_number }}{% endblock %}
+{% block topbar_actions %}
+<a class="button ghost" href="{% url 'staff:matter_edit' matter.pk %}"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit setup</a>
+{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+
+<div class="staff-matter-layout">
+    <div class="staff-matter-main">
+        <header class="staff-matter-hero">
+            <div class="staff-matter-hero__top">
+                <span class="staff-matter-ref">{{ matter.reference_number }}</span>
+                <form class="staff-inline-status" method="post" action="{% url 'staff:matter_status' matter.pk %}">
+                    {% csrf_token %}
+                    <label class="staff-inline-status__label" for="matter-status">Status</label>
+                    <select id="matter-status" name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                        {% for value, label in matter_status_choices %}
+                        <option value="{{ value }}"{% if matter.status == value %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <h2 class="staff-matter-hero__title">{{ matter.title }}</h2>
+            {% if matter.description %}
+            <p class="staff-matter-hero__desc">{{ matter.description }}</p>
+            {% endif %}
+
+            <dl class="staff-matter-meta">
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-user" aria-hidden="true"></i> Client</dt>
+                    <dd><a href="{% url 'staff:client_detail' matter.client.pk %}">{{ matter.client.full_name }}</a></dd>
+                </div>
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-stamp" aria-hidden="true"></i> Service</dt>
+                    <dd>{{ matter.service_type.name }}</dd>
+                </div>
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-calendar" aria-hidden="true"></i> Scheduled</dt>
+                    <dd>{% if matter.scheduled_at %}{{ matter.scheduled_at|date:"M j, Y g:i A" }}{% else %}—{% endif %}</dd>
+                </div>
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-user-tie" aria-hidden="true"></i> Assigned</dt>
+                    <dd>{{ matter.assigned_to.get_full_name|default:"—" }}</dd>
+                </div>
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-wallet" aria-hidden="true"></i> Billed</dt>
+                    <dd>${{ total_billed }}</dd>
+                </div>
+                <div class="staff-matter-meta__item">
+                    <dt><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Paid</dt>
+                    <dd>${{ total_paid }}</dd>
+                </div>
+            </dl>
+        </header>
+
+        <section class="staff-section">
+            <div class="staff-section__head">
+                <h3><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Documents</h3>
+                <div class="staff-section__head-actions">
+                    <a class="staff-link" href="{% url 'staff:matter_print_documents' matter.pk %}" target="_blank" rel="noopener"><i class="fa-solid fa-print" aria-hidden="true"></i> Print all</a>
+                    {% if not matter_is_closed %}<a class="staff-link" href="{% url 'staff:matter_documents' matter.pk %}">Add document</a>{% endif %}
+                </div>
+            </div>
+            {% if documents %}
+            <ul class="staff-item-list">
+                {% for doc in documents %}
+                <li class="staff-item-row">
+                    <div class="staff-item-row__main">
+                        <strong class="staff-item-row__title">{{ doc.title }}</strong>
+                        <span class="staff-item-row__meta">{{ doc.document_type|default:"Document" }} · {{ doc.created_at|date:"M j, Y" }}</span>
+                    </div>
+                    <form class="staff-inline-status staff-inline-status--compact" method="post" action="{% url 'staff:document_action' doc.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="action" value="status">
+                        <select name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                            {% for value, label in document_status_choices %}
+                            <option value="{{ value }}"{% if doc.status == value %} selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    <div class="staff-item-row__actions">
+                        {% if doc.approve_target %}
+                        <form method="post" action="{% url 'staff:document_action' doc.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--approve" title="Approve → {{ doc.approve_target_label }}">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% if doc.file %}
+                        <a class="staff-icon-btn" href="{{ doc.file.url }}" target="_blank" rel="noopener" title="Download">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                        </a>
+                        {% endif %}
+                        <a class="staff-icon-btn" href="{% url 'staff:matter_documents' matter.pk %}" title="Edit">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                        <form method="post" action="{% url 'staff:document_action' doc.pk %}" onsubmit="return confirm('Remove this document?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--danger" title="Delete">
+                                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="staff-empty">No documents yet. <a href="{% url 'staff:matter_documents' matter.pk %}">Upload the first document</a>.</p>
+            {% endif %}
+        </section>
+
+        <section class="staff-section">
+            <div class="staff-section__head">
+                <h3><i class="fa-solid fa-coins" aria-hidden="true"></i> Finances</h3>
+                {% if not matter_is_closed %}<a class="staff-link" href="{% url 'staff:matter_finances' matter.pk %}">Add transaction</a>{% endif %}
+            </div>
+            {% if transactions %}
+            <ul class="staff-item-list">
+                {% for txn in transactions %}
+                <li class="staff-item-row">
+                    <div class="staff-item-row__main">
+                        <strong class="staff-item-row__title">{{ txn.description }}</strong>
+                        <span class="staff-item-row__meta">{{ txn.get_transaction_type_display }} · {{ txn.transaction_date|date:"M j, Y" }}</span>
+                    </div>
+                    <span class="staff-item-row__amount">${{ txn.amount }}{% if txn.is_locked %} <i class="fa-solid fa-lock staff-lock-icon" title="Locked — paid or finalised"></i>{% endif %}</span>
+                    {% if txn.is_locked %}
+                    <span class="staff-badge staff-badge--completed">{{ txn.get_status_display }}</span>
+                    {% else %}
+                    <form class="staff-inline-status staff-inline-status--compact" method="post" action="{% url 'staff:transaction_action' txn.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="action" value="status">
+                        <select name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                            {% for value, label in transaction_status_choices %}
+                            <option value="{{ value }}"{% if txn.status == value %} selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    {% endif %}
+                    <div class="staff-item-row__actions">
+                        {% if not txn.is_locked %}
+                        <form method="post" action="{% url 'staff:transaction_action' txn.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="mark_paid">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--approve" title="Mark paid">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        <a class="staff-icon-btn" href="{% url 'staff:matter_finances' matter.pk %}" title="Edit">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                        <form method="post" action="{% url 'staff:transaction_action' txn.pk %}" onsubmit="return confirm('Remove this transaction?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--danger" title="Delete">
+                                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        <a class="staff-icon-btn" href="{% url 'staff:transaction_receipt' txn.pk %}" target="_blank" rel="noopener" title="Print receipt">
+                            <i class="fa-solid fa-print" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="staff-empty">No transactions yet. <a href="{% url 'staff:matter_finances' matter.pk %}">Record a fee or payment</a>.</p>
+            {% endif %}
+        </section>
+    </div>
+
+    <aside class="staff-matter-aside">
+        <h3 class="staff-matter-aside__title">Quick actions</h3>
+        <nav class="staff-aside-actions">
+            <a class="staff-aside-btn" href="{% url 'staff:matter_documents' matter.pk %}">
+                <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
+                <span>Documents</span>
+            </a>
+            <a class="staff-aside-btn" href="{% url 'staff:matter_finances' matter.pk %}">
+                <i class="fa-solid fa-receipt" aria-hidden="true"></i>
+                <span>Finances</span>
+            </a>
+            <a class="staff-aside-btn" href="{% url 'staff:matter_complete' matter.pk %}">
+                <i class="fa-solid fa-flag-checkered" aria-hidden="true"></i>
+                <span>Complete</span>
+            </a>
+            <a class="staff-aside-btn" href="{% url 'staff:matter_print_documents' matter.pk %}" target="_blank" rel="noopener">
+                <i class="fa-solid fa-print" aria-hidden="true"></i>
+                <span>Print documents</span>
+            </a>
+            <a class="staff-aside-btn staff-aside-btn--muted" href="{% url 'staff:matter_edit' matter.pk %}">
+                <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                <span>Edit setup</span>
+            </a>
+        </nav>
+    </aside>
+</div>
+{% endblock %}

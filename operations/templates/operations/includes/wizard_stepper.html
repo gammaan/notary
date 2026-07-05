@@ -1,0 +1,23 @@
+{% load i18n %}
+<nav class="staff-stepper staff-stepper--matter" aria-label="{% trans 'New matter progress' %}">
+    {% for s in wizard_steps %}
+    {% if s.done or s.active %}
+    <a href="{% url 'staff:matter_wizard' step=s.slug %}" class="staff-stepper__item staff-stepper__item--link{% if s.active %} is-active{% endif %}{% if s.done %} is-done{% endif %}">
+        <span class="staff-stepper__num">{% if s.done %}✓{% else %}{{ s.number }}{% endif %}</span>
+        <span class="staff-stepper__text">
+            <strong>{{ s.label }}</strong>
+            {% if s.description %}<small>{{ s.description }}</small>{% endif %}
+        </span>
+    </a>
+    {% else %}
+    <span class="staff-stepper__item staff-stepper__item--link staff-stepper__item--static{% if s.active %} is-active{% endif %}">
+        <span class="staff-stepper__num">{{ s.number }}</span>
+        <span class="staff-stepper__text">
+            <strong>{{ s.label }}</strong>
+            {% if s.description %}<small>{{ s.description }}</small>{% endif %}
+        </span>
+    </span>
+    {% endif %}
+    {% if not forloop.last %}<span class="staff-stepper__line" aria-hidden="true"></span>{% endif %}
+    {% endfor %}
+</nav>

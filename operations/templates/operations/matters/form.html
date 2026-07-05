@@ -1,0 +1,32 @@
+{% extends "operations/base_staff.html" %}
+{% load i18n %}
+{% block page_title %}Edit matter{% endblock %}
+{% block extra_head %}{% include "operations/includes/staff_select2_head.html" %}{% endblock %}
+{% block content %}
+{% with matter=object %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">{% trans "Step 1 — Setup" %}</p>
+    <form class="staff-form staff-form--compact" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-row-three">
+            <label><span>{% trans "Client" %}</span>{{ form.client }}</label>
+            <label><span>{% trans "Service" %}</span>{{ form.service_type }}</label>
+            <label><span>{% trans "Title" %}</span>{{ form.title }}</label>
+        </div>
+        <label><span>{% trans "Description" %}</span>{{ form.description }}</label>
+        <div class="form-row-three">
+            <label><span>{% trans "Status" %}</span>{{ form.status }}</label>
+            <label><span>{% trans "Scheduled for" %}</span>{{ form.scheduled_at }}</label>
+            <label><span>{% trans "Assigned to" %}</span>{{ form.assigned_to }}</label>
+        </div>
+        <label><span>{% trans "Notes" %}</span>{{ form.notes }}</label>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">Save & continue</button>
+            <a class="button ghost" href="{% url 'staff:matter_detail' object.pk %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endwith %}
+{% endblock %}
+{% block extra_js %}{% include "operations/includes/staff_select2_js.html" %}{% endblock %}

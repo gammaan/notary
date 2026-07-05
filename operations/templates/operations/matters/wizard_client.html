@@ -1,0 +1,18 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}New matter — Step {{ step_number }}{% endblock %}
+{% block extra_head %}{% include "operations/includes/staff_select2_head.html" %}{% endblock %}
+{% block content %}
+{% include "operations/includes/wizard_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">Step 1 — Client</p>
+    <form class="staff-form staff-form--compact" method="post" novalidate>
+        {% csrf_token %}
+        <label><span>{{ form.client.label }}</span>{{ form.client }}</label>
+        <p class="staff-muted">Don't see the client? <a href="{% url 'staff:client_create' %}">Add a new client</a> first.</p>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">Continue to matter details →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block extra_js %}{% include "operations/includes/staff_select2_js.html" %}{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My profile" %} | {{ notary.brand.name }} {% trans "Notary" %}{% endblock %}
+{% block meta_description %}{% trans "Manage your Himilo Notary client profile." %}{% endblock %}
+{% block main_class %}main-inner main-inner--auth{% endblock %}
+
+{% block content %}
+<section class="section auth-section">
+    {% if messages %}
+    <div class="auth-messages auth-messages--split" role="status" data-reveal>
+        {% for message in messages %}
+        <p class="auth-message auth-message--{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="auth-split auth-split--profile" data-reveal>
+        <div class="auth-split__intro">
+            <p class="eyebrow">
+                <span class="eyebrow-line"></span>
+                {% trans "Client account" %}
+            </p>
+            <div class="profile-avatar" aria-hidden="true">{{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}</div>
+            <h1>{{ user.full_name }}</h1>
+            <p class="auth-split__lede">{{ user.email }}</p>
+
+            <ul class="profile-meta">
+                <li><span class="cms-badge cms-badge--blog">{{ user.get_role_display }}</span></li>
+                <li>{% trans "Member since" %} {{ user.date_joined|date:"M j, Y" }}</li>
+                {% if user.is_email_verified %}
+                <li class="profile-meta__verified">{% trans "Email verified" %}</li>
+                {% endif %}
+            </ul>
+
+            <dl class="profile-facts">
+                <div>
+                    <dt>{% trans "Last sign in" %}</dt>
+                    <dd>{% if user.last_login %}{{ user.last_login|date:"M j, Y" }}{% else %}{% trans "Not yet recorded" %}{% endif %}</dd>
+                </div>
+            </dl>
+
+            <div class="auth-split__actions">
+                <a class="button ghost" href="{% url 'accounts:password_change' %}">{% trans "Change password" %}</a>
+                <form method="post" action="{% url 'accounts:logout' %}">
+                    {% csrf_token %}
+                    <button class="button ghost" type="submit">{% trans "Sign out" %}</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="auth-split__panel">
+            <div class="auth-split__panel-head">
+                <h2>{% trans "Personal information" %}</h2>
+                <p>{% trans "Update the name and phone number on your account." %}</p>
+            </div>
+
+            <form class="contact-form" method="post" novalidate>
+                {% csrf_token %}
+                {% include "accounts/_form_errors.html" %}
+
+                <div class="form-row">
+                    <label>
+                        <span>{{ form.first_name.label }}</span>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}<small class="field-error">{{ form.first_name.errors.0 }}</small>{% endif %}
+                    </label>
+                    <label>
+                        <span>{{ form.last_name.label }}</span>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}<small class="field-error">{{ form.last_name.errors.0 }}</small>{% endif %}
+                    </label>
+                </div>
+
+                <label>
+                    <span>{{ form.phone.label }} <small>{% trans "optional" %}</small></span>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}<small class="field-error">{{ form.phone.errors.0 }}</small>{% endif %}
+                </label>
+
+                <button class="button primary" type="submit">{% trans "Save changes" %}</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

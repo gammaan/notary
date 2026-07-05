@@ -1,0 +1,32 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}{{ client.full_name }}{% endblock %}
+{% block topbar_actions %}
+<a class="button ghost" href="{% url 'staff:client_edit' client.pk %}">Edit</a>
+<a class="button primary" href="{% url 'staff:matter_create' %}">New matter</a>
+{% endblock %}
+{% block content %}
+<div class="staff-grid-2">
+    <section class="staff-panel">
+        <h2>Contact</h2>
+        <dl class="staff-dl">
+            <div><dt>Email</dt><dd>{{ client.email|default:"—" }}</dd></div>
+            <div><dt>Phone</dt><dd>{{ client.phone|default:"—" }}</dd></div>
+            <div><dt>ID</dt><dd>{{ client.id_number|default:"—" }}</dd></div>
+            <div><dt>Address</dt><dd>{{ client.address|default:"—" }}</dd></div>
+        </dl>
+        {% if client.notes %}<p class="staff-notes">{{ client.notes }}</p>{% endif %}
+    </section>
+    <section class="staff-panel">
+        <div class="staff-panel__head"><h2>Matters</h2></div>
+        {% if matters %}
+        <ul class="staff-list">
+            {% for m in matters %}
+            <li><a href="{% url 'staff:matter_detail' m.pk %}"><strong>{{ m.reference_number }}</strong> {{ m.title }} <span class="staff-badge staff-badge--{{ m.status }}">{{ m.get_status_display }}</span></a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="staff-empty">No matters for this client yet.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

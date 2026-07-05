@@ -7,7 +7,7 @@
 
 {% block content %}
 <section class="page-hero page-hero--compact">
-    <div class="page-hero__inner" data-reveal>
+    <div class="cms-page page-hero__inner" data-reveal>
         <p class="eyebrow">
             <span class="eyebrow-line"></span>
             {% trans "Portfolio" %}
@@ -20,28 +20,33 @@
 </section>
 
 <section class="section cms-section">
-    {% if portfolio_items %}
-    <div class="cms-grid cms-grid--portfolio" data-reveal data-stagger>
-        {% for item in portfolio_items %}
-        <article class="cms-card cms-card--portfolio">
-            {% if item.document_type %}
-            <span class="cms-metric">{{ item.document_type }}</span>
-            {% endif %}
-            <h2><a href="{% url 'portfolio_detail' slug=item.slug %}">{{ item.title }}</a></h2>
-            <p>{{ item.summary }}</p>
-            <a class="cms-card__link" href="{% url 'portfolio_detail' slug=item.slug %}">
-                {% trans "View details" %}
-                <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-                    <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </a>
-        </article>
-        {% endfor %}
+    <div class="cms-page">
+        {% if portfolio_items %}
+        <div class="cms-grid cms-grid--portfolio" data-reveal data-stagger>
+            {% for item in portfolio_items %}
+            <article class="cms-card cms-card--portfolio">
+                <div class="cms-card__glow" aria-hidden="true"></div>
+                {% if item.document_type %}
+                <span class="cms-metric">{{ item.document_type }}</span>
+                {% endif %}
+                <h2 class="cms-card__title"><a href="{% url 'portfolio_detail' slug=item.slug %}">{{ item.title }}</a></h2>
+                <p class="cms-card__excerpt">{{ item.summary|truncatewords:24 }}</p>
+                <footer class="cms-card__footer">
+                    <a class="cms-card__link" href="{% url 'portfolio_detail' slug=item.slug %}">
+                        {% trans "View details" %}
+                        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                            <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </footer>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="cms-empty" data-reveal>
+            <p>{% trans "Portfolio highlights will appear here once published." %}</p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="cms-empty" data-reveal>
-        <p>{% trans "Portfolio highlights will appear here once published." %}</p>
-    </div>
-    {% endif %}
 </section>
 {% endblock %}

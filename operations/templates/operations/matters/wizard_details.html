@@ -1,0 +1,26 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}New matter — Step {{ step_number }}{% endblock %}
+{% block content %}
+{% include "operations/includes/wizard_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">Step 2 — Matter details</p>
+    <form class="staff-form staff-form--compact" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-row-three">
+            <label><span>{{ form.service_type.label }}</span>{{ form.service_type }}</label>
+            <label><span>{{ form.status.label }}</span>{{ form.status }}</label>
+            <label><span>{{ form.title.label }}</span>{{ form.title }}</label>
+        </div>
+        <label><span>{{ form.description.label }}</span>{{ form.description }}</label>
+        <label><span>{{ form.scheduled_at.label }}</span>{{ form.scheduled_at }}</label>
+        <label class="staff-check">
+            {{ form.create_fee }}
+            <span>{{ form.create_fee.label }}</span>
+        </label>
+        <div class="staff-form-actions">
+            <a class="button ghost" href="{% url 'staff:matter_wizard' step='client' %}">← Back</a>
+            <button class="button primary" type="submit">Review →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

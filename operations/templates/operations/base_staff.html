@@ -1,0 +1,190 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}" data-theme="dark"
+      data-label-light="{% trans 'Light mode' %}"
+      data-label-dark="{% trans 'Dark mode' %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% trans "Staff portal" %}{% endblock %} | Himilo Notary</title>
+    <script>
+        (function () {
+            var theme = localStorage.getItem("theme");
+            if (theme === "light" || theme === "dark") {
+                document.documentElement.setAttribute("data-theme", theme);
+            }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/staff.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="staff-body">
+    <div class="staff-shell">
+        {% if user.is_authenticated %}
+        <aside class="staff-sidebar">
+            <a class="staff-brand" href="{% url 'staff:dashboard' %}">
+                <span class="staff-brand__mark">H</span>
+                <span class="staff-brand__text">
+                    <strong>Himilo Notary</strong>
+                    <small>{% trans "Staff portal" %}</small>
+                </span>
+            </a>
+
+            <div class="staff-sidebar__utilities">
+                <div class="lang-switch staff-lang-switch" role="group" aria-label="{% trans 'Language' %}">
+                    {% get_available_languages as LANGUAGES %}
+                    {% for code, name in LANGUAGES %}
+                    <form method="post" action="{% url 'set_language' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="language" value="{{ code }}">
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit"
+                                class="lang-btn{% if code == LANGUAGE_CODE %} is-active{% endif %}"
+                                aria-label="{{ name }}"
+                                title="{{ name }}">{{ code|upper }}</button>
+                    </form>
+                    {% endfor %}
+                </div>
+                <button class="theme-toggle staff-theme-toggle" type="button" aria-label="{% trans 'Light mode' %}">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <circle cx="9" cy="9" r="3.5" stroke="currentColor" stroke-width="1.4"/>
+                        <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.4 3.4l1.4 1.4M13.2 13.2l1.4 1.4M3.4 14.6l1.4-1.4M13.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path d="M15.2 10.4A6.5 6.5 0 0 1 7.6 2.8 6.5 6.5 0 1 0 15.2 10.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="staff-nav" aria-label="{% trans 'Staff navigation' %}">
+                <p class="staff-nav__section">{% trans "Main" %}</p>
+                <a href="{% url 'staff:dashboard' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'dashboard' %} is-active{% endif %}">
+                    <i class="fa-solid fa-gauge-high" aria-hidden="true"></i>
+                    <span>{% trans "Dashboard" %}</span>
+                </a>
+                <a href="{% url 'staff:client_list' %}" class="staff-nav__link{% if 'client' in request.resolver_match.url_name %} is-active{% endif %}">
+                    <i class="fa-solid fa-users" aria-hidden="true"></i>
+                    <span>{% trans "Clients" %}</span>
+                </a>
+                <a href="{% url 'staff:matter_list' %}" class="staff-nav__link{% if 'matter' in request.resolver_match.url_name %} is-active{% endif %}">
+                    <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                    <span>{% trans "Matters" %}</span>
+                </a>
+                <a href="{% url 'staff:document_list' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'document_list' %} is-active{% endif %}">
+                    <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+                    <span>{% trans "Documents" %}</span>
+                </a>
+                <a href="{% url 'staff:transaction_list' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'transaction_list' %} is-active{% endif %}">
+                    <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+                    <span>{% trans "Finances" %}</span>
+                </a>
+
+                <p class="staff-nav__section">{% trans "Links" %}</p>
+                <a href="{% url 'home' %}" class="staff-nav__link staff-nav__link--muted" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    <span>{% trans "Public site" %}</span>
+                </a>
+                <a href="/admin/" class="staff-nav__link staff-nav__link--muted" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    <span>{% trans "Django admin" %}</span>
+                </a>
+            </nav>
+
+            <div class="staff-sidebar__foot">
+                <div class="staff-user-card">
+                    <span class="staff-user-card__avatar" aria-hidden="true">{{ user.email|first|upper }}</span>
+                    <div class="staff-user-card__info">
+                        <strong>{{ user.get_full_name|default:user.email }}</strong>
+                        <small>{% trans "Signed in" %}</small>
+                    </div>
+                </div>
+                <form method="post" action="{% url 'staff:logout' %}">
+                    {% csrf_token %}
+                    <button class="staff-nav__link staff-nav__link--button staff-nav__link--logout" type="submit">
+                        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                        <span>{% trans "Sign out" %}</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+        {% endif %}
+
+        <div class="staff-main">
+            {% if user.is_authenticated %}
+            <header class="staff-topbar">
+                <div class="staff-topbar__inner">
+                    <div>
+                        <p class="staff-topbar__eyebrow">{% trans "Operations" %}</p>
+                        <h1 class="staff-topbar__title">{% block page_title %}{% trans "Dashboard" %}{% endblock %}</h1>
+                    </div>
+                    <div class="staff-topbar__actions">
+                        {% block topbar_actions %}{% endblock %}
+                    </div>
+                </div>
+            </header>
+            {% else %}
+            <header class="staff-topbar staff-topbar--guest">
+                <div class="staff-topbar__inner">
+                    <a class="staff-brand staff-brand--compact" href="{% url 'home' %}">
+                        <span class="staff-brand__mark">H</span>
+                        <span class="staff-brand__text">
+                            <strong>Himilo Notary</strong>
+                            <small>{% trans "Staff portal" %}</small>
+                        </span>
+                    </a>
+                    <div class="staff-sidebar__utilities staff-sidebar__utilities--inline">
+                        <div class="lang-switch staff-lang-switch" role="group" aria-label="{% trans 'Language' %}">
+                            {% get_available_languages as LANGUAGES %}
+                            {% for code, name in LANGUAGES %}
+                            <form method="post" action="{% url 'set_language' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="language" value="{{ code }}">
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <button type="submit"
+                                        class="lang-btn{% if code == LANGUAGE_CODE %} is-active{% endif %}"
+                                        aria-label="{{ name }}"
+                                        title="{{ name }}">{{ code|upper }}</button>
+                            </form>
+                            {% endfor %}
+                        </div>
+                        <button class="theme-toggle staff-theme-toggle" type="button" aria-label="{% trans 'Light mode' %}">
+                            <svg class="icon-sun" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <circle cx="9" cy="9" r="3.5" stroke="currentColor" stroke-width="1.4"/>
+                                <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.4 3.4l1.4 1.4M13.2 13.2l1.4 1.4M3.4 14.6l1.4-1.4M13.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            </svg>
+                            <svg class="icon-moon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M15.2 10.4A6.5 6.5 0 0 1 7.6 2.8 6.5 6.5 0 1 0 15.2 10.4Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            {% endif %}
+
+            {% if messages %}
+            <div class="staff-messages">
+                <div class="staff-messages__inner">
+                    {% for message in messages %}
+                    <p class="staff-message staff-message--{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="staff-content">
+                <div class="staff-content__inner">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/staff.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -23,6 +23,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'pages',
     'cms',
+    'accounts',
+    'operations',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -85,6 +87,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 10},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -93,6 +96,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
+
+# Public client login/register is disabled for now. Staff use /staff/ portal.
+PUBLIC_AUTH_ENABLED = False
+LOGIN_URL = '/staff/login/'
+LOGIN_REDIRECT_URL = '/staff/'
+LOGOUT_REDIRECT_URL = '/staff/login/'
 
 
 # Internationalization
@@ -134,6 +145,9 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,0 +1,24 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}New matter — Review{% endblock %}
+{% block content %}
+{% include "operations/includes/wizard_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">Step 3 — Review</p>
+    <div class="staff-review-card">
+        <h2>Review before creating</h2>
+        <dl class="staff-dl staff-dl--compact">
+            <div><dt>Client</dt><dd>{{ client.full_name }}</dd></div>
+            <div><dt>Service</dt><dd>{{ service.name }} (${{ service.default_fee }})</dd></div>
+            <div><dt>Title</dt><dd>{{ details.title }}</dd></div>
+            <div><dt>Description</dt><dd>{{ details.description|default:"—" }}</dd></div>
+            <div><dt>Status</dt><dd>{{ details.status }}</dd></div>
+            <div><dt>Scheduled</dt><dd>{{ details.scheduled_at|default:"—" }}</dd></div>
+        </dl>
+    </div>
+    <form method="post" class="staff-form-actions">
+        {% csrf_token %}
+        <a class="button ghost" href="{% url 'staff:matter_wizard' step='details' %}">← Back</a>
+        <button class="button primary" type="submit">Create matter & add documents</button>
+    </form>
+</div>
+{% endblock %}

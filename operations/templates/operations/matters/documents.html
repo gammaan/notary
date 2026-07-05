@@ -1,0 +1,37 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}Documents — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-grid-2">
+    <section class="staff-form-wrap">
+        <p class="staff-step-label">Step 2 — Add document</p>
+        <form class="staff-form staff-form--compact" method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <label><span>Title</span>{{ form.title }}</label>
+            <label><span>Document type</span>{{ form.document_type }}</label>
+            <label><span>File</span>{{ form.file }}</label>
+            <label><span>Status</span>{{ form.status }}</label>
+            <label><span>Notes</span>{{ form.notes }}</label>
+            <button class="button primary" type="submit">Upload document</button>
+        </form>
+    </section>
+    <section class="staff-panel">
+        <h2>Documents on file</h2>
+        {% if documents %}
+        <ul class="staff-list staff-list--cards">
+            {% for d in documents %}
+            <li>
+                <strong>{{ d.title }}</strong>
+                <span>{{ d.document_type|default:"Document" }}</span>
+                <span class="staff-badge">{{ d.get_status_display }}</span>
+                {% if d.file %}<a href="{{ d.file.url }}" target="_blank" rel="noopener">Download</a>{% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}<p class="staff-empty">No documents uploaded yet.</p>{% endif %}
+        <div class="staff-form-actions">
+            <a class="button primary" href="{% url 'staff:matter_finances' matter.pk %}">Continue to finances →</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

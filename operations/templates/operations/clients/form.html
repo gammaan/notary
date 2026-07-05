@@ -1,0 +1,28 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}{% if object %}Edit client{% else %}New client{% endif %}{% endblock %}
+{% block content %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <form class="staff-form staff-form--compact" method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-row">
+            <label><span>First name</span>{{ form.first_name }}</label>
+            <label><span>Last name</span>{{ form.last_name }}</label>
+        </div>
+        <div class="form-row">
+            <label><span>Email</span>{{ form.email }}</label>
+            <label><span>Phone</span>{{ form.phone }}</label>
+        </div>
+        <label><span>ID / passport</span>{{ form.id_number }}</label>
+        <label><span>Address</span>{{ form.address }}</label>
+        <label><span>Internal notes</span>{{ form.notes }}</label>
+        <label class="staff-check">
+            {{ form.is_active }}
+            <span>Active client</span>
+        </label>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">Save client</button>
+            <a class="button ghost" href="{% url 'staff:client_list' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

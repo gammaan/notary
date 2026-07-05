@@ -1,0 +1,52 @@
+from django.urls import path
+
+from operations.views import (
+    ClientCreateView,
+    ClientDetailView,
+    ClientListView,
+    ClientUpdateView,
+    DashboardView,
+    DocumentListView,
+    DocumentQuickActionView,
+    MatterCompleteView,
+    MatterDetailView,
+    MatterDocumentsPrintView,
+    MatterDocumentsView,
+    MatterFinancesView,
+    MatterListView,
+    MatterStatusView,
+    MatterUpdateView,
+    MatterWizardView,
+    StaffLoginView,
+    StaffLogoutView,
+    TransactionListView,
+    TransactionQuickActionView,
+    TransactionReceiptView,
+)
+
+app_name = "staff"
+
+urlpatterns = [
+    path("login/", StaffLoginView.as_view(), name="login"),
+    path("logout/", StaffLogoutView.as_view(), name="logout"),
+    path("", DashboardView.as_view(), name="dashboard"),
+    path("clients/", ClientListView.as_view(), name="client_list"),
+    path("clients/new/", ClientCreateView.as_view(), name="client_create"),
+    path("clients/<int:pk>/", ClientDetailView.as_view(), name="client_detail"),
+    path("clients/<int:pk>/edit/", ClientUpdateView.as_view(), name="client_edit"),
+    path("matters/", MatterListView.as_view(), name="matter_list"),
+    path("matters/new/", MatterWizardView.as_view(), {"step": "client"}, name="matter_create"),
+    path("matters/new/<slug:step>/", MatterWizardView.as_view(), name="matter_wizard"),
+    path("matters/<int:pk>/", MatterDetailView.as_view(), name="matter_detail"),
+    path("matters/<int:pk>/status/", MatterStatusView.as_view(), name="matter_status"),
+    path("matters/<int:pk>/edit/", MatterUpdateView.as_view(), name="matter_edit"),
+    path("matters/<int:pk>/documents/", MatterDocumentsView.as_view(), name="matter_documents"),
+    path("matters/<int:pk>/finances/", MatterFinancesView.as_view(), name="matter_finances"),
+    path("matters/<int:pk>/complete/", MatterCompleteView.as_view(), name="matter_complete"),
+    path("documents/<int:pk>/action/", DocumentQuickActionView.as_view(), name="document_action"),
+    path("transactions/<int:pk>/action/", TransactionQuickActionView.as_view(), name="transaction_action"),
+    path("transactions/<int:pk>/receipt/", TransactionReceiptView.as_view(), name="transaction_receipt"),
+    path("matters/<int:pk>/print/documents/", MatterDocumentsPrintView.as_view(), name="matter_print_documents"),
+    path("documents/", DocumentListView.as_view(), name="document_list"),
+    path("transactions/", TransactionListView.as_view(), name="transaction_list"),
+]

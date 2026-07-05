@@ -1,0 +1,24 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}Complete — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-panel">
+    <p class="staff-step-label">Step 4 — Review & close</p>
+    <h2>Checklist</h2>
+    <ul class="staff-checklist">
+        {% for step in workflow_steps %}
+        <li class="{% if step.done %}is-done{% endif %}">{{ step.label }} — {{ step.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <div class="staff-form-actions">
+        <form method="post" style="display:inline">{% csrf_token %}
+            <button class="button primary" name="action" value="complete" type="submit">Mark as completed</button>
+        </form>
+        <form method="post" style="display:inline">{% csrf_token %}
+            <button class="button ghost" name="action" value="awaiting_payment" type="submit">Set awaiting payment</button>
+        </form>
+        <a class="button ghost" href="{% url 'staff:matter_detail' matter.pk %}">Back to matter</a>
+    </div>
+</div>
+{% endblock %}

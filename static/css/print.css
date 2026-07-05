@@ -1,0 +1,158 @@
+/* Printable staff documents */
+
+.print-body {
+  margin: 0;
+  padding: 24px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12pt;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+.print-page {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.print-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.print-brand strong {
+  display: block;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+
+.print-brand span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.print-meta p {
+  margin: 0 0 4px;
+  font-size: 0.82rem;
+  text-align: right;
+}
+
+.print-block {
+  margin-bottom: 28px;
+}
+
+.print-block h2 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.print-dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.print-dl--inline {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+}
+
+.print-dl dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.print-dl dd {
+  margin: 2px 0 0;
+}
+
+.print-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.print-table th,
+.print-table td {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.print-table th {
+  background: #f5f5f5;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.print-table__sub td {
+  background: #fafafa;
+  font-size: 0.82rem;
+}
+
+.print-footer {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid #ccc;
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.print-footer__note {
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.print-toolbar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.print-toolbar__btn {
+  padding: 10px 18px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.print-toolbar__btn--ghost {
+  background: #fff;
+  color: #333;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-body {
+    padding: 0;
+  }
+}

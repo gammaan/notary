@@ -1,0 +1,89 @@
+{% extends "operations/print/base.html" %}
+{% block title %}Documents — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+<header class="print-header">
+    <div class="print-brand">
+        <strong>Himilo Notary</strong>
+        <span>Matter document register</span>
+    </div>
+    <div class="print-meta">
+        <p><strong>Matter</strong> {{ matter.reference_number }}</p>
+        <p><strong>Printed</strong> {% now "F j, Y g:i A" %}</p>
+    </div>
+</header>
+
+<section class="print-block">
+    <h2>{{ matter.title }}</h2>
+    <dl class="print-dl print-dl--inline">
+        <div><dt>Client</dt><dd>{{ matter.client.full_name }}</dd></div>
+        <div><dt>Service</dt><dd>{{ matter.service_type.name }}</dd></div>
+        <div><dt>Status</dt><dd>{{ matter.get_status_display }}</dd></div>
+        {% if matter.scheduled_at %}
+        <div><dt>Scheduled</dt><dd>{{ matter.scheduled_at|date:"F j, Y g:i A" }}</dd></div>
+        {% endif %}
+    </dl>
+</section>
+
+<section class="print-block">
+    <h2>Documents ({{ documents|length }})</h2>
+    {% if documents %}
+    <table class="print-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Uploaded</th>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><strong>{{ doc.title }}</strong></td>
+                <td>{{ doc.document_type|default:"—" }}</td>
+                <td>{{ doc.get_status_display }}</td>
+                <td>{{ doc.created_at|date:"M j, Y" }}</td>
+                <td>{% if doc.file %}Yes{% else %}—{% endif %}</td>
+            </tr>
+            {% if doc.notes %}
+            <tr class="print-table__sub">
+                <td></td>
+                <td colspan="5"><em>Notes:</em> {{ doc.notes }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No documents on file for this matter.</p>
+    {% endif %}
+</section>
+
+{% if transactions %}
+<section class="print-block">
+    <h2>Related payments</h2>
+    <table class="print-table">
+        <thead>
+            <tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for txn in transactions %}
+            <tr>
+                <td>{{ txn.transaction_date|date:"M j, Y" }}</td>
+                <td>{{ txn.description }}</td>
+                <td>{{ txn.currency }} {{ txn.amount }}</td>
+                <td>{{ txn.get_status_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endif %}
+
+<footer class="print-footer">
+    <p class="print-footer__note">Official document register for matter {{ matter.reference_number }}.</p>
+</footer>
+{% endblock %}
