@@ -31,6 +31,13 @@
     <div class="page-shell">
         {% include "includes/header.html" %}
         <main class="{% block main_class %}{% endblock %}">
+            {% if messages %}
+            <div class="site-messages" role="status">
+                {% for message in messages %}
+                <p class="site-message site-message--{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% block content %}{% endblock %}
         </main>
         {% include "includes/footer.html" %}

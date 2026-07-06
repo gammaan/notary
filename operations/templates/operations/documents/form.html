@@ -1,0 +1,19 @@
+{% extends "operations/base_staff.html" %}
+{% block page_title %}Edit document — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+<div class="staff-form-wrap">
+    <p class="staff-step-label">{{ matter.reference_number }} · {{ document.title }}</p>
+    <form class="staff-form staff-form--compact" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <label><span>Title</span>{{ form.title }}</label>
+        <label><span>Document type</span>{{ form.document_type }}</label>
+        <label><span>File</span>{{ form.file }}{% if document.file %}<small>Leave blank to keep current file.</small>{% endif %}</label>
+        <label><span>Status</span>{{ form.status }}</label>
+        <label><span>Notes</span>{{ form.notes }}</label>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">Save document</button>
+            <a class="button ghost" href="{% url 'staff:matter_detail' matter.pk %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

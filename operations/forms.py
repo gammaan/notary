@@ -4,7 +4,10 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from django.contrib.auth import get_user_model
+
 from operations.models import Client, Document, Matter, ServiceType, Transaction
+from operations.validators import validate_document_upload
 
 STAFF_SELECT2_CLASS = "staff-select2"
 
@@ -111,9 +114,13 @@ class MatterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        User = get_user_model()
         self.fields["service_type"].queryset = ServiceType.objects.filter(is_active=True)
         self.fields["client"].queryset = Client.objects.filter(is_active=True).order_by(
             "last_name", "first_name"
+        )
+        self.fields["assigned_to"].queryset = User.objects.filter(is_staff=True).order_by(
+            "first_name", "last_name"
         )
         if not self.is_bound and not self.initial.get("scheduled_at"):
             if not getattr(self.instance, "pk", None):
@@ -248,6 +255,14 @@ class DocumentForm(forms.ModelForm):
             "notes": forms.Textarea(attrs={"rows": 3, "placeholder": _("Optional notes about this document")}),
         }
 
+    def clean_file(self):
+        file = self.cleaned_data.get("file")
+        if file:
+            validate_document_upload(file)
+        elif not self.instance.pk:
+            raise forms.ValidationError(_("Please upload a file."))
+        return file
+
 
 class TransactionForm(forms.ModelForm):
     class Meta:
@@ -274,3 +289,6 @@ class TransactionForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not self.is_bound and not self.initial.get("transaction_date"):
             self.fields["transaction_date"].initial = _default_today_date()
+        if self.instance.pk and self.instance.is_locked:
+            for field in self.fields.values():
+                field.disabled = True

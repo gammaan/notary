@@ -6,8 +6,10 @@ from operations.views import (
     ClientListView,
     ClientUpdateView,
     DashboardView,
+    DocumentDownloadView,
     DocumentListView,
     DocumentQuickActionView,
+    DocumentUpdateView,
     MatterCompleteView,
     MatterDetailView,
     MatterDocumentsPrintView,
@@ -22,6 +24,7 @@ from operations.views import (
     TransactionListView,
     TransactionQuickActionView,
     TransactionReceiptView,
+    TransactionUpdateView,
 )
 
 app_name = "staff"
@@ -44,7 +47,10 @@ urlpatterns = [
     path("matters/<int:pk>/finances/", MatterFinancesView.as_view(), name="matter_finances"),
     path("matters/<int:pk>/complete/", MatterCompleteView.as_view(), name="matter_complete"),
     path("documents/<int:pk>/action/", DocumentQuickActionView.as_view(), name="document_action"),
+    path("documents/<int:pk>/download/", DocumentDownloadView.as_view(), name="document_download"),
+    path("documents/<int:pk>/edit/", DocumentUpdateView.as_view(), name="document_edit"),
     path("transactions/<int:pk>/action/", TransactionQuickActionView.as_view(), name="transaction_action"),
+    path("transactions/<int:pk>/edit/", TransactionUpdateView.as_view(), name="transaction_edit"),
     path("transactions/<int:pk>/receipt/", TransactionReceiptView.as_view(), name="transaction_receipt"),
     path("matters/<int:pk>/print/documents/", MatterDocumentsPrintView.as_view(), name="matter_print_documents"),
     path("documents/", DocumentListView.as_view(), name="document_list"),

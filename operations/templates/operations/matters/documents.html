@@ -24,7 +24,7 @@
                 <strong>{{ d.title }}</strong>
                 <span>{{ d.document_type|default:"Document" }}</span>
                 <span class="staff-badge">{{ d.get_status_display }}</span>
-                {% if d.file %}<a href="{{ d.file.url }}" target="_blank" rel="noopener">Download</a>{% endif %}
+                {% if d.file %}<a href="{% url 'staff:document_download' d.pk %}">Download</a>{% endif %}
             </li>
             {% endfor %}
         </ul>

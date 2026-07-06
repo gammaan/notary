@@ -4,6 +4,7 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db.models import Count, Q, Sum
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -16,8 +17,6 @@ from operations.forms import (
     MatterForm,
     MatterWizardClientForm,
     MatterWizardDetailsForm,
-    MatterWizardDocumentForm,
-    MatterWizardPaymentForm,
     StaffLoginForm,
     TransactionForm,
 )
@@ -26,10 +25,14 @@ from operations.models import Client, Document, Matter, ServiceType, Transaction
 from operations.filters import filter_clients, filter_documents, filter_matters, filter_transactions
 from operations.quick_actions import next_document_status
 from operations.transaction_rules import (
+    REOPEN_STATUSES,
+    apply_matter_status,
     auto_complete_matter_if_paid,
+    can_manually_complete_matter,
     matter_is_closed,
     transaction_is_locked,
 )
+from operations.utils import redirect_if_matter_closed, safe_redirect
 from operations.workflow import (
     clear_wizard_data,
     get_wizard_data,
@@ -293,25 +296,58 @@ class MatterStatusView(StaffRequiredMixin, View):
     def post(self, request, pk):
         matter = get_object_or_404(Matter, pk=pk)
         status = request.POST.get("status")
-        if status in Matter.Status.values:
-            matter.status = status
-            if status == Matter.Status.COMPLETED and not matter.completed_at:
-                matter.completed_at = timezone.now()
-            elif status != Matter.Status.COMPLETED:
-                matter.completed_at = None
-            matter.save(update_fields=["status", "completed_at", "updated_at"])
-            messages.success(request, f"Matter status updated to {matter.get_status_display()}.")
-        else:
+        if status not in Matter.Status.values:
             messages.error(request, "Invalid status.")
+            return redirect("staff:matter_detail", pk=matter.pk)
+
+        if matter_is_closed(matter):
+            if status in REOPEN_STATUSES:
+                apply_matter_status(matter, status)
+                messages.success(request, f"Matter reopened as {matter.get_status_display()}.")
+            else:
+                messages.error(request, "This matter is closed. Choose an open status to reopen it.")
+        elif status == Matter.Status.COMPLETED and not can_manually_complete_matter(matter):
+            messages.error(
+                request,
+                "Cannot mark complete until all income fees are paid or waived.",
+            )
+        else:
+            apply_matter_status(matter, status)
+            messages.success(request, f"Matter status updated to {matter.get_status_display()}.")
         return redirect("staff:matter_detail", pk=matter.pk)
+
+
+class DocumentDownloadView(StaffRequiredMixin, View):
+    def get(self, request, pk):
+        document = get_object_or_404(Document.objects.select_related("matter"), pk=pk)
+        if not document.file:
+            messages.error(request, "No file attached to this document.")
+            return redirect("staff:matter_detail", pk=document.matter_id)
+        try:
+            filename = document.file.name.rsplit("/", 1)[-1]
+            return FileResponse(
+                document.file.open("rb"),
+                as_attachment=True,
+                filename=filename,
+            )
+        except FileNotFoundError:
+            messages.error(request, "File not found on disk.")
+            return redirect("staff:matter_detail", pk=document.matter_id)
 
 
 class DocumentQuickActionView(StaffRequiredMixin, View):
     def post(self, request, pk):
         document = get_object_or_404(Document.objects.select_related("matter"), pk=pk)
-        matter_pk = document.matter_id
+        matter = document.matter
+        matter_pk = matter.pk
+        next_url = request.POST.get("next")
+        default = reverse("staff:matter_detail", kwargs={"pk": matter_pk})
+
+        blocked = redirect_if_matter_closed(request, matter)
+        if blocked:
+            return blocked
+
         action = request.POST.get("action")
-        next_url = request.POST.get("next") or reverse("staff:matter_detail", kwargs={"pk": matter_pk})
 
         if action == "delete":
             title = document.title
@@ -336,7 +372,7 @@ class DocumentQuickActionView(StaffRequiredMixin, View):
         else:
             messages.error(request, "Unknown action.")
 
-        return redirect(next_url)
+        return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
 
 
 class TransactionQuickActionView(StaffRequiredMixin, View):
@@ -346,10 +382,13 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
         )
         matter = transaction.matter
         matter_pk = matter.pk
+        next_url = request.POST.get("next")
+
+        blocked = redirect_if_matter_closed(request, matter)
+        if blocked:
+            return blocked
+
         action = request.POST.get("action")
-        next_url = request.POST.get("next") or reverse(
-            "staff:matter_detail", kwargs={"pk": matter_pk}
-        )
 
         if transaction_is_locked(transaction) and action in {
             "delete",
@@ -362,7 +401,7 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
                 request,
                 "This transaction is locked because it is paid, waived, or cancelled.",
             )
-            return redirect(next_url)
+            return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
 
         if action == "delete":
             label = transaction.description
@@ -416,13 +455,100 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
         else:
             messages.error(request, "Unknown action.")
 
-        return redirect(next_url)
+        return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+
+
+class DocumentUpdateView(StaffRequiredMixin, UpdateView):
+    model = Document
+    form_class = DocumentForm
+    template_name = "operations/documents/form.html"
+    context_object_name = "document"
+
+    def get_queryset(self):
+        return Document.objects.select_related("matter")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method in ("GET", "POST"):
+            document = get_object_or_404(
+                Document.objects.select_related("matter"), pk=kwargs["pk"]
+            )
+            blocked = redirect_if_matter_closed(request, document.matter)
+            if blocked:
+                return blocked
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["matter"] = self.object.matter
+        return ctx
+
+    def get_success_url(self):
+        return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
+
+    def form_valid(self, form):
+        messages.success(self.request, "Document updated successfully.")
+        return super().form_valid(form)
+
+
+class TransactionUpdateView(StaffRequiredMixin, UpdateView):
+    model = Transaction
+    form_class = TransactionForm
+    template_name = "operations/transactions/form.html"
+    context_object_name = "transaction"
+
+    def get_queryset(self):
+        return Transaction.objects.select_related("matter")
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method in ("GET", "POST"):
+            transaction = get_object_or_404(
+                Transaction.objects.select_related("matter"), pk=kwargs["pk"]
+            )
+            blocked = redirect_if_matter_closed(request, transaction.matter)
+            if blocked:
+                return blocked
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if transaction_is_locked(self.object):
+            messages.error(
+                request,
+                "This transaction is locked and cannot be edited.",
+            )
+            return redirect("staff:matter_detail", pk=self.object.matter_id)
+        return super().post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["matter"] = self.object.matter
+        ctx["is_locked"] = transaction_is_locked(self.object)
+        return ctx
+
+    def get_success_url(self):
+        return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
+
+    def form_valid(self, form):
+        messages.success(self.request, "Transaction updated successfully.")
+        return super().form_valid(form)
 
 
 class MatterUpdateView(StaffRequiredMixin, UpdateView):
     model = Matter
     form_class = MatterForm
     template_name = "operations/matters/form.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method in ("GET", "POST"):
+            matter = get_object_or_404(Matter, pk=kwargs["pk"])
+            blocked = redirect_if_matter_closed(request, matter)
+            if blocked:
+                return blocked
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -444,6 +570,14 @@ class MatterDocumentsView(StaffRequiredMixin, DetailView):
     model = Matter
     template_name = "operations/matters/documents.html"
     context_object_name = "matter"
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method in ("GET", "POST"):
+            matter = get_object_or_404(Matter, pk=kwargs["pk"])
+            blocked = redirect_if_matter_closed(request, matter)
+            if blocked:
+                return blocked
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -536,19 +670,39 @@ class MatterCompleteView(StaffRequiredMixin, DetailView):
         ctx["current_step"] = 4
         ctx["documents"] = self.object.documents.all()
         ctx["transactions"] = self.object.transactions.all()
+        ctx["matter_is_closed"] = matter_is_closed(self.object)
+        ctx["can_complete"] = can_manually_complete_matter(self.object)
+        ctx["document_count"] = ctx["documents"].count()
+        ctx["pending_income"] = self.object.transactions.filter(
+            transaction_type=Transaction.Type.INCOME,
+            status=Transaction.Status.PENDING,
+        ).count()
         return ctx
 
     def post(self, request, *args, **kwargs):
         matter = self.get_object()
         action = request.POST.get("action")
         if action == "complete":
-            matter.status = Matter.Status.COMPLETED
-            matter.save()
-            messages.success(request, f"Matter {matter.reference_number} marked as completed.")
+            if not can_manually_complete_matter(matter):
+                messages.error(
+                    request,
+                    "Cannot complete until all income fees are paid or waived.",
+                )
+            else:
+                apply_matter_status(matter, Matter.Status.COMPLETED)
+                messages.success(
+                    request,
+                    f"Matter {matter.reference_number} marked as completed.",
+                )
         elif action == "awaiting_payment":
-            matter.status = Matter.Status.AWAITING_PAYMENT
-            matter.save()
-            messages.info(request, "Matter set to awaiting payment.")
+            if matter_is_closed(matter):
+                messages.error(request, "This matter is closed.")
+            else:
+                apply_matter_status(matter, Matter.Status.AWAITING_PAYMENT)
+                messages.info(request, "Matter set to awaiting payment.")
+        elif action == "reopen":
+            apply_matter_status(matter, Matter.Status.IN_PROGRESS)
+            messages.success(request, "Matter reopened for further work.")
         return redirect("staff:matter_detail", pk=matter.pk)
 
 

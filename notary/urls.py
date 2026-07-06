@@ -17,16 +17,15 @@ urlpatterns = [
 
     path("i18n/", include("django.conf.urls.i18n")),
 
-    path("staff/", include("operations.urls")),
 
 ]
-
 
 
 urlpatterns += i18n_patterns(
 
     path("", home, name="home"),
 
+    path("staff/", include("operations.urls")),
     path("news/", blog_list, name="blog_list"),
 
     path("news/<slug:slug>/", blog_detail, name="blog_detail"),

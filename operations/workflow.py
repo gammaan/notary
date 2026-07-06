@@ -1,15 +1,13 @@
 """Workflow helpers for matter step-by-step UI."""
 
-from operations.models import Document, Matter, Transaction
+from operations.models import Matter
+from operations.transaction_rules import finance_step_done
 
 
 def matter_workflow_steps(matter):
     setup_done = bool(matter.title and matter.client_id and matter.service_type_id)
     documents_done = matter.documents.exists()
-    finance_done = matter.transactions.filter(
-        transaction_type=Transaction.Type.INCOME,
-        status__in=[Transaction.Status.PAID, Transaction.Status.PARTIAL],
-    ).exists()
+    finance_done = finance_step_done(matter)
     complete_done = matter.status == Matter.Status.COMPLETED
 
     steps = [
