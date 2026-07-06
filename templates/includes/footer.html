@@ -44,6 +44,9 @@
             {% endfor %}
         </div>
         {% endif %}
-        <p class="footer-legal">&copy; {% now "Y" %} {% blocktrans %}Himilo Notary. All rights reserved.{% endblocktrans %}</p>
+        <p class="footer-legal">&copy; {% now "Y" %} {% blocktrans %}Himilo Notary. All rights reserved.{% endblocktrans %}
+            · <a href="{% url 'privacy' %}">{% trans "Privacy" %}</a>
+            · <a href="{% url 'terms' %}">{% trans "Terms" %}</a>
+        </p>
     </div>
 </footer>

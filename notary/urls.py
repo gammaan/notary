@@ -3,19 +3,30 @@
 from django.conf.urls.i18n import i18n_patterns
 
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 
 from django.urls import include, path
 
 from django.conf.urls.static import static
 
 from cms.views import blog_detail, blog_list, portfolio_detail, portfolio_list
-from pages.views import home
+from notary.sitemaps import PortfolioSitemap, PostSitemap, StaticViewSitemap
+from pages.robots import robots_txt
+from pages.views import home, privacy, terms
+
+sitemaps = {
+    "static": StaticViewSitemap,
+    "posts": PostSitemap,
+    "portfolio": PortfolioSitemap,
+}
 
 
 
 urlpatterns = [
 
     path("i18n/", include("django.conf.urls.i18n")),
+    path("robots.txt", robots_txt, name="robots"),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 
 
 ]
@@ -24,6 +35,8 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
 
     path("", home, name="home"),
+    path("privacy/", privacy, name="privacy"),
+    path("terms/", terms, name="terms"),
 
     path("staff/", include("operations.urls")),
     path("news/", blog_list, name="blog_list"),

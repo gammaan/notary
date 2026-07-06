@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "name": "{{ notary.brand.name }} {% trans 'Notary' %}",
+  "description": "{% trans 'Trusted notarial services with a clear process from first contact to sealed documents.' %}",
+  "url": "{{ seo_url|default:'' }}",
+  "telephone": "{{ notary.contact.phone_href }}",
+  "email": "{{ notary.contact.email }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ notary.contact.address }}",
+    "addressCountry": "SO"
+  },
+  "openingHours": "{{ notary.contact.hours }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
             <section class="hero" aria-labelledby="hero-heading">
                 <div class="hero-bg" aria-hidden="true">
@@ -230,6 +250,87 @@
                     </div>
                 </div>
             </section>
+
+            {% if featured_posts or featured_portfolio %}
+            <section class="section home-cms-section" id="highlights">
+                <div class="section-intro" data-reveal>
+                    <p class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        {% trans "News & portfolio" %}
+                    </p>
+                    <h2>
+                        {% trans "Recent updates" %}<br>
+                        <em>{% trans "and work highlights." %}</em>
+                    </h2>
+                    <p class="section-lede">
+                        {% blocktrans %}Stay informed with office news and see examples of the documents we help clients notarize.{% endblocktrans %}
+                    </p>
+                </div>
+
+                {% if featured_posts %}
+                <div class="home-cms-block" data-reveal>
+                    <div class="home-cms-block__head">
+                        <h3>{% trans "Latest news" %}</h3>
+                        <a class="button ghost" href="{% url 'blog_list' %}">{% trans "View all news" %}</a>
+                    </div>
+                    <div class="cms-grid cms-grid--posts" data-stagger>
+                        {% for post in featured_posts %}
+                        <article class="cms-card cms-card--post">
+                            <div class="cms-card__glow" aria-hidden="true"></div>
+                            <div class="cms-card__top">
+                                <span class="cms-badge cms-badge--{{ post.category }}">{{ post.get_category_display }}</span>
+                                {% if post.published_at %}
+                                <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"M j, Y" }}</time>
+                                {% endif %}
+                            </div>
+                            <h4 class="cms-card__title"><a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a></h4>
+                            {% if post.summary %}
+                            <p class="cms-card__excerpt">{{ post.summary|truncatewords:22 }}</p>
+                            {% endif %}
+                            <footer class="cms-card__footer">
+                                <a class="cms-card__link" href="{% url 'blog_detail' slug=post.slug %}">
+                                    {% trans "Read more" %}
+                                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                        <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            </footer>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if featured_portfolio %}
+                <div class="home-cms-block" data-reveal>
+                    <div class="home-cms-block__head">
+                        <h3>{% trans "Portfolio highlights" %}</h3>
+                        <a class="button ghost" href="{% url 'portfolio_list' %}">{% trans "View portfolio" %}</a>
+                    </div>
+                    <div class="cms-grid cms-grid--portfolio" data-stagger>
+                        {% for item in featured_portfolio %}
+                        <article class="cms-card cms-card--portfolio">
+                            <div class="cms-card__glow" aria-hidden="true"></div>
+                            {% if item.document_type %}
+                            <span class="cms-metric">{{ item.document_type }}</span>
+                            {% endif %}
+                            <h4 class="cms-card__title"><a href="{% url 'portfolio_detail' slug=item.slug %}">{{ item.title }}</a></h4>
+                            <p class="cms-card__excerpt">{{ item.summary|truncatewords:20 }}</p>
+                            <footer class="cms-card__footer">
+                                <a class="cms-card__link" href="{% url 'portfolio_detail' slug=item.slug %}">
+                                    {% trans "View details" %}
+                                    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                        <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            </footer>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </section>
+            {% endif %}
 
             <section class="cta-section" id="contact">
                 <div class="cta-layout">

@@ -21,13 +21,13 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
-    list_display = ("title", "document_type", "status", "sort_order", "published_at")
-    list_filter = ("status", "document_type")
+    list_display = ("title", "document_type", "status", "is_featured", "sort_order", "published_at")
+    list_filter = ("status", "is_featured", "document_type")
     search_fields = ("title", "summary", "body", "document_type")
     prepopulated_fields = {"slug": ("title",)}
     ordering = ("sort_order", "-published_at")
     fieldsets = (
-        (None, {"fields": ("title", "slug", "document_type", "status", "sort_order")}),
+        (None, {"fields": ("title", "slug", "document_type", "status", "is_featured", "sort_order")}),
         (_("Content"), {"fields": ("summary", "body")}),
         (_("Publishing"), {"fields": ("published_at",)}),
     )

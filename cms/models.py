@@ -81,6 +81,7 @@ class PortfolioItem(models.Model):
         choices=Status.choices,
         default=Status.DRAFT,
     )
+    is_featured = models.BooleanField(default=False)
     sort_order = models.PositiveIntegerField(default=0)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

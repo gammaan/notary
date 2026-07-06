@@ -4,8 +4,10 @@ from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
+from cms.featured import featured_portfolio, featured_posts
 from pages.content import load_site_content
 from pages.forms import ContactForm
+from pages.seo import page_seo
 
 
 def home(request):
@@ -40,4 +42,39 @@ def home(request):
     else:
         contact_form = ContactForm(service_choices=service_options or None)
 
-    return render(request, "pages/home.html", {"contact_form": contact_form})
+    ctx = {
+        "contact_form": contact_form,
+        "featured_posts": featured_posts(),
+        "featured_portfolio": featured_portfolio(),
+    }
+    ctx.update(
+        page_seo(
+            request,
+            title=_("Himilo Notary | The Art of Certainty"),
+            description=_(
+                "Himilo Notary — trusted notarial services, a clear process from first contact to sealed documents, and an easy way to book your appointment."
+            ),
+            path=request.path,
+        )
+    )
+    return render(request, "pages/home.html", ctx)
+
+
+def privacy(request):
+    ctx = page_seo(
+        request,
+        title=_("Privacy Policy | Himilo Notary"),
+        description=_("How Himilo Notary collects, uses, and protects your personal information."),
+        path=request.path,
+    )
+    return render(request, "pages/privacy.html", ctx)
+
+
+def terms(request):
+    ctx = page_seo(
+        request,
+        title=_("Terms of Service | Himilo Notary"),
+        description=_("Terms governing use of the Himilo Notary website and services."),
+        path=request.path,
+    )
+    return render(request, "pages/terms.html", ctx)

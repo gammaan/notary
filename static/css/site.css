@@ -2865,3 +2865,43 @@ html[dir="rtl"] .workflow-node {
   font-size: 0.82rem;
   color: #f87171;
 }
+
+.home-cms-section {
+  padding-top: 0;
+}
+
+.home-cms-block {
+  margin-top: 40px;
+}
+
+.home-cms-block__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.home-cms-block__head h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.cms-page--legal {
+  max-width: 760px;
+}
+
+.legal-body h2 {
+  margin: 32px 0 12px;
+  font-size: 1.15rem;
+}
+
+.legal-body p {
+  margin: 0 0 16px;
+  color: var(--paper-muted);
+  line-height: 1.7;
+}
+
+.legal-body a {
+  color: var(--accent-light);
+}
