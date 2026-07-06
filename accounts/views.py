@@ -29,12 +29,22 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        self.object.role = User.Role.CLIENT
+        self.object.save(update_fields=["role"])
+
+        from operations.models import Client
+
+        client = Client.objects.filter(email__iexact=self.object.email, user__isnull=True).first()
+        if client:
+            client.user = self.object
+            client.save(update_fields=["user", "updated_at"])
+
         login(self.request, self.object)
         messages.success(
             self.request,
             _("Welcome, %(name)s! Your account has been created.") % {"name": self.object.first_name},
         )
-        return response
+        return redirect("portal:dashboard")
 
 
 class UserLoginView(LoginView):

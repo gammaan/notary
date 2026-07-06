@@ -30,5 +30,38 @@
     updateThemeLabels(theme);
   }
 
+  function initProfileMenu() {
+    const trigger = document.getElementById("staff-profile-trigger");
+    const menu = document.getElementById("staff-profile-dropdown");
+    if (!trigger || !menu) return;
+
+    const close = () => {
+      trigger.setAttribute("aria-expanded", "false");
+      menu.hidden = true;
+    };
+
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const open = menu.hidden;
+      if (open) {
+        trigger.setAttribute("aria-expanded", "true");
+        menu.hidden = false;
+      } else {
+        close();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!menu.hidden && !menu.contains(event.target) && event.target !== trigger) {
+        close();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") close();
+    });
+  }
+
   initTheme();
+  initProfileMenu();
 })();

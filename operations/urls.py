@@ -1,6 +1,7 @@
 from django.urls import path
 
 from operations.views import (
+    AppointmentListView,
     AuditLogListView,
     CalendarView,
     ClientCreateView,
@@ -23,6 +24,7 @@ from operations.views import (
     MatterWizardView,
     StaffLoginView,
     StaffLogoutView,
+    StaffProfileView,
     TransactionListView,
     TransactionQuickActionView,
     TransactionReceiptView,
@@ -36,6 +38,8 @@ urlpatterns = [
     path("logout/", StaffLogoutView.as_view(), name="logout"),
     path("", DashboardView.as_view(), name="dashboard"),
     path("calendar/", CalendarView.as_view(), name="calendar"),
+    path("appointments/", AppointmentListView.as_view(), name="appointment_list"),
+    path("profile/", StaffProfileView.as_view(), name="profile"),
     path("audit-log/", AuditLogListView.as_view(), name="audit_log"),
     path("clients/", ClientListView.as_view(), name="client_list"),
     path("clients/new/", ClientCreateView.as_view(), name="client_create"),

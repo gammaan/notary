@@ -9,7 +9,6 @@ from cms.views import blog_detail, blog_list, portfolio_detail, portfolio_list
 from notary.sitemaps import PortfolioSitemap, PostSitemap, StaticViewSitemap
 from pages.robots import robots_txt
 from pages.views import home, privacy, terms
-
 sitemaps = {
     "static": StaticViewSitemap,
     "posts": PostSitemap,
@@ -26,8 +25,9 @@ urlpatterns += i18n_patterns(
     path("", home, name="home"),
     path("privacy/", privacy, name="privacy"),
     path("terms/", terms, name="terms"),
-    path("staff/", include("operations.urls")),
-    path("news/", blog_list, name="blog_list"),
+    path("account/", include("accounts.urls")),
+    path("portal/", include("accounts.portal_urls")),
+    path("staff/", include("operations.urls")),    path("news/", blog_list, name="blog_list"),
     path("news/<slug:slug>/", blog_detail, name="blog_detail"),
     path("portfolio/", portfolio_list, name="portfolio_list"),
     path("portfolio/<slug:slug>/", portfolio_detail, name="portfolio_detail"),

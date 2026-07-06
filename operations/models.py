@@ -29,6 +29,14 @@ class Client(models.Model):
     address = models.TextField(_("address"), blank=True)
     notes = models.TextField(_("internal notes"), blank=True)
     is_active = models.BooleanField(_("active"), default=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="client_profile",
+        verbose_name=_("portal user"),
+    )
     created_at = models.DateTimeField(_("created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated"), auto_now=True)
 
@@ -325,3 +333,32 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"{self.get_action_display()} {self.entity_label}"
+
+
+class AppointmentRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending")
+        CONFIRMED = "confirmed", _("Confirmed")
+        CANCELLED = "cancelled", _("Cancelled")
+
+    name = models.CharField(_("full name"), max_length=120)
+    email = models.EmailField(_("email"))
+    service = models.CharField(_("service needed"), max_length=200)
+    message = models.TextField(_("message"), blank=True)
+    preferred_date = models.DateField(_("preferred date"), null=True, blank=True)
+    status = models.CharField(
+        _("status"),
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    created_at = models.DateTimeField(_("submitted"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("updated"), auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("appointment request")
+        verbose_name_plural = _("appointment requests")
+
+    def __str__(self):
+        return f"{self.name} — {self.service}"

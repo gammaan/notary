@@ -11,8 +11,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, TemplateView, UpdateView, View
 
+from accounts.forms import UserProfileForm
 from accounts.permissions import can_delete_records
 from operations.audit import log_audit, log_status_change
+from operations.finance import global_finance_summary, matter_finance_summary
+from operations.notifications import notify_client_matter_update
+from operations.pdf import render_pdf_response
 from operations.forms import (
     ClientForm,
     DocumentForm,
@@ -23,7 +27,7 @@ from operations.forms import (
     TransactionForm,
 )
 from operations.mixins import ManagerRequiredMixin, StaffRequiredMixin
-from operations.models import AuditLog, Client, Document, Matter, ServiceType, Transaction
+from operations.models import AppointmentRequest, AuditLog, Client, Document, Matter, ServiceType, Transaction
 from operations.filters import filter_clients, filter_documents, filter_matters, filter_transactions
 from operations.quick_actions import next_document_status
 from operations.transaction_rules import (
@@ -190,6 +194,7 @@ class ClientListView(StaffRequiredMixin, ListView):
         params = self.request.GET.copy()
         params.pop("page", None)
         ctx["filter_query"] = params.urlencode()
+        ctx["clear_url"] = reverse("staff:client_list")
         return ctx
 
 
@@ -332,6 +337,11 @@ class MatterStatusView(StaffRequiredMixin, View):
                     old_status,
                     status,
                     label=matter.reference_number,
+                )
+                notify_client_matter_update(
+                    matter,
+                    _("Your matter status is now: %(status)s")
+                    % {"status": matter.get_status_display()},
                 )
             messages.success(request, f"Matter status updated to {matter.get_status_display()}.")
         return redirect("staff:matter_detail", pk=matter.pk)
@@ -756,19 +766,8 @@ class MatterFinancesView(StaffRequiredMixin, DetailView):
         ctx["current_step"] = 3
         ctx["transactions"] = self.object.transactions.order_by("-transaction_date")
         ctx["form"] = TransactionForm(initial={"currency": "USD"})
-        ctx["total_income"] = (
-            self.object.transactions.filter(transaction_type=Transaction.Type.INCOME).aggregate(
-                s=Sum("amount")
-            )["s"]
-            or Decimal("0")
-        )
-        ctx["total_paid"] = (
-            self.object.transactions.filter(
-                transaction_type=Transaction.Type.INCOME,
-                status=Transaction.Status.PAID,
-            ).aggregate(s=Sum("amount"))["s"]
-            or Decimal("0")
-        )
+        summary = matter_finance_summary(self.object)
+        ctx.update(summary)
         ctx["matter_is_closed"] = matter_is_closed(self.object)
         return ctx
 
@@ -1060,13 +1059,7 @@ class TransactionListView(StaffRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["total_income"] = (
-            Transaction.objects.filter(
-                transaction_type=Transaction.Type.INCOME,
-                status=Transaction.Status.PAID,
-            ).aggregate(s=Sum("amount"))["s"]
-            or Decimal("0")
-        )
+        ctx.update(global_finance_summary())
         ctx["status_choices"] = Transaction.Status.choices
         ctx["type_choices"] = Transaction.Type.choices
         ctx["payment_method_choices"] = Transaction.PaymentMethod.choices
@@ -1076,6 +1069,7 @@ class TransactionListView(StaffRequiredMixin, ListView):
         params.pop("page", None)
         ctx["filter_query"] = params.urlencode()
         ctx["filters"] = self.request.GET
+        ctx["clear_url"] = reverse("staff:transaction_list")
         return ctx
 
 
@@ -1091,6 +1085,16 @@ class TransactionReceiptView(StaffRequiredMixin, DetailView):
             "matter__service_type",
             "recorded_by",
         )
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.GET.get("format") == "pdf":
+            context = self.get_context_data(object=self.object)
+            filename = f"receipt-{self.object.pk}.pdf"
+            pdf = render_pdf_response(self.template_name, context, filename=filename)
+            if pdf:
+                return pdf
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -1173,3 +1177,50 @@ class AuditLogListView(ManagerRequiredMixin, ListView):
         ctx["entity_types"] = AuditLog.EntityType.choices
         ctx["active_entity"] = self.request.GET.get("entity", "")
         return ctx
+
+
+class StaffProfileView(StaffRequiredMixin, UpdateView):
+    form_class = UserProfileForm
+    template_name = "operations/profile.html"
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse("staff:profile")
+
+    def form_valid(self, form):
+        messages.success(self.request, _("Profile updated successfully."))
+        return super().form_valid(form)
+
+
+class AppointmentListView(StaffRequiredMixin, ListView):
+    model = AppointmentRequest
+    template_name = "operations/appointments/list.html"
+    context_object_name = "appointments"
+    paginate_by = 25
+
+    def get_queryset(self):
+        qs = AppointmentRequest.objects.order_by("-created_at")
+        status = self.request.GET.get("status")
+        if status in AppointmentRequest.Status.values:
+            qs = qs.filter(status=status)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["status_choices"] = AppointmentRequest.Status.choices
+        ctx["active_status"] = self.request.GET.get("status", "")
+        ctx["pending_count"] = AppointmentRequest.objects.filter(
+            status=AppointmentRequest.Status.PENDING
+        ).count()
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        appointment = get_object_or_404(AppointmentRequest, pk=request.POST.get("pk"))
+        status = request.POST.get("status")
+        if status in AppointmentRequest.Status.values:
+            appointment.status = status
+            appointment.save(update_fields=["status", "updated_at"])
+            messages.success(request, _("Appointment updated."))
+        return redirect("staff:appointment_list")

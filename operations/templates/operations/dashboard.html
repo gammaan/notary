@@ -1,11 +1,11 @@
 {% extends "operations/base_staff.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block page_title %}Dashboard{% endblock %}
+{% block page_title %}{% trans "Dashboard" %}{% endblock %}
 
 {% block topbar_actions %}
-<a class="button primary" href="{% url 'staff:matter_create' %}">New matter</a>
-<a class="button ghost" href="{% url 'staff:client_create' %}">Add client</a>
+<a class="button primary" href="{% url 'staff:matter_create' %}">{% trans "New matter" %}</a>
+<a class="button ghost" href="{% url 'staff:client_create' %}">{% trans "Add client" %}</a>
 {% endblock %}
 
 {% block content %}

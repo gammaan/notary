@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from operations.models import AuditLog, Client, Document, Matter, ServiceType, Transaction
+from operations.models import AppointmentRequest, AuditLog, Client, Document, Matter, ServiceType, Transaction
 
 
 class MatterInline(admin.TabularInline):
@@ -141,3 +141,11 @@ class AuditLogAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(AppointmentRequest)
+class AppointmentRequestAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "service", "preferred_date", "status", "created_at")
+    list_filter = ("status", "created_at")
+    search_fields = ("name", "email", "service", "message")
+    readonly_fields = ("created_at", "updated_at")

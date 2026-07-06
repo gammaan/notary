@@ -25,6 +25,11 @@ class ContactForm(forms.Form):
             attrs={"rows": 3, "placeholder": _("Tell us about your request (optional)")}
         ),
     )
+    preferred_date = forms.DateField(
+        label=_("Preferred date"),
+        required=False,
+        widget=forms.DateInput(attrs={"type": "date", "class": "staff-date-input"}),
+    )
 
     def __init__(self, *args, service_choices=None, **kwargs):
         super().__init__(*args, **kwargs)

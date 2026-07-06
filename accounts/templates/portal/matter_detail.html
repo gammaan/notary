@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ matter.reference_number }} | {% trans "Client portal" %}{% endblock %}
+{% block main_class %}main-inner{% endblock %}
+
+{% block content %}
+<section class="section cms-section">
+    <div class="cms-page" data-reveal>
+        <p class="eyebrow"><span class="eyebrow-line"></span>{{ matter.reference_number }}</p>
+        <h1>{{ matter.title }}</h1>
+        <p class="section-lede">{{ matter.service_type.name }} · {{ matter.get_status_display }}</p>
+
+        {% if matter.scheduled_at %}
+        <p><strong>{% trans "Scheduled:" %}</strong> {{ matter.scheduled_at|date:"M j, Y g:i A" }}</p>
+        {% endif %}
+
+        <h2>{% trans "Documents" %}</h2>
+        {% if documents %}
+        <ul class="legal-body">
+            {% for doc in documents %}
+            <li>{{ doc.title }} — {{ doc.get_status_display }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>{% trans "No documents uploaded yet." %}</p>
+        {% endif %}
+
+        <h2>{% trans "Fees" %}</h2>
+        {% if transactions %}
+        <ul class="legal-body">
+            {% for txn in transactions %}
+            <li>{{ txn.description }}: ${{ txn.amount }} ({{ txn.get_status_display }})</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>{% trans "No fees recorded yet." %}</p>
+        {% endif %}
+
+        <p><a class="button ghost" href="{% url 'portal:dashboard' %}">{% trans "Back to my matters" %}</a></p>
+    </div>
+</section>
+{% endblock %}

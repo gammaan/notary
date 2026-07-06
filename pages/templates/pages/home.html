@@ -397,6 +397,10 @@
                             {% if contact_form.service.errors %}<span class="field-error">{{ contact_form.service.errors.0 }}</span>{% endif %}
                         </label>
                         <label>
+                            <span>{% trans "Preferred date" %}</span>
+                            {{ contact_form.preferred_date }}
+                        </label>
+                        <label>
                             <span>
                                 {% trans "Message" %}
                                 <small>{% trans "(optional)" %}</small>

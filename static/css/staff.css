@@ -223,40 +223,63 @@ html[dir="rtl"] .staff-nav__link--button {
 
 .staff-sidebar__foot {
   margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  border-top: 0;
 }
 
-.staff-user-card {
+.staff-profile-menu {
+  position: relative;
+}
+
+.staff-profile-trigger {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
-  padding: 0 8px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--paper-muted) 8%, var(--surface));
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.staff-user-card__avatar {
+html[dir="rtl"] .staff-profile-trigger {
+  text-align: right;
+}
+
+.staff-profile-trigger:hover,
+.staff-profile-trigger[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--paper-muted) 14%, var(--surface));
+}
+
+.staff-profile-trigger__avatar {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--accent-dim);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--surface-raised);
   color: var(--accent-light);
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 800;
   flex-shrink: 0;
 }
 
-.staff-user-card__info {
+.staff-profile-trigger__info {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  line-height: 1.25;
+  flex: 1;
+  line-height: 1.3;
 }
 
-.staff-user-card__info strong {
-  font-size: 0.84rem;
+.staff-profile-trigger__info strong {
+  font-size: 0.88rem;
   font-weight: 700;
   color: var(--text-secondary);
   overflow: hidden;
@@ -264,12 +287,135 @@ html[dir="rtl"] .staff-nav__link--button {
   white-space: nowrap;
 }
 
-.staff-user-card__info small {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.staff-profile-trigger__info small {
+  font-size: 0.75rem;
   color: var(--text-faint);
+}
+
+.staff-profile-trigger__gear {
+  color: var(--accent-light);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.staff-profile-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 30;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+}
+
+.staff-profile-dropdown__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 4px 12px;
+}
+
+.staff-profile-dropdown__avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  background: var(--surface);
+  color: var(--accent-light);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.staff-profile-dropdown__header strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.staff-profile-dropdown__header small {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+.staff-profile-dropdown__divider {
+  height: 1px;
+  margin: 0 0 8px;
+  background: var(--line);
+}
+
+.staff-profile-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.88rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.staff-profile-dropdown__item:hover {
+  background: color-mix(in srgb, var(--paper-muted) 10%, transparent);
+}
+
+.staff-profile-dropdown__item--signout {
+  color: #f97316;
+}
+
+.staff-profile-dropdown__item--signout i {
+  color: #f97316;
+}
+
+.staff-user-card {
+  display: none;
+}
+
+.staff-topbar__actions .button {
+  min-height: 36px;
+  padding: 7px 14px;
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+.staff-topbar__actions .button i {
+  font-size: 0.82rem;
+}
+
+.staff-filter-form__actions .button {
+  min-height: 40px;
+  padding: 8px 16px;
+  align-self: flex-end;
+}
+
+.staff-filter-form__actions {
+  align-items: flex-end;
+}
+
+.staff-amount--expense {
+  color: #f87171;
+}
+
+.staff-amount--income {
+  color: var(--accent-light);
+}
+
+.staff-finance-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 /* ── Main layout ── */

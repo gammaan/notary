@@ -1,14 +1,15 @@
 {% extends "operations/base_staff.html" %}
+{% load i18n %}
 
-{% block page_title %}Clients{% endblock %}
-{% block topbar_actions %}<a class="button primary" href="{% url 'staff:client_create' %}">Add client</a>{% endblock %}
+{% block page_title %}{% trans "Clients" %}{% endblock %}
+{% block topbar_actions %}<a class="button primary" href="{% url 'staff:client_create' %}">{% trans "Add client" %}</a>{% endblock %}
 
 {% block content %}
 <form class="staff-filter-form" method="get">
     <div class="staff-filter-form__row">
         <label class="staff-filter-field staff-filter-field--grow">
-            <span>Search</span>
-            <input type="search" name="q" value="{{ filters.q }}" placeholder="Name, email, phone, ID…">
+            <span>{% trans "Search" %}</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="{% trans 'Name, email, phone, ID…' %}">
         </label>
         <label class="staff-filter-field">
             <span>Active</span>
@@ -36,10 +37,7 @@
             <span>Added to</span>
             <input type="date" name="date_to" value="{{ filters.date_to }}">
         </label>
-        <div class="staff-filter-form__actions">
-            <button class="button primary button--compact" type="submit">Filter</button>
-            <a class="button ghost button--compact" href="{% url 'staff:client_list' %}">Clear</a>
-        </div>
+        {% include "operations/includes/filter_actions.html" with clear_url=clear_url %}
     </div>
 </form>
 

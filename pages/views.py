@@ -1,11 +1,12 @@
 ﻿from django.conf import settings
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
 from cms.featured import featured_portfolio, featured_posts
 from cms.locale import request_language
+from operations.models import AppointmentRequest
+from operations.notifications import notify_appointment_request
 from pages.content import load_site_content
 from pages.forms import ContactForm
 from pages.seo import page_seo
@@ -20,20 +21,14 @@ def home(request):
         contact_form = ContactForm(request.POST, service_choices=service_options or None)
         if contact_form.is_valid():
             data = contact_form.cleaned_data
-            subject = _("New appointment request from %(name)s") % {"name": data["name"]}
-            body = (
-                f"Name: {data['name']}\n"
-                f"Email: {data['email']}\n"
-                f"Service: {data['service']}\n\n"
-                f"Message:\n{data.get('message') or '—'}"
+            appointment = AppointmentRequest.objects.create(
+                name=data["name"],
+                email=data["email"],
+                service=data["service"],
+                message=data.get("message", ""),
+                preferred_date=data.get("preferred_date"),
             )
-            send_mail(
-                subject,
-                body,
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.CONTACT_EMAIL],
-                fail_silently=False,
-            )
+            notify_appointment_request(appointment)
             messages.success(
                 request,
                 _("Thank you — your request was sent. We will contact you shortly."),
