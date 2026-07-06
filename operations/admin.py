@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from operations.models import Client, Document, Matter, ServiceType, Transaction
+from operations.models import AuditLog, Client, Document, Matter, ServiceType, Transaction
 
 
 class MatterInline(admin.TabularInline):
@@ -118,3 +118,26 @@ class TransactionAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     autocomplete_fields = ("matter", "recorded_by")
     date_hierarchy = "transaction_date"
+
+
+@admin.register(AuditLog)
+class AuditLogAdmin(admin.ModelAdmin):
+    list_display = ("created_at", "user", "action", "entity_type", "entity_label", "matter")
+    list_filter = ("action", "entity_type", "created_at")
+    search_fields = ("entity_label", "detail", "matter__reference_number")
+    readonly_fields = (
+        "user",
+        "action",
+        "entity_type",
+        "entity_id",
+        "entity_label",
+        "detail",
+        "matter",
+        "created_at",
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False

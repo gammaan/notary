@@ -76,6 +76,10 @@
                     <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
                     <span>{% trans "Matters" %}</span>
                 </a>
+                <a href="{% url 'staff:calendar' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'calendar' %} is-active{% endif %}">
+                    <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                    <span>{% trans "Calendar" %}</span>
+                </a>
                 <a href="{% url 'staff:document_list' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'document_list' %} is-active{% endif %}">
                     <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
                     <span>{% trans "Documents" %}</span>
@@ -84,6 +88,12 @@
                     <i class="fa-solid fa-wallet" aria-hidden="true"></i>
                     <span>{% trans "Finances" %}</span>
                 </a>
+                {% if staff_can_view_audit %}
+                <a href="{% url 'staff:audit_log' %}" class="staff-nav__link{% if request.resolver_match.url_name == 'audit_log' %} is-active{% endif %}">
+                    <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+                    <span>{% trans "Audit log" %}</span>
+                </a>
+                {% endif %}
 
                 <p class="staff-nav__section">{% trans "Links" %}</p>
                 <a href="{% url 'home' %}" class="staff-nav__link staff-nav__link--muted" target="_blank" rel="noopener">

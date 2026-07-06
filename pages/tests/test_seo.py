@@ -7,12 +7,13 @@ from cms.models import PortfolioItem, Post
 
 class FeaturedContentTests(TestCase):
     def test_featured_posts_prefers_flagged(self):
-        Post.objects.create(title="Regular", body="Body", status=Post.Status.PUBLISHED)
+        Post.objects.create(title="Regular", body="Body", status=Post.Status.PUBLISHED, language="en")
         featured = Post.objects.create(
             title="Featured",
             body="Body",
             status=Post.Status.PUBLISHED,
             is_featured=True,
+            language="en",
         )
         results = list(featured_posts(limit=1))
         self.assertEqual(results[0].pk, featured.pk)
@@ -22,6 +23,7 @@ class FeaturedContentTests(TestCase):
             title="Sample",
             summary="Summary text",
             status=PortfolioItem.Status.PUBLISHED,
+            language="en",
         )
         self.assertEqual(featured_portfolio().count(), 1)
 

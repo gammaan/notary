@@ -5,13 +5,14 @@ from django.shortcuts import redirect, render
 from django.utils.translation import gettext as _
 
 from cms.featured import featured_portfolio, featured_posts
+from cms.locale import request_language
 from pages.content import load_site_content
 from pages.forms import ContactForm
 from pages.seo import page_seo
 
 
 def home(request):
-    lang = getattr(request, "LANGUAGE_CODE", "en") or "en"
+    lang = request_language(request)
     site = load_site_content(lang)
     service_options = site.get("notary", {}).get("form", {}).get("options", [])
 
@@ -44,8 +45,8 @@ def home(request):
 
     ctx = {
         "contact_form": contact_form,
-        "featured_posts": featured_posts(),
-        "featured_portfolio": featured_portfolio(),
+        "featured_posts": featured_posts(lang),
+        "featured_portfolio": featured_portfolio(lang),
     }
     ctx.update(
         page_seo(

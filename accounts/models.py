@@ -16,6 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
         CLIENT = "client", _("Client")
         STAFF = "staff", _("Staff")
+        MANAGER = "manager", _("Manager")
 
     email = models.EmailField(_("email address"), unique=True, db_index=True)
     first_name = models.CharField(_("first name"), max_length=150)

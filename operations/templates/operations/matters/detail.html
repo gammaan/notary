@@ -113,6 +113,7 @@
                         <a class="staff-icon-btn" href="{% url 'staff:document_edit' doc.pk %}" title="Edit">
                             <i class="fa-solid fa-pen" aria-hidden="true"></i>
                         </a>
+                        {% if staff_can_delete %}
                         <form method="post" action="{% url 'staff:document_action' doc.pk %}" onsubmit="return confirm('Remove this document?');">
                             {% csrf_token %}
                             <input type="hidden" name="next" value="{{ request.path }}">
@@ -121,6 +122,7 @@
                                 <i class="fa-solid fa-trash" aria-hidden="true"></i>
                             </button>
                         </form>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </li>
@@ -172,6 +174,7 @@
                         <a class="staff-icon-btn" href="{% url 'staff:transaction_edit' txn.pk %}" title="Edit">
                             <i class="fa-solid fa-pen" aria-hidden="true"></i>
                         </a>
+                        {% if staff_can_delete %}
                         <form method="post" action="{% url 'staff:transaction_action' txn.pk %}" onsubmit="return confirm('Remove this transaction?');">
                             {% csrf_token %}
                             <input type="hidden" name="next" value="{{ request.path }}">
@@ -180,6 +183,7 @@
                                 <i class="fa-solid fa-trash" aria-hidden="true"></i>
                             </button>
                         </form>
+                        {% endif %}
                         {% endif %}
                         <a class="staff-icon-btn" href="{% url 'staff:transaction_receipt' txn.pk %}" target="_blank" rel="noopener" title="Print receipt">
                             <i class="fa-solid fa-print" aria-hidden="true"></i>

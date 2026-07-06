@@ -31,7 +31,7 @@
         <div class="dash-kpi__body">
             <span class="dash-kpi__label">Scheduled today</span>
             <strong class="dash-kpi__value">{{ stats.scheduled_today }}</strong>
-            <span class="dash-kpi__hint">Appointments on calendar</span>
+            <span class="dash-kpi__hint"><a class="staff-link" href="{% url 'staff:calendar' %}">Open calendar</a></span>
         </div>
     </article>
     <article class="dash-kpi">

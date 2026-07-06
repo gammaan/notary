@@ -1,8 +1,7 @@
-from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
+from django.contrib.sitemaps import Sitemap
 
 from cms.models import PortfolioItem, Post
-
 
 class StaticViewSitemap(Sitemap):
     changefreq = "monthly"
@@ -13,7 +12,6 @@ class StaticViewSitemap(Sitemap):
 
     def location(self, item):
         return reverse(item)
-
 
 class PostSitemap(Sitemap):
     changefreq = "weekly"
@@ -27,7 +25,6 @@ class PostSitemap(Sitemap):
 
     def location(self, obj):
         return reverse("blog_detail", kwargs={"slug": obj.slug})
-
 
 class PortfolioSitemap(Sitemap):
     changefreq = "monthly"

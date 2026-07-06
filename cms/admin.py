@@ -1,19 +1,19 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from cms.models import PortfolioItem, Post
+from cms.models import ContentLanguage, PortfolioItem, Post
 
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "status", "is_featured", "published_at", "updated_at")
-    list_filter = ("category", "status", "is_featured")
+    list_display = ("title", "language", "category", "status", "is_featured", "published_at", "updated_at")
+    list_filter = ("language", "category", "status", "is_featured")
     search_fields = ("title", "summary", "body")
     prepopulated_fields = {"slug": ("title",)}
     date_hierarchy = "published_at"
     ordering = ("-published_at", "-created_at")
     fieldsets = (
-        (None, {"fields": ("title", "slug", "category", "status", "is_featured")}),
+        (None, {"fields": ("title", "slug", "language", "category", "status", "is_featured")}),
         (_("Content"), {"fields": ("summary", "body")}),
         (_("Publishing"), {"fields": ("published_at",)}),
     )
@@ -21,13 +21,13 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(PortfolioItem)
 class PortfolioItemAdmin(admin.ModelAdmin):
-    list_display = ("title", "document_type", "status", "is_featured", "sort_order", "published_at")
-    list_filter = ("status", "is_featured", "document_type")
+    list_display = ("title", "language", "document_type", "status", "is_featured", "sort_order", "published_at")
+    list_filter = ("language", "status", "is_featured", "document_type")
     search_fields = ("title", "summary", "body", "document_type")
     prepopulated_fields = {"slug": ("title",)}
     ordering = ("sort_order", "-published_at")
     fieldsets = (
-        (None, {"fields": ("title", "slug", "document_type", "status", "is_featured", "sort_order")}),
+        (None, {"fields": ("title", "slug", "language", "document_type", "status", "is_featured", "sort_order")}),
         (_("Content"), {"fields": ("summary", "body")}),
         (_("Publishing"), {"fields": ("published_at",)}),
     )

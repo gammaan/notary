@@ -60,6 +60,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
                 "pages.context_processors.site_content",
+                "operations.context_processors.staff_permissions",
             ],
         },
     },

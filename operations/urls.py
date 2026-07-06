@@ -1,6 +1,8 @@
 from django.urls import path
 
 from operations.views import (
+    AuditLogListView,
+    CalendarView,
     ClientCreateView,
     ClientDetailView,
     ClientListView,
@@ -33,6 +35,8 @@ urlpatterns = [
     path("login/", StaffLoginView.as_view(), name="login"),
     path("logout/", StaffLogoutView.as_view(), name="logout"),
     path("", DashboardView.as_view(), name="dashboard"),
+    path("calendar/", CalendarView.as_view(), name="calendar"),
+    path("audit-log/", AuditLogListView.as_view(), name="audit_log"),
     path("clients/", ClientListView.as_view(), name="client_list"),
     path("clients/new/", ClientCreateView.as_view(), name="client_create"),
     path("clients/<int:pk>/", ClientDetailView.as_view(), name="client_detail"),

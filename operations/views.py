@@ -1,5 +1,5 @@
 from decimal import Decimal
-from datetime import date
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, TemplateView, UpdateView, View
 
+from accounts.permissions import can_delete_records
+from operations.audit import log_audit, log_status_change
 from operations.forms import (
     ClientForm,
     DocumentForm,
@@ -20,8 +22,8 @@ from operations.forms import (
     StaffLoginForm,
     TransactionForm,
 )
-from operations.mixins import StaffRequiredMixin
-from operations.models import Client, Document, Matter, ServiceType, Transaction
+from operations.mixins import ManagerRequiredMixin, StaffRequiredMixin
+from operations.models import AuditLog, Client, Document, Matter, ServiceType, Transaction
 from operations.filters import filter_clients, filter_documents, filter_matters, filter_transactions
 from operations.quick_actions import next_document_status
 from operations.transaction_rules import (
@@ -300,9 +302,18 @@ class MatterStatusView(StaffRequiredMixin, View):
             messages.error(request, "Invalid status.")
             return redirect("staff:matter_detail", pk=matter.pk)
 
+        old_status = matter.status
         if matter_is_closed(matter):
             if status in REOPEN_STATUSES:
                 apply_matter_status(matter, status)
+                log_status_change(
+                    request.user,
+                    AuditLog.EntityType.MATTER,
+                    matter,
+                    old_status,
+                    status,
+                    label=matter.reference_number,
+                )
                 messages.success(request, f"Matter reopened as {matter.get_status_display()}.")
             else:
                 messages.error(request, "This matter is closed. Choose an open status to reopen it.")
@@ -313,6 +324,15 @@ class MatterStatusView(StaffRequiredMixin, View):
             )
         else:
             apply_matter_status(matter, status)
+            if old_status != status:
+                log_status_change(
+                    request.user,
+                    AuditLog.EntityType.MATTER,
+                    matter,
+                    old_status,
+                    status,
+                    label=matter.reference_number,
+                )
             messages.success(request, f"Matter status updated to {matter.get_status_display()}.")
         return redirect("staff:matter_detail", pk=matter.pk)
 
@@ -350,22 +370,55 @@ class DocumentQuickActionView(StaffRequiredMixin, View):
         action = request.POST.get("action")
 
         if action == "delete":
+            if not can_delete_records(request.user):
+                messages.error(request, "Only managers can delete records.")
+                return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
             title = document.title
+            doc_id = document.pk
             document.delete()
+            log_audit(
+                request.user,
+                AuditLog.Action.DELETED,
+                AuditLog.EntityType.DOCUMENT,
+                doc_id,
+                title,
+                matter=matter,
+            )
             messages.success(request, f'Document "{title}" removed.')
         elif action == "approve":
             nxt = next_document_status(document.status)
             if nxt:
+                old_status = document.status
                 document.status = nxt
                 document.save(update_fields=["status", "updated_at"])
+                log_status_change(
+                    request.user,
+                    AuditLog.EntityType.DOCUMENT,
+                    document,
+                    old_status,
+                    nxt,
+                    matter=matter,
+                    label=document.title,
+                )
                 messages.success(request, f'Document marked as {document.get_status_display()}.')
             else:
                 messages.info(request, "Document is already at the final review stage.")
         elif action == "status":
             status = request.POST.get("status")
             if status in Document.Status.values:
+                old_status = document.status
                 document.status = status
                 document.save(update_fields=["status", "updated_at"])
+                if old_status != status:
+                    log_status_change(
+                        request.user,
+                        AuditLog.EntityType.DOCUMENT,
+                        document,
+                        old_status,
+                        status,
+                        matter=matter,
+                        label=document.title,
+                    )
                 messages.success(request, f'Document status set to {document.get_status_display()}.')
             else:
                 messages.error(request, "Invalid document status.")
@@ -404,12 +457,34 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
             return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
 
         if action == "delete":
+            if not can_delete_records(request.user):
+                messages.error(request, "Only managers can delete records.")
+                return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
             label = transaction.description
+            txn_id = transaction.pk
             transaction.delete()
+            log_audit(
+                request.user,
+                AuditLog.Action.DELETED,
+                AuditLog.EntityType.TRANSACTION,
+                txn_id,
+                label,
+                matter=matter,
+            )
             messages.success(request, f'Transaction "{label}" removed.')
         elif action == "mark_paid":
+            old_status = transaction.status
             transaction.status = Transaction.Status.PAID
             transaction.save(update_fields=["status", "updated_at"])
+            log_status_change(
+                request.user,
+                AuditLog.EntityType.TRANSACTION,
+                transaction,
+                old_status,
+                transaction.status,
+                matter=matter,
+                label=transaction.description,
+            )
             if auto_complete_matter_if_paid(matter):
                 messages.success(
                     request,
@@ -418,12 +493,32 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
             else:
                 messages.success(request, "Payment marked as paid.")
         elif action == "mark_pending":
+            old_status = transaction.status
             transaction.status = Transaction.Status.PENDING
             transaction.save(update_fields=["status", "updated_at"])
+            log_status_change(
+                request.user,
+                AuditLog.EntityType.TRANSACTION,
+                transaction,
+                old_status,
+                transaction.status,
+                matter=matter,
+                label=transaction.description,
+            )
             messages.info(request, "Payment marked as pending.")
         elif action == "mark_waived":
+            old_status = transaction.status
             transaction.status = Transaction.Status.WAIVED
             transaction.save(update_fields=["status", "updated_at"])
+            log_status_change(
+                request.user,
+                AuditLog.EntityType.TRANSACTION,
+                transaction,
+                old_status,
+                transaction.status,
+                matter=matter,
+                label=transaction.description,
+            )
             if auto_complete_matter_if_paid(matter):
                 messages.info(
                     request,
@@ -434,8 +529,19 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
         elif action == "status":
             status = request.POST.get("status")
             if status in Transaction.Status.values:
+                old_status = transaction.status
                 transaction.status = status
                 transaction.save(update_fields=["status", "updated_at"])
+                if old_status != status:
+                    log_status_change(
+                        request.user,
+                        AuditLog.EntityType.TRANSACTION,
+                        transaction,
+                        old_status,
+                        status,
+                        matter=matter,
+                        label=transaction.description,
+                    )
                 if status in {
                     Transaction.Status.PAID,
                     Transaction.Status.WAIVED,
@@ -490,8 +596,17 @@ class DocumentUpdateView(StaffRequiredMixin, UpdateView):
         return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        log_audit(
+            self.request.user,
+            AuditLog.Action.UPDATED,
+            AuditLog.EntityType.DOCUMENT,
+            self.object.pk,
+            self.object.title,
+            matter=self.object.matter,
+        )
         messages.success(self.request, "Document updated successfully.")
-        return super().form_valid(form)
+        return response
 
 
 class TransactionUpdateView(StaffRequiredMixin, UpdateView):
@@ -533,8 +648,17 @@ class TransactionUpdateView(StaffRequiredMixin, UpdateView):
         return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        log_audit(
+            self.request.user,
+            AuditLog.Action.UPDATED,
+            AuditLog.EntityType.TRANSACTION,
+            self.object.pk,
+            self.object.description,
+            matter=self.object.matter,
+        )
         messages.success(self.request, "Transaction updated successfully.")
-        return super().form_valid(form)
+        return response
 
 
 class MatterUpdateView(StaffRequiredMixin, UpdateView):
@@ -562,8 +686,17 @@ class MatterUpdateView(StaffRequiredMixin, UpdateView):
         return reverse("staff:matter_detail", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        log_audit(
+            self.request.user,
+            AuditLog.Action.UPDATED,
+            AuditLog.EntityType.MATTER,
+            self.object.pk,
+            self.object.reference_number,
+            matter=self.object,
+        )
         messages.success(self.request, "Matter updated successfully.")
-        return super().form_valid(form)
+        return response
 
 
 class MatterDocumentsView(StaffRequiredMixin, DetailView):
@@ -596,6 +729,14 @@ class MatterDocumentsView(StaffRequiredMixin, DetailView):
             doc.matter = self.object
             doc.uploaded_by = request.user
             doc.save()
+            log_audit(
+                request.user,
+                AuditLog.Action.CREATED,
+                AuditLog.EntityType.DOCUMENT,
+                doc.pk,
+                doc.title,
+                matter=self.object,
+            )
             messages.success(request, "Document added.")
             return redirect("staff:matter_documents", pk=self.object.pk)
         ctx = self.get_context_data()
@@ -645,6 +786,14 @@ class MatterFinancesView(StaffRequiredMixin, DetailView):
             txn.matter = self.object
             txn.recorded_by = request.user
             txn.save()
+            log_audit(
+                request.user,
+                AuditLog.Action.CREATED,
+                AuditLog.EntityType.TRANSACTION,
+                txn.pk,
+                txn.description,
+                matter=self.object,
+            )
             if auto_complete_matter_if_paid(self.object):
                 messages.success(
                     request,
@@ -682,6 +831,7 @@ class MatterCompleteView(StaffRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         matter = self.get_object()
         action = request.POST.get("action")
+        old_status = matter.status
         if action == "complete":
             if not can_manually_complete_matter(matter):
                 messages.error(
@@ -690,6 +840,14 @@ class MatterCompleteView(StaffRequiredMixin, DetailView):
                 )
             else:
                 apply_matter_status(matter, Matter.Status.COMPLETED)
+                log_status_change(
+                    request.user,
+                    AuditLog.EntityType.MATTER,
+                    matter,
+                    old_status,
+                    Matter.Status.COMPLETED,
+                    label=matter.reference_number,
+                )
                 messages.success(
                     request,
                     f"Matter {matter.reference_number} marked as completed.",
@@ -699,9 +857,25 @@ class MatterCompleteView(StaffRequiredMixin, DetailView):
                 messages.error(request, "This matter is closed.")
             else:
                 apply_matter_status(matter, Matter.Status.AWAITING_PAYMENT)
+                log_status_change(
+                    request.user,
+                    AuditLog.EntityType.MATTER,
+                    matter,
+                    old_status,
+                    Matter.Status.AWAITING_PAYMENT,
+                    label=matter.reference_number,
+                )
                 messages.info(request, "Matter set to awaiting payment.")
         elif action == "reopen":
             apply_matter_status(matter, Matter.Status.IN_PROGRESS)
+            log_status_change(
+                request.user,
+                AuditLog.EntityType.MATTER,
+                matter,
+                old_status,
+                Matter.Status.IN_PROGRESS,
+                label=matter.reference_number,
+            )
             messages.success(request, "Matter reopened for further work.")
         return redirect("staff:matter_detail", pk=matter.pk)
 
@@ -936,4 +1110,66 @@ class MatterDocumentsPrintView(StaffRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx["documents"] = self.object.documents.order_by("title")
         ctx["transactions"] = self.object.transactions.order_by("-transaction_date")
+        return ctx
+
+
+class CalendarView(StaffRequiredMixin, TemplateView):
+    template_name = "operations/calendar.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        today = timezone.localdate()
+        week_param = self.request.GET.get("week")
+        if week_param:
+            try:
+                week_start = date.fromisoformat(week_param)
+            except ValueError:
+                week_start = today - timedelta(days=today.weekday())
+        else:
+            week_start = today - timedelta(days=today.weekday())
+
+        week_end = week_start + timedelta(days=6)
+        week_days = [week_start + timedelta(days=i) for i in range(7)]
+
+        matters = (
+            Matter.objects.filter(
+                scheduled_at__date__gte=week_start,
+                scheduled_at__date__lte=week_end,
+            )
+            .exclude(status=Matter.Status.CANCELLED)
+            .select_related("client", "service_type", "assigned_to")
+            .order_by("scheduled_at")
+        )
+
+        by_day = {day: [] for day in week_days}
+        for matter in matters:
+            if matter.scheduled_at:
+                by_day[matter.scheduled_at.date()].append(matter)
+
+        ctx["week_days"] = [{"date": day, "matters": by_day[day]} for day in week_days]
+        ctx["week_start"] = week_start
+        ctx["week_end"] = week_end
+        ctx["prev_week"] = (week_start - timedelta(days=7)).isoformat()
+        ctx["next_week"] = (week_start + timedelta(days=7)).isoformat()
+        ctx["today"] = today
+        return ctx
+
+
+class AuditLogListView(ManagerRequiredMixin, ListView):
+    model = AuditLog
+    template_name = "operations/audit/list.html"
+    context_object_name = "entries"
+    paginate_by = 40
+
+    def get_queryset(self):
+        qs = AuditLog.objects.select_related("user", "matter").order_by("-created_at")
+        entity = self.request.GET.get("entity")
+        if entity in AuditLog.EntityType.values:
+            qs = qs.filter(entity_type=entity)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["entity_types"] = AuditLog.EntityType.choices
+        ctx["active_entity"] = self.request.GET.get("entity", "")
         return ctx

@@ -1,12 +1,42 @@
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext as _
 
+from cms.locale import filter_by_language, request_language
 from cms.models import PortfolioItem, Post
 from pages.seo import page_seo
 
 
+def _get_post(slug, language):
+    try:
+        return Post.objects.get(slug=slug, status=Post.Status.PUBLISHED, language=language)
+    except Post.DoesNotExist:
+        if language != "en":
+            return get_object_or_404(Post, slug=slug, status=Post.Status.PUBLISHED, language="en")
+        raise
+
+
+def _get_portfolio_item(slug, language):
+    try:
+        return PortfolioItem.objects.get(
+            slug=slug, status=PortfolioItem.Status.PUBLISHED, language=language
+        )
+    except PortfolioItem.DoesNotExist:
+        if language != "en":
+            return get_object_or_404(
+                PortfolioItem,
+                slug=slug,
+                status=PortfolioItem.Status.PUBLISHED,
+                language="en",
+            )
+        raise
+
+
 def blog_list(request):
-    posts = Post.objects.filter(status=Post.Status.PUBLISHED)
+    language = request_language(request)
+    posts = filter_by_language(
+        Post.objects.filter(status=Post.Status.PUBLISHED),
+        language,
+    )
     category = request.GET.get("category")
     if category in Post.Category.values:
         posts = posts.filter(category=category)
@@ -28,9 +58,14 @@ def blog_list(request):
 
 
 def blog_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug, status=Post.Status.PUBLISHED)
+    language = request_language(request)
+    post = _get_post(slug, language)
     related = (
-        Post.objects.filter(status=Post.Status.PUBLISHED, category=post.category)
+        filter_by_language(
+            Post.objects.filter(status=Post.Status.PUBLISHED, category=post.category),
+            language,
+            fallback=False,
+        )
         .exclude(pk=post.pk)[:3]
     )
     ctx = {"post": post, "related_posts": related}
@@ -46,7 +81,11 @@ def blog_detail(request, slug):
 
 
 def portfolio_list(request):
-    items = PortfolioItem.objects.filter(status=PortfolioItem.Status.PUBLISHED)
+    language = request_language(request)
+    items = filter_by_language(
+        PortfolioItem.objects.filter(status=PortfolioItem.Status.PUBLISHED),
+        language,
+    )
     ctx = {"portfolio_items": items}
     ctx.update(
         page_seo(
@@ -60,9 +99,14 @@ def portfolio_list(request):
 
 
 def portfolio_detail(request, slug):
-    item = get_object_or_404(PortfolioItem, slug=slug, status=PortfolioItem.Status.PUBLISHED)
+    language = request_language(request)
+    item = _get_portfolio_item(slug, language)
     related = (
-        PortfolioItem.objects.filter(status=PortfolioItem.Status.PUBLISHED)
+        filter_by_language(
+            PortfolioItem.objects.filter(status=PortfolioItem.Status.PUBLISHED),
+            language,
+            fallback=False,
+        )
         .exclude(pk=item.pk)[:3]
     )
     ctx = {"item": item, "related_items": related}

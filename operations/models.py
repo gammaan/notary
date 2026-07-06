@@ -280,3 +280,48 @@ class Transaction(models.Model):
             self.Status.WAIVED,
             self.Status.CANCELLED,
         )
+
+
+class AuditLog(models.Model):
+    class EntityType(models.TextChoices):
+        MATTER = "matter", _("Matter")
+        DOCUMENT = "document", _("Document")
+        TRANSACTION = "transaction", _("Transaction")
+        CLIENT = "client", _("Client")
+
+    class Action(models.TextChoices):
+        CREATED = "created", _("Created")
+        UPDATED = "updated", _("Updated")
+        DELETED = "deleted", _("Deleted")
+        STATUS_CHANGED = "status_changed", _("Status changed")
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_logs",
+        verbose_name=_("user"),
+    )
+    action = models.CharField(_("action"), max_length=20, choices=Action.choices)
+    entity_type = models.CharField(_("entity type"), max_length=20, choices=EntityType.choices)
+    entity_id = models.PositiveIntegerField(_("entity id"))
+    entity_label = models.CharField(_("entity"), max_length=255)
+    detail = models.CharField(_("detail"), max_length=500, blank=True)
+    matter = models.ForeignKey(
+        Matter,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_logs",
+        verbose_name=_("matter"),
+    )
+    created_at = models.DateTimeField(_("logged at"), auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = _("audit log entry")
+        verbose_name_plural = _("audit log")
+
+    def __str__(self):
+        return f"{self.get_action_display()} {self.entity_label}"
