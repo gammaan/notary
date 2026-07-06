@@ -1,32 +1,88 @@
 {% extends "operations/base_staff.html" %}
+{% load i18n %}
+
 {% block page_title %}{{ client.full_name }}{% endblock %}
+
 {% block topbar_actions %}
-<a class="button ghost" href="{% url 'staff:client_edit' client.pk %}">Edit</a>
-<a class="button primary" href="{% url 'staff:matter_create' %}">New matter</a>
+<a class="button ghost" href="{% url 'staff:client_edit' client.uuid %}"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> {% trans "Edit" %}</a>
+<a class="button primary" href="{% url 'staff:matter_create' %}?client={{ client.uuid }}"><i class="fa-solid fa-plus" aria-hidden="true"></i> {% trans "New matter" %}</a>
 {% endblock %}
+
 {% block content %}
-<div class="staff-grid-2">
-    <section class="staff-panel">
-        <h2>Contact</h2>
-        <dl class="staff-dl">
-            <div><dt>Email</dt><dd>{{ client.email|default:"—" }}</dd></div>
-            <div><dt>Phone</dt><dd>{{ client.phone|default:"—" }}</dd></div>
-            <div><dt>ID</dt><dd>{{ client.id_number|default:"—" }}</dd></div>
-            <div><dt>Address</dt><dd>{{ client.address|default:"—" }}</dd></div>
-        </dl>
-        {% if client.notes %}<p class="staff-notes">{{ client.notes }}</p>{% endif %}
-    </section>
-    <section class="staff-panel">
-        <div class="staff-panel__head"><h2>Matters</h2></div>
-        {% if matters %}
-        <ul class="staff-list">
-            {% for m in matters %}
-            <li><a href="{% url 'staff:matter_detail' m.pk %}"><strong>{{ m.reference_number }}</strong> {{ m.title }} <span class="staff-badge staff-badge--{{ m.status }}">{{ m.get_status_display }}</span></a></li>
-            {% endfor %}
-        </ul>
+<header class="staff-detail-hero">
+    <div class="staff-detail-hero__head">
+        <div>
+            <span class="staff-detail-hero__eyebrow">{% trans "Client" %}</span>
+            <h2 class="staff-detail-hero__title">{{ client.full_name }}</h2>
+        </div>
+        {% if client.is_active %}
+        <span class="staff-badge staff-badge--completed">{% trans "Active" %}</span>
         {% else %}
-        <p class="staff-empty">No matters for this client yet.</p>
+        <span class="staff-badge">{% trans "Inactive" %}</span>
         {% endif %}
-    </section>
-</div>
+    </div>
+
+    <div class="staff-detail-cards">
+        <div class="staff-detail-card">
+            <span class="staff-detail-card__label"><i class="fa-solid fa-venus-mars" aria-hidden="true"></i> {% trans "Sex" %}</span>
+            <strong>{{ client.get_sex_display|default:"—" }}</strong>
+        </div>
+        <div class="staff-detail-card">
+            <span class="staff-detail-card__label"><i class="fa-solid fa-envelope" aria-hidden="true"></i> {% trans "Email" %}</span>
+            <strong>{% if client.email %}<a href="mailto:{{ client.email }}">{{ client.email }}</a>{% else %}—{% endif %}</strong>
+        </div>
+        <div class="staff-detail-card">
+            <span class="staff-detail-card__label"><i class="fa-solid fa-phone" aria-hidden="true"></i> {% trans "Phone" %}</span>
+            <strong>{{ client.phone|default:"—" }}</strong>
+        </div>
+        <div class="staff-detail-card">
+            <span class="staff-detail-card__label"><i class="fa-solid fa-id-card" aria-hidden="true"></i> {% trans "ID / passport" %}</span>
+            <strong>{{ client.id_number|default:"—" }}</strong>
+        </div>
+        <div class="staff-detail-card staff-detail-card--wide">
+            <span class="staff-detail-card__label"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {% trans "Address" %}</span>
+            <strong>{{ client.address|default:"—" }}</strong>
+        </div>
+    </div>
+
+    {% if client.notes %}
+    <p class="staff-detail-notes"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> {{ client.notes }}</p>
+    {% endif %}
+</header>
+
+<section class="staff-section">
+    <div class="staff-section__head">
+        <h4><i class="fa-solid fa-briefcase" aria-hidden="true"></i> {% trans "Matters" %}</h4>
+        <a class="staff-link" href="{% url 'staff:matter_create' %}?client={{ client.uuid }}">{% trans "New matter" %}</a>
+    </div>
+    {% if matters_page.object_list %}
+    <table class="staff-table staff-table--compact">
+        <thead>
+            <tr>
+                <th>{% trans "Reference" %}</th>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Service" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Created" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in matters_page %}
+            <tr>
+                <td><strong>{{ m.reference_number }}</strong></td>
+                <td>{{ m.title }}</td>
+                <td>{{ m.service_type.name }}</td>
+                <td><span class="staff-badge staff-badge--{{ m.status }}">{{ m.get_status_display }}</span></td>
+                <td>{{ m.created_at|date:"M j, Y" }}</td>
+                <td><a class="staff-link" href="{% url 'staff:matter_detail' m.uuid %}">{% trans "Open" %}</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "operations/includes/pagination.html" with page_obj=matters_page %}
+    {% else %}
+    <p class="staff-empty">{% trans "No matters for this client yet." %} <a href="{% url 'staff:matter_create' %}?client={{ client.uuid }}">{% trans "Create the first matter" %}</a></p>
+    {% endif %}
+</section>
 {% endblock %}

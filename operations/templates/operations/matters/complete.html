@@ -30,7 +30,7 @@
             <button class="button ghost" name="action" value="awaiting_payment" type="submit">Set awaiting payment</button>
         </form>
         {% endif %}
-        <a class="button ghost" href="{% url 'staff:matter_detail' matter.pk %}">Back to matter</a>
+        <a class="button ghost" href="{% url 'staff:matter_detail' matter.uuid %}">Back to matter</a>
     </div>
 </div>
 {% endblock %}

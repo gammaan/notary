@@ -20,7 +20,7 @@ class StaffPortalTests(TestCase):
             last_name="User",
             is_staff=True,
         )
-        self.client_obj = Client.objects.create(first_name="Ali", last_name="Hassan")
+        self.client_obj = Client.objects.create(full_name="Ali Hassan")
         self.service = ServiceType.objects.create(name="Notarization", default_fee=Decimal("50"))
         self.matter = Matter.objects.create(
             client=self.client_obj,
@@ -38,7 +38,7 @@ class StaffPortalTests(TestCase):
             uploaded_by=self.staff,
         )
         anon = HttpClient()
-        url = reverse("staff:document_download", kwargs={"pk": doc.pk})
+        url = reverse("staff:document_download", kwargs={"pk": doc.uuid})
         self.assertEqual(anon.get(url).status_code, 302)
         response = self.http.get(url)
         self.assertEqual(response.status_code, 200)
@@ -46,9 +46,9 @@ class StaffPortalTests(TestCase):
     def test_closed_matter_blocks_document_upload(self):
         self.matter.status = Matter.Status.COMPLETED
         self.matter.save()
-        url = reverse("staff:matter_documents", kwargs={"pk": self.matter.pk})
+        url = reverse("staff:matter_documents", kwargs={"pk": self.matter.uuid})
         response = self.http.get(url)
-        self.assertRedirects(response, reverse("staff:matter_detail", kwargs={"pk": self.matter.pk}))
+        self.assertRedirects(response, reverse("staff:matter_detail", kwargs={"pk": self.matter.uuid}))
 
     def test_safe_redirect_blocks_external_url(self):
         request = self.http.get("/").wsgi_request
@@ -61,7 +61,9 @@ class StaffPortalTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse("staff:dashboard"))
 
-    def test_locked_transaction_blocks_edit_post(self):
+    def test_locked_transaction_blocks_edit_when_matter_closed(self):
+        self.matter.status = Matter.Status.COMPLETED
+        self.matter.save()
         txn = Transaction.objects.create(
             matter=self.matter,
             transaction_type=Transaction.Type.INCOME,
@@ -70,6 +72,14 @@ class StaffPortalTests(TestCase):
             status=Transaction.Status.PAID,
             recorded_by=self.staff,
         )
-        url = reverse("staff:transaction_edit", kwargs={"pk": txn.pk})
+        url = reverse("staff:transaction_edit", kwargs={"pk": txn.uuid})
         response = self.http.post(url, {"description": "Changed"})
-        self.assertRedirects(response, reverse("staff:matter_detail", kwargs={"pk": self.matter.pk}))
+        self.assertRedirects(response, reverse("staff:matter_detail", kwargs={"pk": self.matter.uuid}))
+
+    def test_matter_wizard_prefills_client_from_query(self):
+        url = reverse("staff:matter_create") + f"?client={self.client_obj.uuid}"
+        response = self.http.get(url)
+        self.assertRedirects(response, reverse("staff:matter_wizard", kwargs={"step": "details"}))
+        follow = self.http.get(response.url)
+        self.assertEqual(follow.status_code, 200)
+        self.assertContains(follow, self.client_obj.full_name)

@@ -20,11 +20,11 @@
                     <time>{{ matter.created_at|date:"M j, Y" }}</time>
                 </div>
                 <h2 class="cms-card__title">
-                    <a href="{% url 'portal:matter_detail' matter.pk %}">{{ matter.title }}</a>
+                    <a href="{% url 'portal:matter_detail' matter.uuid %}">{{ matter.title }}</a>
                 </h2>
                 <p class="cms-card__excerpt">{{ matter.reference_number }} · {{ matter.service_type.name }}</p>
                 <footer class="cms-card__footer">
-                    <a class="cms-card__link" href="{% url 'portal:matter_detail' matter.pk %}">
+                    <a class="cms-card__link" href="{% url 'portal:matter_detail' matter.uuid %}">
                         {% trans "View details" %}
                     </a>
                 </footer>

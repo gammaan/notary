@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 phone_validator = RegexValidator(
     regex=r"^\+?[\d\s\-().]{7,20}$",
@@ -10,9 +11,31 @@ phone_validator = RegexValidator(
 )
 
 
-class Client(models.Model):
-    first_name = models.CharField(_("first name"), max_length=150)
-    last_name = models.CharField(_("last name"), max_length=150)
+class UUIDModel(models.Model):
+    uuid = models.UUIDField(
+        _("uuid"),
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        db_index=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Client(UUIDModel):
+    class Sex(models.TextChoices):
+        MALE = "male", _("Male")
+        FEMALE = "female", _("Female")
+
+    full_name = models.CharField(_("full name"), max_length=300)
+    sex = models.CharField(
+        _("sex"),
+        max_length=10,
+        choices=Sex.choices,
+        blank=True,
+    )
     email = models.EmailField(_("email"), blank=True)
     phone = models.CharField(
         _("phone"),
@@ -41,16 +64,12 @@ class Client(models.Model):
     updated_at = models.DateTimeField(_("updated"), auto_now=True)
 
     class Meta:
-        ordering = ["last_name", "first_name"]
+        ordering = ["full_name"]
         verbose_name = _("client")
         verbose_name_plural = _("clients")
 
     def __str__(self):
         return self.full_name
-
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}".strip()
 
 
 class ServiceType(models.Model):
@@ -75,7 +94,7 @@ class ServiceType(models.Model):
         return self.name
 
 
-class Matter(models.Model):
+class Matter(UUIDModel):
     class Status(models.TextChoices):
         INQUIRY = "inquiry", _("Inquiry")
         SCHEDULED = "scheduled", _("Scheduled")
@@ -165,7 +184,7 @@ def document_upload_path(instance, filename):
     return f"documents/{matter_ref}/{filename}"
 
 
-class Document(models.Model):
+class Document(UUIDModel):
     class Status(models.TextChoices):
         PENDING = "pending", _("Pending")
         RECEIVED = "received", _("Received")
@@ -209,7 +228,7 @@ class Document(models.Model):
         return self.title
 
 
-class Transaction(models.Model):
+class Transaction(UUIDModel):
     class Type(models.TextChoices):
         INCOME = "income", _("Income")
         EXPENSE = "expense", _("Expense")
@@ -228,11 +247,45 @@ class Transaction(models.Model):
         CARD = "card", _("Card")
         OTHER = "other", _("Other")
 
+    class Category(models.TextChoices):
+        RENT = "rent", _("Rent")
+        UTILITIES = "utilities", _("Utilities")
+        INTERNET = "internet", _("Internet")
+        SALARY = "salary", _("Salary")
+        OFFICE_SUPPLIES = "office_supplies", _("Office supplies")
+        OTHER_INCOME = "other_income", _("Other income")
+        INTEREST = "interest", _("Interest")
+        REFUND = "refund", _("Refund")
+        OTHER = "other", _("Other")
+
+    EXPENSE_CATEGORIES = (
+        Category.RENT,
+        Category.UTILITIES,
+        Category.INTERNET,
+        Category.SALARY,
+        Category.OFFICE_SUPPLIES,
+        Category.OTHER,
+    )
+    INCOME_CATEGORIES = (
+        Category.OTHER_INCOME,
+        Category.INTEREST,
+        Category.REFUND,
+        Category.OTHER,
+    )
+
     matter = models.ForeignKey(
         Matter,
         on_delete=models.CASCADE,
         related_name="transactions",
         verbose_name=_("matter"),
+        null=True,
+        blank=True,
+    )
+    category = models.CharField(
+        _("category"),
+        max_length=32,
+        choices=Category.choices,
+        blank=True,
     )
     transaction_type = models.CharField(
         _("type"),
@@ -279,7 +332,14 @@ class Transaction(models.Model):
         verbose_name_plural = _("transactions")
 
     def __str__(self):
-        return f"{self.get_transaction_type_display()} {self.amount} — {self.matter.reference_number}"
+        if self.matter_id:
+            return f"{self.get_transaction_type_display()} {self.amount} — {self.matter.reference_number}"
+        label = self.get_category_display() if self.category else self.description
+        return f"{self.get_transaction_type_display()} {self.amount} — {label}"
+
+    @property
+    def is_general(self):
+        return self.matter_id is None
 
     @property
     def is_locked(self):
@@ -335,7 +395,7 @@ class AuditLog(models.Model):
         return f"{self.get_action_display()} {self.entity_label}"
 
 
-class AppointmentRequest(models.Model):
+class AppointmentRequest(UUIDModel):
     class Status(models.TextChoices):
         PENDING = "pending", _("Pending")
         CONFIRMED = "confirmed", _("Confirmed")

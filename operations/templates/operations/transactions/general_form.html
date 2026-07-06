@@ -1,0 +1,42 @@
+{% extends "operations/base_staff.html" %}
+{% load i18n %}
+{% block page_title %}{% if entry_type == "income" %}{% trans "Record income" %}{% else %}{% trans "Record expense" %}{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Back to finances" %}</a>
+{% endblock %}
+{% block content %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">
+        {% if entry_type == "income" %}{% trans "Other income" %}{% else %}{% trans "General expense" %}{% endif %}
+    </p>
+    <p class="staff-muted staff-form-intro">{% trans "Record office expenses (rent, utilities, salary, etc.) or income from sources outside matters." %}</p>
+    <form class="staff-form staff-form--compact" method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="entry_type" value="{{ entry_type }}">
+        <div class="row">
+            <label class="col-12"><span>{% trans "Category" %}</span>{{ form.category }}</label>
+        </div>
+        <div class="row">
+            <label class="col-12"><span>{% trans "Description" %}</span>{{ form.description }}</label>
+        </div>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Amount" %}</span>{{ form.amount }}</label>
+            <label class="col-6"><span>{% trans "Currency" %}</span>{{ form.currency }}</label>
+        </div>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Payment method" %}</span>{{ form.payment_method }}</label>
+            <label class="col-6"><span>{% trans "Status" %}</span>{{ form.status }}</label>
+        </div>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Date" %}</span>{{ form.transaction_date }}</label>
+        </div>
+        <div class="row">
+            <label class="col-12"><span>{% trans "Notes" %}</span>{{ form.notes }}</label>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Record entry" %}</button>
+            <a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

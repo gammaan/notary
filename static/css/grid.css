@@ -1,0 +1,84 @@
+/**
+ * Lightweight 12-column grid (Bootstrap-compatible class names).
+ * Use .row as a container and .col-* for column spans (1–12).
+ */
+
+:root {
+  --grid-gap: 18px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+}
+
+.row > [class*="col"] {
+  min-width: 0;
+}
+
+.col {
+  grid-column: span 12;
+}
+
+.col-1 { grid-column: span 1; }
+.col-2 { grid-column: span 2; }
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; }
+.col-7 { grid-column: span 7; }
+.col-8 { grid-column: span 8; }
+.col-9 { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+.row > label,
+.row > [class*="col"] > label {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  min-width: 0;
+}
+
+.row > label > span,
+.row > [class*="col"] > label > span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted, #888);
+}
+
+/* Legacy alias — same as .row */
+.form-row,
+.form-row-three {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  width: 100%;
+}
+
+.form-row > label {
+  grid-column: span 6;
+}
+
+.form-row-three > label {
+  grid-column: span 4;
+}
+
+@media (max-width: 900px) {
+  .row > [class*="col-"],
+  .form-row > label,
+  .form-row-three > label {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --grid-gap: 14px;
+  }
+}

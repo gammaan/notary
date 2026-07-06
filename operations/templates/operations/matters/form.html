@@ -1,6 +1,6 @@
 {% extends "operations/base_staff.html" %}
 {% load i18n %}
-{% block page_title %}Edit matter{% endblock %}
+{% block page_title %}{% trans "Edit matter" %}{% endblock %}
 {% block extra_head %}{% include "operations/includes/staff_select2_head.html" %}{% endblock %}
 {% block content %}
 {% with matter=object %}
@@ -9,21 +9,25 @@
     <p class="staff-step-label">{% trans "Step 1 — Setup" %}</p>
     <form class="staff-form staff-form--compact" method="post" novalidate>
         {% csrf_token %}
-        <div class="form-row-three">
-            <label><span>{% trans "Client" %}</span>{{ form.client }}</label>
-            <label><span>{% trans "Service" %}</span>{{ form.service_type }}</label>
-            <label><span>{% trans "Title" %}</span>{{ form.title }}</label>
+        <div class="row">
+            <label class="col-4"><span>{% trans "Client" %}</span>{{ form.client }}</label>
+            <label class="col-4"><span>{% trans "Service" %}</span>{{ form.service_type }}</label>
+            <label class="col-4"><span>{% trans "Title" %}</span>{{ form.title }}</label>
         </div>
-        <label><span>{% trans "Description" %}</span>{{ form.description }}</label>
-        <div class="form-row-three">
-            <label><span>{% trans "Status" %}</span>{{ form.status }}</label>
-            <label><span>{% trans "Scheduled for" %}</span>{{ form.scheduled_at }}</label>
-            <label><span>{% trans "Assigned to" %}</span>{{ form.assigned_to }}</label>
+        <div class="row">
+            <label class="col-12"><span>{% trans "Description" %}</span>{{ form.description }}</label>
         </div>
-        <label><span>{% trans "Notes" %}</span>{{ form.notes }}</label>
+        <div class="row">
+            <label class="col-4"><span>{% trans "Status" %}</span>{{ form.status }}</label>
+            <label class="col-4"><span>{% trans "Scheduled for" %}</span>{{ form.scheduled_at }}</label>
+            <label class="col-4"><span>{% trans "Assigned to" %}</span>{{ form.assigned_to }}</label>
+        </div>
+        <div class="row">
+            <label class="col-12"><span>{% trans "Notes" %}</span>{{ form.notes }}</label>
+        </div>
         <div class="staff-form-actions">
-            <button class="button primary" type="submit">Save & continue</button>
-            <a class="button ghost" href="{% url 'staff:matter_detail' object.pk %}">Cancel</a>
+            <button class="button primary" type="submit">{% trans "Save & continue" %}</button>
+            <a class="button ghost" href="{% url 'staff:matter_detail' object.uuid %}">{% trans "Cancel" %}</a>
         </div>
     </form>
 </div>

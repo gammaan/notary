@@ -11,10 +11,13 @@
     return {
       accent: readCssVar("--accent-light", "#c9a962"),
       accentDeep: readCssVar("--accent", "#a68b4a"),
+      danger: readCssVar("--danger", "#f87171"),
       muted: readCssVar("--text-faint", "#8a8278"),
       grid: isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)",
       text: readCssVar("--text-secondary", "#c8c0b4"),
       palette: ["#c9a962", "#86efac", "#93c5fd", "#fcd34d", "#f9a8d4", "#a5b4fc", "#fdba74"],
+      income: readCssVar("--accent-light", "#c9a962"),
+      expense: readCssVar("--danger", "#f87171"),
     };
   }
 
@@ -28,6 +31,40 @@
     }
   }
 
+  function doughnutOptions() {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "68%",
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 10, padding: 14, font: { size: 11 } },
+        },
+      },
+    };
+  }
+
+  function initDoughnut(canvasId, dataId, palette) {
+    const data = parseChartData(dataId);
+    const canvas = document.getElementById(canvasId);
+    if (!canvas || !data || !data.labels?.length) return;
+
+    new Chart(canvas, {
+      type: "doughnut",
+      data: {
+        labels: data.labels,
+        datasets: [{
+          data: data.values,
+          backgroundColor: palette,
+          borderWidth: 0,
+          hoverOffset: 6,
+        }],
+      },
+      options: doughnutOptions(),
+    });
+  }
+
   function initDashboardCharts() {
     if (typeof Chart === "undefined") return;
 
@@ -36,47 +73,20 @@
     Chart.defaults.borderColor = colors.grid;
     Chart.defaults.font.family = "'M PLUS Rounded 1c', system-ui, sans-serif";
 
-    const statusData = parseChartData("chart-matter-status-data");
-    const statusCanvas = document.getElementById("chart-matter-status");
-    if (statusCanvas && statusData) {
-      new Chart(statusCanvas, {
-        type: "doughnut",
-        data: {
-          labels: statusData.labels,
-          datasets: [{
-            data: statusData.values,
-            backgroundColor: colors.palette,
-            borderWidth: 0,
-            hoverOffset: 6,
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: "68%",
-          plugins: {
-            legend: {
-              position: "bottom",
-              labels: { boxWidth: 10, padding: 14, font: { size: 11 } },
-            },
-          },
-        },
-      });
-    }
+    initDoughnut("chart-matter-status", "chart-matter-status-data", colors.palette);
 
-    const revenueData = parseChartData("chart-revenue-data");
-    const revenueCanvas = document.getElementById("chart-revenue");
-    if (revenueCanvas && revenueData) {
-      new Chart(revenueCanvas, {
+    const incomeExpenseData = parseChartData("chart-income-expense-data");
+    const incomeExpenseCanvas = document.getElementById("chart-income-expense");
+    if (incomeExpenseCanvas && incomeExpenseData?.labels?.length) {
+      new Chart(incomeExpenseCanvas, {
         type: "bar",
         data: {
-          labels: revenueData.labels,
+          labels: incomeExpenseData.labels,
           datasets: [{
-            label: "Paid income",
-            data: revenueData.values,
-            backgroundColor: colors.accent,
-            borderRadius: 6,
-            maxBarThickness: 36,
+            data: incomeExpenseData.values,
+            backgroundColor: [colors.income, colors.expense + "cc"],
+            borderRadius: 8,
+            maxBarThickness: 72,
           }],
         },
         options: {
@@ -90,6 +100,61 @@
             },
           },
           plugins: { legend: { display: false } },
+        },
+      });
+    }
+
+    initDoughnut(
+      "chart-income-status",
+      "chart-income-status-data",
+      [colors.income, "#86efac", "#93c5fd", "#fcd34d", "#a5b4fc"]
+    );
+    initDoughnut(
+      "chart-expense-status",
+      "chart-expense-status-data",
+      [colors.expense, "#fdba74", "#f9a8d4", "#c4b5fd", "#94a3b8"]
+    );
+
+    const revenueData = parseChartData("chart-revenue-data");
+    const revenueCanvas = document.getElementById("chart-revenue");
+    if (revenueCanvas && revenueData) {
+      new Chart(revenueCanvas, {
+        type: "bar",
+        data: {
+          labels: revenueData.labels,
+          datasets: [
+            {
+              label: "Paid income",
+              data: revenueData.values,
+              backgroundColor: colors.income,
+              borderRadius: 6,
+              maxBarThickness: 28,
+            },
+            {
+              label: "Paid expenses",
+              data: revenueData.expenses || [],
+              backgroundColor: colors.expense + "cc",
+              borderRadius: 6,
+              maxBarThickness: 28,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { display: false } },
+            y: {
+              beginAtZero: true,
+              ticks: { callback: (v) => "$" + v },
+            },
+          },
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: { boxWidth: 10, padding: 12, font: { size: 11 } },
+            },
+          },
         },
       });
     }

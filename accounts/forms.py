@@ -47,9 +47,15 @@ class UserRegistrationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        password_placeholders = {
+            "password1": _("Create a password"),
+            "password2": _("Confirm your password"),
+        }
         for name in ("password1", "password2"):
             self.fields[name].widget.attrs.setdefault("autocomplete", "new-password")
-            self.fields[name].widget.attrs.setdefault("placeholder", _("Password"))
+            self.fields[name].widget.attrs.setdefault(
+                "placeholder", password_placeholders.get(name, _("Password"))
+            )
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower().strip()
@@ -66,7 +72,6 @@ class EmailAuthenticationForm(AuthenticationForm):
                 "autocomplete": "email",
                 "placeholder": _("you@example.com"),
                 "autofocus": True,
-                "placeholder": _("you@example.com"),
             }
         ),
     )
@@ -94,12 +99,16 @@ class UserProfileForm(forms.ModelForm):
         model = User
         fields = ("first_name", "last_name", "phone")
         widgets = {
-            "first_name": forms.TextInput(attrs={"autocomplete": "given-name"}),
-            "last_name": forms.TextInput(attrs={"autocomplete": "family-name"}),
+            "first_name": forms.TextInput(
+                attrs={"autocomplete": "given-name", "placeholder": _("e.g. Ahmed")}
+            ),
+            "last_name": forms.TextInput(
+                attrs={"autocomplete": "family-name", "placeholder": _("e.g. Hassan")}
+            ),
             "phone": forms.TextInput(
                 attrs={
                     "autocomplete": "tel",
-                    "placeholder": _("Optional"),
+                    "placeholder": _("+252 61 234 5678"),
                 }
             ),
         }
@@ -108,5 +117,14 @@ class UserProfileForm(forms.ModelForm):
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs.setdefault("autocomplete", "new-password")
+        placeholders = {
+            "old_password": _("Enter current password"),
+            "new_password1": _("Enter new password"),
+            "new_password2": _("Confirm new password"),
+        }
+        for name, field in self.fields.items():
+            if name == "old_password":
+                field.widget.attrs.setdefault("autocomplete", "current-password")
+            else:
+                field.widget.attrs.setdefault("autocomplete", "new-password")
+            field.widget.attrs.setdefault("placeholder", placeholders.get(name, _("Password")))

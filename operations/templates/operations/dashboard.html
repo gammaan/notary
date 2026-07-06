@@ -4,8 +4,34 @@
 {% block page_title %}{% trans "Dashboard" %}{% endblock %}
 
 {% block topbar_actions %}
-<a class="button primary" href="{% url 'staff:matter_create' %}">{% trans "New matter" %}</a>
+<div class="staff-action-menu" data-staff-action-menu>
+    <button type="button" class="button ghost staff-action-menu__trigger" aria-expanded="false" aria-haspopup="menu">
+        <i class="fa-solid fa-compass" aria-hidden="true"></i> {% trans "Quick links" %}
+        <i class="fa-solid fa-chevron-down staff-action-menu__caret" aria-hidden="true"></i>
+    </button>
+    <div class="staff-action-menu__panel staff-action-menu__panel--wide" role="menu" hidden>
+        <a class="staff-action-menu__item" href="{% url 'staff:client_create' %}" role="menuitem">
+            <i class="fa-solid fa-user-plus" aria-hidden="true"></i> {% trans "New client" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_create' %}" role="menuitem">
+            <i class="fa-solid fa-folder-plus" aria-hidden="true"></i> {% trans "New matter" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:document_list' %}" role="menuitem">
+            <i class="fa-solid fa-file-lines" aria-hidden="true"></i> {% trans "Documents" %}{% if stats.documents_pending %} <span class="staff-action-menu__badge">{{ stats.documents_pending }}</span>{% endif %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:transaction_list' %}" role="menuitem">
+            <i class="fa-solid fa-wallet" aria-hidden="true"></i> {% trans "Finances" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:transaction_create' %}?type=expense" role="menuitem">
+            <i class="fa-solid fa-minus" aria-hidden="true"></i> {% trans "Record expense" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:transaction_create' %}?type=income" role="menuitem">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> {% trans "Record income" %}
+        </a>
+    </div>
+</div>
 <a class="button ghost" href="{% url 'staff:client_create' %}">{% trans "Add client" %}</a>
+<a class="button primary" href="{% url 'staff:matter_create' %}">{% trans "New matter" %}</a>
 {% endblock %}
 
 {% block content %}
@@ -13,73 +39,116 @@
     <article class="dash-kpi">
         <span class="dash-kpi__icon"><i class="fa-solid fa-users" aria-hidden="true"></i></span>
         <div class="dash-kpi__body">
-            <span class="dash-kpi__label">Active clients</span>
+            <span class="dash-kpi__label">{% trans "Active clients" %}</span>
             <strong class="dash-kpi__value">{{ stats.clients }}</strong>
-            <span class="dash-kpi__hint">{{ stats.new_clients_month }} new this month</span>
+            <span class="dash-kpi__hint">{{ stats.new_clients_month }} {% trans "new this month" %}</span>
         </div>
     </article>
     <article class="dash-kpi">
         <span class="dash-kpi__icon"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></span>
         <div class="dash-kpi__body">
-            <span class="dash-kpi__label">Open matters</span>
+            <span class="dash-kpi__label">{% trans "Open matters" %}</span>
             <strong class="dash-kpi__value">{{ stats.open_matters }}</strong>
-            <span class="dash-kpi__hint">{{ stats.completed_month }} completed this month</span>
+            <span class="dash-kpi__hint">{{ stats.completed_month }} {% trans "completed this month" %}</span>
         </div>
     </article>
     <article class="dash-kpi">
         <span class="dash-kpi__icon"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i></span>
         <div class="dash-kpi__body">
-            <span class="dash-kpi__label">Scheduled today</span>
+            <span class="dash-kpi__label">{% trans "Scheduled today" %}</span>
             <strong class="dash-kpi__value">{{ stats.scheduled_today }}</strong>
-            <span class="dash-kpi__hint"><a class="staff-link" href="{% url 'staff:calendar' %}">Open calendar</a></span>
+            <span class="dash-kpi__hint"><a class="staff-link" href="{% url 'staff:calendar' %}">{% trans "Open calendar" %}</a></span>
         </div>
     </article>
     <article class="dash-kpi">
         <span class="dash-kpi__icon"><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i></span>
         <div class="dash-kpi__body">
-            <span class="dash-kpi__label">Pending payments</span>
+            <span class="dash-kpi__label">{% trans "Pending payments" %}</span>
             <strong class="dash-kpi__value">{{ stats.pending_payments }}</strong>
-            <span class="dash-kpi__hint">Awaiting collection</span>
+            <span class="dash-kpi__hint">{% trans "Matter income awaiting collection" %}</span>
         </div>
     </article>
-    <article class="dash-kpi dash-kpi--accent">
-        <span class="dash-kpi__icon"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span>
+    <article class="dash-kpi">
+        <span class="dash-kpi__icon"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span>
         <div class="dash-kpi__body">
-            <span class="dash-kpi__label">Income this month</span>
-            <strong class="dash-kpi__value">${{ stats.income_month }}</strong>
-            <span class="dash-kpi__hint">Paid transactions</span>
+            <span class="dash-kpi__label">{% trans "Pending expenses" %}</span>
+            <strong class="dash-kpi__value">{{ stats.pending_expenses }}</strong>
+            <span class="dash-kpi__hint"><a class="staff-link" href="{% url 'staff:transaction_list' %}?type=expense&status=pending">{% trans "View all" %}</a></span>
         </div>
     </article>
+</div>
+
+<div class="staff-finance-stats dash-finance-stats">
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Paid income (month)" %}</span><strong class="staff-amount--income">${{ stats.income_month }}</strong></div>
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Paid expenses (month)" %}</span><strong class="staff-amount--expense">${{ stats.expenses_month }}</strong></div>
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Net (month)" %}</span><strong>${{ stats.net_month }}</strong></div>
+</div>
+<div class="staff-finance-stats staff-finance-stats--secondary dash-finance-stats dash-finance-stats--secondary">
+    <div class="staff-stat staff-stat--compact"><span class="staff-stat__label">{% trans "From matters (month)" %}</span><strong class="staff-amount--income">${{ stats.matter_income_month }}</strong></div>
+    <div class="staff-stat staff-stat--compact"><span class="staff-stat__label">{% trans "General expenses (month)" %}</span><strong class="staff-amount--expense">${{ stats.general_expenses_month }}</strong></div>
+</div>
+
+<div class="dash-charts dash-charts--finance">
+    <section class="dash-chart-card">
+        <header class="dash-chart-card__head">
+            <h2>{% trans "Income vs expenses" %}</h2>
+            <p>{% trans "Paid totals this month" %}</p>
+        </header>
+        <div class="dash-chart-card__canvas">
+            <canvas id="chart-income-expense" aria-label="{% trans 'Income vs expenses chart' %}"></canvas>
+        </div>
+        {{ chart_income_expense|json_script:"chart-income-expense-data" }}
+    </section>
+    <section class="dash-chart-card">
+        <header class="dash-chart-card__head">
+            <h2>{% trans "Income by status" %}</h2>
+            <p>{% trans "Total amount per payment status" %}</p>
+        </header>
+        <div class="dash-chart-card__canvas">
+            <canvas id="chart-income-status" aria-label="{% trans 'Income status chart' %}"></canvas>
+        </div>
+        {{ chart_income_status|json_script:"chart-income-status-data" }}
+    </section>
+    <section class="dash-chart-card">
+        <header class="dash-chart-card__head">
+            <h2>{% trans "Expenses by status" %}</h2>
+            <p>{% trans "Total amount per payment status" %}</p>
+        </header>
+        <div class="dash-chart-card__canvas">
+            <canvas id="chart-expense-status" aria-label="{% trans 'Expense status chart' %}"></canvas>
+        </div>
+        {{ chart_expense_status|json_script:"chart-expense-status-data" }}
+    </section>
 </div>
 
 <div class="dash-charts">
     <section class="dash-chart-card">
         <header class="dash-chart-card__head">
-            <h2>Matter pipeline</h2>
-            <p>Status breakdown across all matters</p>
+            <h2>{% trans "Matter pipeline" %}</h2>
+            <p>{% trans "Status breakdown across all matters" %}</p>
         </header>
         <div class="dash-chart-card__canvas">
-            <canvas id="chart-matter-status" aria-label="Matter status chart"></canvas>
+            <canvas id="chart-matter-status" aria-label="{% trans 'Matter status chart' %}"></canvas>
         </div>
         {{ chart_matter_status|json_script:"chart-matter-status-data" }}
     </section>
     <section class="dash-chart-card">
         <header class="dash-chart-card__head">
-            <h2>Revenue trend</h2>
-            <p>Paid income — last 6 months</p>
+            <h2>{% trans "Cash flow" %}</h2>
+            <p>{% trans "Paid income and expenses — last 6 months" %}</p>
         </header>
         <div class="dash-chart-card__canvas">
-            <canvas id="chart-revenue" aria-label="Revenue chart"></canvas>
+            <canvas id="chart-revenue" aria-label="{% trans 'Cash flow chart' %}"></canvas>
         </div>
         {{ chart_revenue|json_script:"chart-revenue-data" }}
     </section>
     <section class="dash-chart-card dash-chart-card--wide">
         <header class="dash-chart-card__head">
-            <h2>Services in demand</h2>
-            <p>Matters by service type</p>
+            <h2>{% trans "Services in demand" %}</h2>
+            <p>{% trans "Matters by service type" %}</p>
         </header>
         <div class="dash-chart-card__canvas dash-chart-card__canvas--short">
-            <canvas id="chart-services" aria-label="Services chart"></canvas>
+            <canvas id="chart-services" aria-label="{% trans 'Services chart' %}"></canvas>
         </div>
         {{ chart_services|json_script:"chart-services-data" }}
     </section>
@@ -88,14 +157,14 @@
 <div class="dash-panels">
     <section class="dash-panel">
         <header class="dash-panel__head">
-            <h2><i class="fa-solid fa-clock" aria-hidden="true"></i> Today's schedule</h2>
-            <a class="staff-link" href="{% url 'staff:matter_list' %}?scheduled_from={% now 'Y-m-d' %}&scheduled_to={% now 'Y-m-d' %}">View all</a>
+            <h2><i class="fa-solid fa-clock" aria-hidden="true"></i> {% trans "Today's schedule" %}</h2>
+            <a class="staff-link" href="{% url 'staff:matter_list' %}?scheduled_from={% now 'Y-m-d' %}&scheduled_to={% now 'Y-m-d' %}">{% trans "View all" %}</a>
         </header>
         {% if today_matters %}
         <ul class="dash-feed">
             {% for m in today_matters %}
             <li class="dash-feed__item">
-                <a href="{% url 'staff:matter_detail' m.pk %}">
+                <a href="{% url 'staff:matter_detail' m.uuid %}">
                     <time>{{ m.scheduled_at|time:"g:i A" }}</time>
                     <span>
                         <strong>{{ m.title }}</strong>
@@ -107,20 +176,20 @@
             {% endfor %}
         </ul>
         {% else %}
-        <p class="staff-empty">No matters scheduled for today.</p>
+        <p class="staff-empty">{% trans "No matters scheduled for today." %}</p>
         {% endif %}
     </section>
 
     <section class="dash-panel">
         <header class="dash-panel__head">
-            <h2><i class="fa-solid fa-bolt" aria-hidden="true"></i> Recent matters</h2>
-            <a class="staff-link" href="{% url 'staff:matter_list' %}">View all</a>
+            <h2><i class="fa-solid fa-bolt" aria-hidden="true"></i> {% trans "Recent matters" %}</h2>
+            <a class="staff-link" href="{% url 'staff:matter_list' %}">{% trans "View all" %}</a>
         </header>
         {% if recent_matters %}
         <ul class="dash-feed">
             {% for m in recent_matters %}
             <li class="dash-feed__item">
-                <a href="{% url 'staff:matter_detail' m.pk %}">
+                <a href="{% url 'staff:matter_detail' m.uuid %}">
                     <time>{{ m.created_at|date:"M j" }}</time>
                     <span>
                         <strong>{{ m.reference_number }}</strong>
@@ -132,20 +201,20 @@
             {% endfor %}
         </ul>
         {% else %}
-        <p class="staff-empty">No matters yet. <a href="{% url 'staff:matter_create' %}">Create the first one</a>.</p>
+        <p class="staff-empty">{% trans "No matters yet." %} <a href="{% url 'staff:matter_create' %}">{% trans "Create the first one" %}</a>.</p>
         {% endif %}
     </section>
 
     <section class="dash-panel">
         <header class="dash-panel__head">
-            <h2><i class="fa-solid fa-receipt" aria-hidden="true"></i> Pending payments</h2>
-            <a class="staff-link" href="{% url 'staff:transaction_list' %}?status=pending">View all</a>
+            <h2><i class="fa-solid fa-receipt" aria-hidden="true"></i> {% trans "Pending payments" %}</h2>
+            <a class="staff-link" href="{% url 'staff:transaction_list' %}?status=pending&type=income">{% trans "View all" %}</a>
         </header>
         {% if pending_transactions %}
         <ul class="dash-feed">
             {% for t in pending_transactions %}
             <li class="dash-feed__item">
-                <a href="{% url 'staff:matter_detail' t.matter.pk %}">
+                <a href="{% url 'staff:matter_detail' t.matter.uuid %}">
                     <time>{{ t.transaction_date|date:"M j" }}</time>
                     <span>
                         <strong>${{ t.amount }}</strong>
@@ -157,20 +226,33 @@
             {% endfor %}
         </ul>
         {% else %}
-        <p class="staff-empty">No pending payments — all caught up.</p>
+        <p class="staff-empty">{% trans "No pending payments — all caught up." %}</p>
         {% endif %}
     </section>
 
-    <section class="dash-panel dash-panel--actions">
+    <section class="dash-panel">
         <header class="dash-panel__head">
-            <h2><i class="fa-solid fa-compass" aria-hidden="true"></i> Quick links</h2>
+            <h2><i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i> {% trans "Recent expenses" %}</h2>
+            <a class="staff-link" href="{% url 'staff:transaction_list' %}?type=expense">{% trans "View all" %}</a>
         </header>
-        <nav class="dash-quick-links">
-            <a href="{% url 'staff:client_create' %}"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> New client</a>
-            <a href="{% url 'staff:matter_create' %}"><i class="fa-solid fa-folder-plus" aria-hidden="true"></i> New matter</a>
-            <a href="{% url 'staff:document_list' %}"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> Documents {% if stats.documents_pending %}<em>{{ stats.documents_pending }} pending</em>{% endif %}</a>
-            <a href="{% url 'staff:transaction_list' %}"><i class="fa-solid fa-wallet" aria-hidden="true"></i> Finances</a>
-        </nav>
+        {% if recent_expenses %}
+        <ul class="dash-feed">
+            {% for t in recent_expenses %}
+            <li class="dash-feed__item">
+                <a href="{% if t.matter %}{% url 'staff:matter_detail' t.matter.uuid %}{% else %}{% url 'staff:transaction_list' %}?source=general{% endif %}">
+                    <time>{{ t.transaction_date|date:"M j" }}</time>
+                    <span>
+                        <strong class="staff-amount--expense">${{ t.amount }}</strong>
+                        <small>{{ t.description }}{% if t.matter %} · {{ t.matter.reference_number }}{% elif t.category %} · {{ t.get_category_display }}{% endif %}</small>
+                    </span>
+                    <span class="staff-badge">{% if t.matter %}{% trans "Matter" %}{% else %}{% trans "General" %}{% endif %}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="staff-empty">{% trans "No paid expenses recorded yet." %}</p>
+        {% endif %}
     </section>
 </div>
 {% endblock %}

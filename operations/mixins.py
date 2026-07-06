@@ -4,6 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from accounts.permissions import can_delete_records, can_view_audit_log
 
 
+class UUIDSlugMixin:
+    pk_url_kwarg = None
+    slug_field = "uuid"
+    slug_url_kwarg = "pk"
+
+
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     login_url = "/staff/login/"
 

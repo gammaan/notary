@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, ListView, TemplateView
 
 from accounts.models import User
+from operations.mixins import UUIDSlugMixin
 from operations.models import Client, Matter
 
 
@@ -47,7 +48,7 @@ class PortalDashboardView(ClientRequiredMixin, TemplateView):
         return ctx
 
 
-class PortalMatterDetailView(ClientRequiredMixin, DetailView):
+class PortalMatterDetailView(ClientRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "portal/matter_detail.html"
     context_object_name = "matter"

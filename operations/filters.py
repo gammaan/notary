@@ -8,8 +8,7 @@ def filter_clients(queryset, params):
     q = params.get("q", "").strip()
     if q:
         queryset = queryset.filter(
-            Q(first_name__icontains=q)
-            | Q(last_name__icontains=q)
+            Q(full_name__icontains=q)
             | Q(email__icontains=q)
             | Q(phone__icontains=q)
             | Q(id_number__icontains=q)
@@ -44,8 +43,7 @@ def filter_matters(queryset, params):
         queryset = queryset.filter(
             Q(reference_number__icontains=q)
             | Q(title__icontains=q)
-            | Q(client__first_name__icontains=q)
-            | Q(client__last_name__icontains=q)
+            | Q(client__full_name__icontains=q)
             | Q(service_type__name__icontains=q)
         )
 
@@ -60,8 +58,7 @@ def filter_matters(queryset, params):
     client = params.get("client", "").strip()
     if client:
         queryset = queryset.filter(
-            Q(client__first_name__icontains=client)
-            | Q(client__last_name__icontains=client)
+            Q(client__full_name__icontains=client)
             | Q(client__email__icontains=client)
         )
 
@@ -92,8 +89,7 @@ def filter_documents(queryset, params):
             | Q(document_type__icontains=q)
             | Q(matter__reference_number__icontains=q)
             | Q(matter__title__icontains=q)
-            | Q(matter__client__first_name__icontains=q)
-            | Q(matter__client__last_name__icontains=q)
+            | Q(matter__client__full_name__icontains=q)
         )
 
     status = params.get("status", "").strip()
@@ -122,9 +118,19 @@ def filter_transactions(queryset, params):
             Q(description__icontains=q)
             | Q(matter__reference_number__icontains=q)
             | Q(matter__title__icontains=q)
-            | Q(matter__client__first_name__icontains=q)
-            | Q(matter__client__last_name__icontains=q)
+            | Q(matter__client__full_name__icontains=q)
+            | Q(category__icontains=q)
         )
+
+    source = params.get("source", "").strip()
+    if source == "matter":
+        queryset = queryset.filter(matter__isnull=False)
+    elif source == "general":
+        queryset = queryset.filter(matter__isnull=True)
+
+    category = params.get("category", "").strip()
+    if category in Transaction.Category.values:
+        queryset = queryset.filter(category=category)
 
     status = params.get("status", "").strip()
     if status in Transaction.Status.values:

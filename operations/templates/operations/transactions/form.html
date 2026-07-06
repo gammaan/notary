@@ -1,30 +1,58 @@
 {% extends "operations/base_staff.html" %}
-{% block page_title %}Edit transaction — {{ matter.reference_number }}{% endblock %}
+{% load i18n %}
+{% block page_title %}
+{% if matter %}{% trans "Edit transaction" %} — {{ matter.reference_number }}{% else %}{% trans "Edit entry" %}{% endif %}
+{% endblock %}
 {% block content %}
-<div class="staff-form-wrap">
+<div class="staff-form-wrap staff-form-wrap--wide">
+    {% if matter %}
     <p class="staff-step-label">{{ matter.reference_number }} · {{ transaction.description }}</p>
+    {% else %}
+    <p class="staff-step-label">{% trans "General entry" %} · {{ transaction.description }}</p>
+    {% endif %}
     {% if is_locked %}
-    <p class="staff-message staff-message--info">This transaction is locked and cannot be edited.</p>
+    <p class="staff-message staff-message--info">{% trans "This transaction is locked and cannot be edited." %}</p>
     {% endif %}
     <form class="staff-form staff-form--compact" method="post" novalidate>
         {% csrf_token %}
-        <div class="form-row">
-            <label><span>Type</span>{{ form.transaction_type }}</label>
-            <label><span>Status</span>{{ form.status }}</label>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Type" %}</span>{{ form.transaction_type }}</label>
+            {% if form.category %}
+            <label class="col-6"><span>{% trans "Category" %}</span>{{ form.category }}</label>
+            {% else %}
+            <label class="col-6"><span>{% trans "Status" %}</span>{{ form.status }}</label>
+            {% endif %}
         </div>
-        <label><span>Description</span>{{ form.description }}</label>
-        <div class="form-row">
-            <label><span>Amount</span>{{ form.amount }}</label>
-            <label><span>Currency</span>{{ form.currency }}</label>
+        <div class="row">
+            <label class="col-12"><span>{% trans "Description" %}</span>{{ form.description }}</label>
         </div>
-        <div class="form-row">
-            <label><span>Payment method</span>{{ form.payment_method }}</label>
-            <label><span>Date</span>{{ form.transaction_date }}</label>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Amount" %}</span>{{ form.amount }}</label>
+            <label class="col-6"><span>{% trans "Currency" %}</span>{{ form.currency }}</label>
         </div>
-        <label><span>Notes</span>{{ form.notes }}</label>
+        <div class="row">
+            <label class="col-6"><span>{% trans "Payment method" %}</span>{{ form.payment_method }}</label>
+            {% if form.category %}
+            <label class="col-6"><span>{% trans "Status" %}</span>{{ form.status }}</label>
+            {% else %}
+            <label class="col-6"><span>{% trans "Date" %}</span>{{ form.transaction_date }}</label>
+            {% endif %}
+        </div>
+        {% if form.category %}
+        <div class="row">
+            <label class="col-6"><span>{% trans "Date" %}</span>{{ form.transaction_date }}</label>
+        </div>
+        {% endif %}
+        <div class="row">
+            <label class="col-12"><span>{% trans "Notes" %}</span>{{ form.notes }}</label>
+        </div>
         <div class="staff-form-actions">
-            {% if not is_locked %}<button class="button primary" type="submit">Save transaction</button>{% endif %}
-            <a class="button ghost" href="{% url 'staff:matter_detail' matter.pk %}">Back to matter</a>
+            {% if not is_locked %}<button class="button primary" type="submit">{% trans "Save transaction" %}</button>{% endif %}
+            {% if matter %}
+            <a class="button ghost" href="{% url 'staff:matter_detail' matter.uuid %}">{% trans "Back to matter" %}</a>
+            {% else %}
+            <a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Back to finances" %}</a>
+            {% endif %}
         </div>
     </form>
 </div>

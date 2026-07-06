@@ -1,8 +1,10 @@
 from decimal import Decimal
 from datetime import date, timedelta
+import uuid
 
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.paginator import Paginator
 from django.db.models import Count, Q, Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -20,13 +22,15 @@ from operations.pdf import render_pdf_response
 from operations.forms import (
     ClientForm,
     DocumentForm,
+    GeneralTransactionForm,
     MatterForm,
     MatterWizardClientForm,
     MatterWizardDetailsForm,
+    MatterTransactionForm,
     StaffLoginForm,
     TransactionForm,
 )
-from operations.mixins import ManagerRequiredMixin, StaffRequiredMixin
+from operations.mixins import ManagerRequiredMixin, StaffRequiredMixin, UUIDSlugMixin
 from operations.models import AppointmentRequest, AuditLog, Client, Document, Matter, ServiceType, Transaction
 from operations.filters import filter_clients, filter_documents, filter_matters, filter_transactions
 from operations.quick_actions import next_document_status
@@ -45,6 +49,13 @@ from operations.workflow import (
     matter_workflow_steps,
     set_wizard_data,
 )
+
+
+def _transaction_entry_type(request, default=Transaction.Type.INCOME):
+    txn_type = request.GET.get("type") or request.POST.get("entry_type")
+    if txn_type in Transaction.Type.values:
+        return txn_type
+    return default
 
 
 class StaffLoginView(LoginView):
@@ -72,6 +83,24 @@ class StaffLogoutView(LogoutView):
 class DashboardView(StaffRequiredMixin, TemplateView):
     template_name = "operations/dashboard.html"
 
+    @staticmethod
+    def _transaction_status_chart(transaction_type):
+        status_labels = dict(Transaction.Status.choices)
+        rows = (
+            Transaction.objects.filter(transaction_type=transaction_type)
+            .values("status")
+            .annotate(total=Sum("amount"))
+        )
+        totals = {row["status"]: float(row["total"] or 0) for row in rows}
+        labels = []
+        values = []
+        for value, _label in Transaction.Status.choices:
+            amount = totals.get(value, 0)
+            if amount > 0:
+                labels.append(str(status_labels.get(value, value)))
+                values.append(amount)
+        return {"labels": labels, "values": values}
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         today = timezone.localdate()
@@ -90,6 +119,35 @@ class DashboardView(StaffRequiredMixin, TemplateView):
             ).aggregate(total=Sum("amount"))["total"]
             or Decimal("0")
         )
+        expenses_month = (
+            Transaction.objects.filter(
+                transaction_type=Transaction.Type.EXPENSE,
+                status=Transaction.Status.PAID,
+                transaction_date__year=today.year,
+                transaction_date__month=today.month,
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0")
+        )
+        matter_income_month = (
+            Transaction.objects.filter(
+                matter__isnull=False,
+                transaction_type=Transaction.Type.INCOME,
+                status=Transaction.Status.PAID,
+                transaction_date__year=today.year,
+                transaction_date__month=today.month,
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0")
+        )
+        general_expenses_month = (
+            Transaction.objects.filter(
+                matter__isnull=True,
+                transaction_type=Transaction.Type.EXPENSE,
+                status=Transaction.Status.PAID,
+                transaction_date__year=today.year,
+                transaction_date__month=today.month,
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0")
+        )
         ctx["stats"] = {
             "clients": Client.objects.filter(is_active=True).count(),
             "open_matters": Matter.objects.filter(status__in=open_statuses).count(),
@@ -100,8 +158,17 @@ class DashboardView(StaffRequiredMixin, TemplateView):
             "pending_payments": Transaction.objects.filter(
                 status=Transaction.Status.PENDING,
                 transaction_type=Transaction.Type.INCOME,
+                matter__isnull=False,
+            ).count(),
+            "pending_expenses": Transaction.objects.filter(
+                status=Transaction.Status.PENDING,
+                transaction_type=Transaction.Type.EXPENSE,
             ).count(),
             "income_month": income_month,
+            "expenses_month": expenses_month,
+            "net_month": income_month - expenses_month,
+            "matter_income_month": matter_income_month,
+            "general_expenses_month": general_expenses_month,
             "completed_month": Matter.objects.filter(
                 status=Matter.Status.COMPLETED,
                 completed_at__year=today.year,
@@ -128,9 +195,18 @@ class DashboardView(StaffRequiredMixin, TemplateView):
             Transaction.objects.filter(
                 status=Transaction.Status.PENDING,
                 transaction_type=Transaction.Type.INCOME,
+                matter__isnull=False,
             )
             .select_related("matter", "matter__client")
             .order_by("transaction_date")[:6]
+        )
+        ctx["recent_expenses"] = (
+            Transaction.objects.filter(
+                transaction_type=Transaction.Type.EXPENSE,
+                status=Transaction.Status.PAID,
+            )
+            .select_related("matter", "matter__client")
+            .order_by("-transaction_date")[:6]
         )
 
         status_labels = dict(Matter.Status.choices)
@@ -145,7 +221,8 @@ class DashboardView(StaffRequiredMixin, TemplateView):
         }
 
         month_labels = []
-        month_values = []
+        income_values = []
+        expense_values = []
         year, month = today.year, today.month
         for offset in range(5, -1, -1):
             m = month - offset
@@ -153,7 +230,7 @@ class DashboardView(StaffRequiredMixin, TemplateView):
             while m <= 0:
                 m += 12
                 y -= 1
-            total = (
+            income_total = (
                 Transaction.objects.filter(
                     transaction_type=Transaction.Type.INCOME,
                     status=Transaction.Status.PAID,
@@ -162,9 +239,30 @@ class DashboardView(StaffRequiredMixin, TemplateView):
                 ).aggregate(s=Sum("amount"))["s"]
                 or Decimal("0")
             )
+            expense_total = (
+                Transaction.objects.filter(
+                    transaction_type=Transaction.Type.EXPENSE,
+                    status=Transaction.Status.PAID,
+                    transaction_date__year=y,
+                    transaction_date__month=m,
+                ).aggregate(s=Sum("amount"))["s"]
+                or Decimal("0")
+            )
             month_labels.append(date(y, m, 1).strftime("%b"))
-            month_values.append(float(total))
-        ctx["chart_revenue"] = {"labels": month_labels, "values": month_values}
+            income_values.append(float(income_total))
+            expense_values.append(float(expense_total))
+        ctx["chart_revenue"] = {
+            "labels": month_labels,
+            "values": income_values,
+            "expenses": expense_values,
+        }
+
+        ctx["chart_income_expense"] = {
+            "labels": [_("Income"), _("Expenses")],
+            "values": [float(income_month), float(expenses_month)],
+        }
+        ctx["chart_income_status"] = self._transaction_status_chart(Transaction.Type.INCOME)
+        ctx["chart_expense_status"] = self._transaction_status_chart(Transaction.Type.EXPENSE)
 
         service_rows = (
             ServiceType.objects.annotate(count=Count("matters"))
@@ -182,10 +280,10 @@ class ClientListView(StaffRequiredMixin, ListView):
     model = Client
     template_name = "operations/clients/list.html"
     context_object_name = "clients"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
-        qs = Client.objects.annotate(matter_count=Count("matters")).order_by("last_name", "first_name")
+        qs = Client.objects.annotate(matter_count=Count("matters")).order_by("full_name")
         return filter_clients(qs, self.request.GET)
 
     def get_context_data(self, **kwargs):
@@ -204,34 +302,39 @@ class ClientCreateView(StaffRequiredMixin, CreateView):
     template_name = "operations/clients/form.html"
 
     def get_success_url(self):
-        return reverse("staff:client_detail", kwargs={"pk": self.object.pk})
+        return reverse("staff:client_detail", kwargs={"pk": self.object.uuid})
 
     def form_valid(self, form):
         messages.success(self.request, "Client created successfully.")
         return super().form_valid(form)
 
 
-class ClientUpdateView(StaffRequiredMixin, UpdateView):
+class ClientUpdateView(StaffRequiredMixin, UUIDSlugMixin, UpdateView):
     model = Client
     form_class = ClientForm
     template_name = "operations/clients/form.html"
 
     def get_success_url(self):
-        return reverse("staff:client_detail", kwargs={"pk": self.object.pk})
+        return reverse("staff:client_detail", kwargs={"pk": self.object.uuid})
 
     def form_valid(self, form):
         messages.success(self.request, "Client updated successfully.")
         return super().form_valid(form)
 
 
-class ClientDetailView(StaffRequiredMixin, DetailView):
+class ClientDetailView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Client
     template_name = "operations/clients/detail.html"
     context_object_name = "client"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["matters"] = self.object.matters.select_related("service_type").order_by("-created_at")
+        matters_qs = self.object.matters.select_related("service_type").order_by("-created_at")
+        paginator = Paginator(matters_qs, 10)
+        ctx["matters_page"] = paginator.get_page(self.request.GET.get("page"))
+        params = self.request.GET.copy()
+        params.pop("page", None)
+        ctx["filter_query"] = params.urlencode()
         return ctx
 
 
@@ -239,7 +342,7 @@ class MatterListView(StaffRequiredMixin, ListView):
     model = Matter
     template_name = "operations/matters/list.html"
     context_object_name = "matters"
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         qs = Matter.objects.select_related("client", "service_type", "assigned_to").order_by("-created_at")
@@ -257,7 +360,7 @@ class MatterListView(StaffRequiredMixin, ListView):
         return ctx
 
 
-class MatterDetailView(StaffRequiredMixin, DetailView):
+class MatterDetailView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "operations/matters/detail.html"
     context_object_name = "matter"
@@ -270,26 +373,16 @@ class MatterDetailView(StaffRequiredMixin, DetailView):
         steps, current = matter_workflow_steps(self.object)
         ctx["workflow_steps"] = steps
         ctx["current_step"] = current
-        ctx["documents"] = self.object.documents.order_by("-created_at")
-        ctx["transactions"] = self.object.transactions.order_by("-transaction_date")
+        ctx["documents_total"] = self.object.documents.count()
+        ctx["transactions"] = self.object.transactions.order_by("-transaction_date")[:10]
+        ctx["transactions_total"] = self.object.transactions.count()
         ctx["matter_status_choices"] = Matter.Status.choices
         ctx["document_status_choices"] = Document.Status.choices
         ctx["transaction_status_choices"] = Transaction.Status.choices
-        ctx["total_billed"] = (
-            self.object.transactions.filter(transaction_type=Transaction.Type.INCOME).aggregate(
-                s=Sum("amount")
-            )["s"]
-            or Decimal("0")
-        )
-        ctx["total_paid"] = (
-            self.object.transactions.filter(
-                transaction_type=Transaction.Type.INCOME,
-                status=Transaction.Status.PAID,
-            ).aggregate(s=Sum("amount"))["s"]
-            or Decimal("0")
-        )
+        ctx.update(matter_finance_summary(self.object))
+        ctx["total_billed"] = ctx["total_income"]
         ctx["matter_is_closed"] = matter_is_closed(self.object)
-        documents = list(self.object.documents.order_by("-created_at"))
+        documents = list(self.object.documents.order_by("-created_at")[:10])
         status_labels = dict(Document.Status.choices)
         for doc in documents:
             nxt = next_document_status(doc.status)
@@ -301,11 +394,11 @@ class MatterDetailView(StaffRequiredMixin, DetailView):
 
 class MatterStatusView(StaffRequiredMixin, View):
     def post(self, request, pk):
-        matter = get_object_or_404(Matter, pk=pk)
+        matter = get_object_or_404(Matter, uuid=pk)
         status = request.POST.get("status")
         if status not in Matter.Status.values:
             messages.error(request, "Invalid status.")
-            return redirect("staff:matter_detail", pk=matter.pk)
+            return redirect("staff:matter_detail", pk=matter.uuid)
 
         old_status = matter.status
         if matter_is_closed(matter):
@@ -344,15 +437,15 @@ class MatterStatusView(StaffRequiredMixin, View):
                     % {"status": matter.get_status_display()},
                 )
             messages.success(request, f"Matter status updated to {matter.get_status_display()}.")
-        return redirect("staff:matter_detail", pk=matter.pk)
+        return redirect("staff:matter_detail", pk=matter.uuid)
 
 
 class DocumentDownloadView(StaffRequiredMixin, View):
     def get(self, request, pk):
-        document = get_object_or_404(Document.objects.select_related("matter"), pk=pk)
+        document = get_object_or_404(Document.objects.select_related("matter"), uuid=pk)
         if not document.file:
             messages.error(request, "No file attached to this document.")
-            return redirect("staff:matter_detail", pk=document.matter_id)
+            return redirect("staff:matter_detail", pk=document.matter.uuid)
         try:
             filename = document.file.name.rsplit("/", 1)[-1]
             return FileResponse(
@@ -362,16 +455,16 @@ class DocumentDownloadView(StaffRequiredMixin, View):
             )
         except FileNotFoundError:
             messages.error(request, "File not found on disk.")
-            return redirect("staff:matter_detail", pk=document.matter_id)
+            return redirect("staff:matter_detail", pk=document.matter.uuid)
 
 
 class DocumentQuickActionView(StaffRequiredMixin, View):
     def post(self, request, pk):
-        document = get_object_or_404(Document.objects.select_related("matter"), pk=pk)
+        document = get_object_or_404(Document.objects.select_related("matter"), uuid=pk)
         matter = document.matter
-        matter_pk = matter.pk
+        matter_uuid = matter.uuid
         next_url = request.POST.get("next")
-        default = reverse("staff:matter_detail", kwargs={"pk": matter_pk})
+        default = reverse("staff:matter_detail", kwargs={"pk": matter_uuid})
 
         blocked = redirect_if_matter_closed(request, matter)
         if blocked:
@@ -382,7 +475,7 @@ class DocumentQuickActionView(StaffRequiredMixin, View):
         if action == "delete":
             if not can_delete_records(request.user):
                 messages.error(request, "Only managers can delete records.")
-                return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+                return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_uuid)
             title = document.title
             doc_id = document.pk
             document.delete()
@@ -435,25 +528,32 @@ class DocumentQuickActionView(StaffRequiredMixin, View):
         else:
             messages.error(request, "Unknown action.")
 
-        return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+        return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_uuid)
 
 
 class TransactionQuickActionView(StaffRequiredMixin, View):
     def post(self, request, pk):
         transaction = get_object_or_404(
-            Transaction.objects.select_related("matter"), pk=pk
+            Transaction.objects.select_related("matter"), uuid=pk
         )
         matter = transaction.matter
-        matter_pk = matter.pk
         next_url = request.POST.get("next")
+        default_name = "staff:transaction_list"
+        default_kwargs = {}
 
-        blocked = redirect_if_matter_closed(request, matter)
-        if blocked:
-            return blocked
+        if matter:
+            matter_uuid = matter.uuid
+            default_name = "staff:matter_detail"
+            default_kwargs = {"pk": matter_uuid}
+            blocked = redirect_if_matter_closed(request, matter)
+            if blocked:
+                return blocked
+        else:
+            matter_uuid = None
 
         action = request.POST.get("action")
 
-        if transaction_is_locked(transaction) and action in {
+        if transaction_is_locked(transaction, matter) and action in {
             "delete",
             "mark_paid",
             "mark_pending",
@@ -464,12 +564,12 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
                 request,
                 "This transaction is locked because it is paid, waived, or cancelled.",
             )
-            return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+            return safe_redirect(request, next_url, default_name, **default_kwargs)
 
         if action == "delete":
             if not can_delete_records(request.user):
                 messages.error(request, "Only managers can delete records.")
-                return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+                return safe_redirect(request, next_url, default_name, **default_kwargs)
             label = transaction.description
             txn_id = transaction.pk
             transaction.delete()
@@ -495,7 +595,7 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
                 matter=matter,
                 label=transaction.description,
             )
-            if auto_complete_matter_if_paid(matter):
+            if matter and auto_complete_matter_if_paid(matter):
                 messages.success(
                     request,
                     "Payment marked as paid. Matter automatically marked as completed.",
@@ -529,7 +629,7 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
                 matter=matter,
                 label=transaction.description,
             )
-            if auto_complete_matter_if_paid(matter):
+            if matter and auto_complete_matter_if_paid(matter):
                 messages.info(
                     request,
                     "Fee waived. Matter automatically marked as completed.",
@@ -552,7 +652,7 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
                         matter=matter,
                         label=transaction.description,
                     )
-                if status in {
+                if matter and status in {
                     Transaction.Status.PAID,
                     Transaction.Status.WAIVED,
                 } and auto_complete_matter_if_paid(matter):
@@ -571,10 +671,10 @@ class TransactionQuickActionView(StaffRequiredMixin, View):
         else:
             messages.error(request, "Unknown action.")
 
-        return safe_redirect(request, next_url, "staff:matter_detail", pk=matter_pk)
+        return safe_redirect(request, next_url, default_name, **default_kwargs)
 
 
-class DocumentUpdateView(StaffRequiredMixin, UpdateView):
+class DocumentUpdateView(StaffRequiredMixin, UUIDSlugMixin, UpdateView):
     model = Document
     form_class = DocumentForm
     template_name = "operations/documents/form.html"
@@ -586,7 +686,7 @@ class DocumentUpdateView(StaffRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         if request.method in ("GET", "POST"):
             document = get_object_or_404(
-                Document.objects.select_related("matter"), pk=kwargs["pk"]
+                Document.objects.select_related("matter"), uuid=kwargs["pk"]
             )
             blocked = redirect_if_matter_closed(request, document.matter)
             if blocked:
@@ -603,7 +703,7 @@ class DocumentUpdateView(StaffRequiredMixin, UpdateView):
         return ctx
 
     def get_success_url(self):
-        return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
+        return reverse("staff:matter_detail", kwargs={"pk": self.object.matter.uuid})
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -619,11 +719,16 @@ class DocumentUpdateView(StaffRequiredMixin, UpdateView):
         return response
 
 
-class TransactionUpdateView(StaffRequiredMixin, UpdateView):
+class TransactionUpdateView(StaffRequiredMixin, UUIDSlugMixin, UpdateView):
     model = Transaction
-    form_class = TransactionForm
     template_name = "operations/transactions/form.html"
     context_object_name = "transaction"
+
+    def get_form_class(self):
+        obj = getattr(self, "object", None) or self.get_object()
+        if not obj.matter_id:
+            return GeneralTransactionForm
+        return TransactionForm
 
     def get_queryset(self):
         return Transaction.objects.select_related("matter")
@@ -631,31 +736,42 @@ class TransactionUpdateView(StaffRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         if request.method in ("GET", "POST"):
             transaction = get_object_or_404(
-                Transaction.objects.select_related("matter"), pk=kwargs["pk"]
+                Transaction.objects.select_related("matter"), uuid=kwargs["pk"]
             )
-            blocked = redirect_if_matter_closed(request, transaction.matter)
-            if blocked:
-                return blocked
+            if transaction.matter_id:
+                blocked = redirect_if_matter_closed(request, transaction.matter)
+                if blocked:
+                    return blocked
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if transaction_is_locked(self.object):
+        if transaction_is_locked(self.object, self.object.matter):
             messages.error(
                 request,
                 "This transaction is locked and cannot be edited.",
             )
-            return redirect("staff:matter_detail", pk=self.object.matter_id)
+            if self.object.matter_id:
+                return redirect("staff:matter_detail", pk=self.object.matter.uuid)
+            return redirect("staff:transaction_list")
         return super().post(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if getattr(self, "object", None):
+            kwargs["matter"] = self.object.matter
+        return kwargs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["matter"] = self.object.matter
-        ctx["is_locked"] = transaction_is_locked(self.object)
+        ctx["is_locked"] = transaction_is_locked(self.object, self.object.matter)
         return ctx
 
     def get_success_url(self):
-        return reverse("staff:matter_detail", kwargs={"pk": self.object.matter_id})
+        if self.object.matter_id:
+            return reverse("staff:matter_detail", kwargs={"pk": self.object.matter.uuid})
+        return reverse("staff:transaction_list")
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -671,14 +787,14 @@ class TransactionUpdateView(StaffRequiredMixin, UpdateView):
         return response
 
 
-class MatterUpdateView(StaffRequiredMixin, UpdateView):
+class MatterUpdateView(StaffRequiredMixin, UUIDSlugMixin, UpdateView):
     model = Matter
     form_class = MatterForm
     template_name = "operations/matters/form.html"
 
     def dispatch(self, request, *args, **kwargs):
         if request.method in ("GET", "POST"):
-            matter = get_object_or_404(Matter, pk=kwargs["pk"])
+            matter = get_object_or_404(Matter, uuid=kwargs["pk"])
             blocked = redirect_if_matter_closed(request, matter)
             if blocked:
                 return blocked
@@ -693,7 +809,7 @@ class MatterUpdateView(StaffRequiredMixin, UpdateView):
         return ctx
 
     def get_success_url(self):
-        return reverse("staff:matter_detail", kwargs={"pk": self.object.pk})
+        return reverse("staff:matter_detail", kwargs={"pk": self.object.uuid})
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -709,14 +825,14 @@ class MatterUpdateView(StaffRequiredMixin, UpdateView):
         return response
 
 
-class MatterDocumentsView(StaffRequiredMixin, DetailView):
+class MatterDocumentsView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "operations/matters/documents.html"
     context_object_name = "matter"
 
     def dispatch(self, request, *args, **kwargs):
         if request.method in ("GET", "POST"):
-            matter = get_object_or_404(Matter, pk=kwargs["pk"])
+            matter = get_object_or_404(Matter, uuid=kwargs["pk"])
             blocked = redirect_if_matter_closed(request, matter)
             if blocked:
                 return blocked
@@ -748,24 +864,32 @@ class MatterDocumentsView(StaffRequiredMixin, DetailView):
                 matter=self.object,
             )
             messages.success(request, "Document added.")
-            return redirect("staff:matter_documents", pk=self.object.pk)
+            return redirect("staff:matter_documents", pk=self.object.uuid)
         ctx = self.get_context_data()
         ctx["form"] = form
         return render(request, self.template_name, ctx)
 
 
-class MatterFinancesView(StaffRequiredMixin, DetailView):
+class MatterFinancesView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "operations/matters/finances.html"
     context_object_name = "matter"
 
+    def _entry_type(self):
+        return _transaction_entry_type(self.request, default=Transaction.Type.INCOME)
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         steps, current = matter_workflow_steps(self.object)
+        entry_type = self._entry_type()
         ctx["workflow_steps"] = steps
         ctx["current_step"] = 3
         ctx["transactions"] = self.object.transactions.order_by("-transaction_date")
-        ctx["form"] = TransactionForm(initial={"currency": "USD"})
+        ctx["entry_type"] = entry_type
+        ctx["form"] = MatterTransactionForm(
+            initial={"currency": "USD"},
+            entry_type=entry_type,
+        )
         summary = matter_finance_summary(self.object)
         ctx.update(summary)
         ctx["matter_is_closed"] = matter_is_closed(self.object)
@@ -778,11 +902,13 @@ class MatterFinancesView(StaffRequiredMixin, DetailView):
                 request,
                 "This matter is closed. New transactions cannot be added.",
             )
-            return redirect("staff:matter_finances", pk=self.object.pk)
-        form = TransactionForm(request.POST)
+            return redirect("staff:matter_finances", pk=self.object.uuid)
+        entry_type = self._entry_type()
+        form = MatterTransactionForm(request.POST, entry_type=entry_type)
         if form.is_valid():
             txn = form.save(commit=False)
             txn.matter = self.object
+            txn.transaction_type = entry_type
             txn.recorded_by = request.user
             txn.save()
             log_audit(
@@ -800,13 +926,17 @@ class MatterFinancesView(StaffRequiredMixin, DetailView):
                 )
             else:
                 messages.success(request, "Transaction recorded.")
-            return redirect("staff:matter_finances", pk=self.object.pk)
+            return redirect(
+                reverse("staff:matter_finances", kwargs={"pk": self.object.uuid})
+                + f"?type={entry_type}"
+            )
         ctx = self.get_context_data()
         ctx["form"] = form
+        ctx["entry_type"] = entry_type
         return render(request, self.template_name, ctx)
 
 
-class MatterCompleteView(StaffRequiredMixin, DetailView):
+class MatterCompleteView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "operations/matters/complete.html"
     context_object_name = "matter"
@@ -876,7 +1006,7 @@ class MatterCompleteView(StaffRequiredMixin, DetailView):
                 label=matter.reference_number,
             )
             messages.success(request, "Matter reopened for further work.")
-        return redirect("staff:matter_detail", pk=matter.pk)
+        return redirect("staff:matter_detail", pk=matter.uuid)
 
 
 class MatterWizardView(StaffRequiredMixin, View):
@@ -892,20 +1022,58 @@ class MatterWizardView(StaffRequiredMixin, View):
         self.step_name = kwargs.get("step", "client")
         return super().dispatch(request, *args, **kwargs)
 
+    def _resolve_client_ref(self, client_ref):
+        return get_object_or_404(Client, uuid=client_ref)
+
     def get(self, request, step="client"):
         if step == "client":
-            clear_wizard_data(request.session)
-        if step == "client":
-            form = MatterWizardClientForm(initial=get_wizard_data(request.session).get("client", {}))
+            client_param = request.GET.get("client", "").strip()
+            if client_param:
+                try:
+                    client_uuid = uuid.UUID(client_param)
+                except ValueError:
+                    client = None
+                else:
+                    client = Client.objects.filter(uuid=client_uuid, is_active=True).first()
+                if client:
+                    clear_wizard_data(request.session)
+                    set_wizard_data(
+                        request.session,
+                        {"client": {"client": str(client.uuid)}},
+                    )
+                    return redirect("staff:matter_wizard", step="details")
+            if request.resolver_match.url_name == "matter_create":
+                clear_wizard_data(request.session)
+            wizard_data = get_wizard_data(request.session)
+            initial = {}
+            client_ref = wizard_data.get("client", {}).get("client")
+            if client_ref:
+                client = Client.objects.filter(uuid=client_ref).first()
+                if client:
+                    initial = {"client": client.pk}
+            form = MatterWizardClientForm(initial=initial)
         elif step == "details":
-            if not get_wizard_data(request.session).get("client"):
+            wizard_data = get_wizard_data(request.session)
+            if not wizard_data.get("client"):
                 return redirect("staff:matter_wizard", step="client")
-            form = MatterWizardDetailsForm(initial=get_wizard_data(request.session).get("details", {}))
+            wizard_client = self._resolve_client_ref(wizard_data["client"]["client"])
+            form = MatterWizardDetailsForm(initial=wizard_data.get("details", {}))
+            return render(
+                request,
+                self.step_templates["details"],
+                {
+                    "form": form,
+                    "wizard_client": wizard_client,
+                    "wizard_steps": self._wizard_steps(step),
+                    "step": step,
+                    "step_number": self._step_number(step),
+                },
+            )
         elif step == "review":
             data = get_wizard_data(request.session)
             if not data.get("client") or not data.get("details"):
                 return redirect("staff:matter_wizard", step="client")
-            client = get_object_or_404(Client, pk=data["client"]["client"])
+            client = self._resolve_client_ref(data["client"]["client"])
             service = get_object_or_404(ServiceType, pk=data["details"]["service_type"])
             return render(
                 request,
@@ -933,7 +1101,7 @@ class MatterWizardView(StaffRequiredMixin, View):
             form = MatterWizardClientForm(request.POST)
             if form.is_valid():
                 data = get_wizard_data(request.session)
-                data["client"] = {"client": form.cleaned_data["client"].pk}
+                data["client"] = {"client": str(form.cleaned_data["client"].uuid)}
                 set_wizard_data(request.session, data)
                 return redirect("staff:matter_wizard", step="details")
         elif step == "details":
@@ -952,10 +1120,20 @@ class MatterWizardView(StaffRequiredMixin, View):
         else:
             return redirect("staff:matter_wizard", step="client")
 
+        context = {
+            "form": form,
+            "wizard_steps": self._wizard_steps(step),
+            "step": step,
+            "step_number": self._step_number(step),
+        }
+        if step == "details":
+            wizard_data = get_wizard_data(request.session)
+            if wizard_data.get("client"):
+                context["wizard_client"] = self._resolve_client_ref(wizard_data["client"]["client"])
         return render(
             request,
             self.step_templates.get(step, self.step_templates["client"]),
-            {"form": form, "wizard_steps": self._wizard_steps(step), "step": step, "step_number": self._step_number(step)},
+            context,
         )
 
     def _finalize(self, request):
@@ -966,7 +1144,7 @@ class MatterWizardView(StaffRequiredMixin, View):
             messages.error(request, "Wizard session expired. Please start again.")
             return redirect("staff:matter_wizard", step="client")
 
-        client = get_object_or_404(Client, pk=client_id)
+        client = self._resolve_client_ref(client_id)
         service = get_object_or_404(ServiceType, pk=details["service_type"])
 
         from django.utils.dateparse import parse_datetime
@@ -998,7 +1176,7 @@ class MatterWizardView(StaffRequiredMixin, View):
 
         clear_wizard_data(request.session)
         messages.success(request, f"Matter {matter.reference_number} created. Continue with documents and payment.")
-        return redirect("staff:matter_documents", pk=matter.pk)
+        return redirect("staff:matter_documents", pk=matter.uuid)
 
     def _step_number(self, step):
         return {"client": 1, "details": 2, "review": 3}.get(step, 1)
@@ -1028,7 +1206,7 @@ class DocumentListView(StaffRequiredMixin, ListView):
     model = Document
     template_name = "operations/documents/list.html"
     context_object_name = "documents"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         qs = Document.objects.select_related("matter", "matter__client").order_by("-created_at")
@@ -1049,7 +1227,7 @@ class TransactionListView(StaffRequiredMixin, ListView):
     model = Transaction
     template_name = "operations/transactions/list.html"
     context_object_name = "transactions"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         qs = Transaction.objects.select_related("matter", "matter__client").order_by(
@@ -1063,8 +1241,10 @@ class TransactionListView(StaffRequiredMixin, ListView):
         ctx["status_choices"] = Transaction.Status.choices
         ctx["type_choices"] = Transaction.Type.choices
         ctx["payment_method_choices"] = Transaction.PaymentMethod.choices
+        ctx["category_choices"] = Transaction.Category.choices
         ctx["active_status"] = self.request.GET.get("status", "")
         ctx["active_type"] = self.request.GET.get("type", "")
+        ctx["active_source"] = self.request.GET.get("source", "")
         params = self.request.GET.copy()
         params.pop("page", None)
         ctx["filter_query"] = params.urlencode()
@@ -1073,7 +1253,48 @@ class TransactionListView(StaffRequiredMixin, ListView):
         return ctx
 
 
-class TransactionReceiptView(StaffRequiredMixin, DetailView):
+class GeneralTransactionCreateView(StaffRequiredMixin, CreateView):
+    model = Transaction
+    form_class = GeneralTransactionForm
+    template_name = "operations/transactions/general_form.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["entry_type"] = _transaction_entry_type(
+            self.request, default=Transaction.Type.EXPENSE
+        )
+        return ctx
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["entry_type"] = _transaction_entry_type(
+            self.request, default=Transaction.Type.EXPENSE
+        )
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.recorded_by = self.request.user
+        self.object.matter = None
+        self.object.transaction_type = _transaction_entry_type(
+            self.request, default=Transaction.Type.EXPENSE
+        )
+        self.object.save()
+        log_audit(
+            self.request.user,
+            AuditLog.Action.CREATED,
+            AuditLog.EntityType.TRANSACTION,
+            self.object.pk,
+            self.object.description,
+        )
+        messages.success(self.request, _("Entry recorded successfully."))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse("staff:transaction_list")
+
+
+class TransactionReceiptView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Transaction
     template_name = "operations/print/receipt.html"
     context_object_name = "transaction"
@@ -1090,7 +1311,7 @@ class TransactionReceiptView(StaffRequiredMixin, DetailView):
         self.object = self.get_object()
         if request.GET.get("format") == "pdf":
             context = self.get_context_data(object=self.object)
-            filename = f"receipt-{self.object.pk}.pdf"
+            filename = f"receipt-{self.object.uuid}.pdf"
             pdf = render_pdf_response(self.template_name, context, filename=filename)
             if pdf:
                 return pdf
@@ -1102,7 +1323,7 @@ class TransactionReceiptView(StaffRequiredMixin, DetailView):
         return ctx
 
 
-class MatterDocumentsPrintView(StaffRequiredMixin, DetailView):
+class MatterDocumentsPrintView(StaffRequiredMixin, UUIDSlugMixin, DetailView):
     model = Matter
     template_name = "operations/print/matter_documents.html"
     context_object_name = "matter"
@@ -1128,9 +1349,9 @@ class CalendarView(StaffRequiredMixin, TemplateView):
             try:
                 week_start = date.fromisoformat(week_param)
             except ValueError:
-                week_start = today - timedelta(days=today.weekday())
+                week_start = today - timedelta(days=(today.weekday() - 5) % 7)
         else:
-            week_start = today - timedelta(days=today.weekday())
+            week_start = today - timedelta(days=(today.weekday() - 5) % 7)
 
         week_end = week_start + timedelta(days=6)
         week_days = [week_start + timedelta(days=i) for i in range(7)]
@@ -1163,7 +1384,7 @@ class AuditLogListView(ManagerRequiredMixin, ListView):
     model = AuditLog
     template_name = "operations/audit/list.html"
     context_object_name = "entries"
-    paginate_by = 40
+    paginate_by = 10
 
     def get_queryset(self):
         qs = AuditLog.objects.select_related("user", "matter").order_by("-created_at")
@@ -1176,6 +1397,9 @@ class AuditLogListView(ManagerRequiredMixin, ListView):
         ctx = super().get_context_data(**kwargs)
         ctx["entity_types"] = AuditLog.EntityType.choices
         ctx["active_entity"] = self.request.GET.get("entity", "")
+        params = self.request.GET.copy()
+        params.pop("page", None)
+        ctx["filter_query"] = params.urlencode()
         return ctx
 
 
@@ -1198,7 +1422,7 @@ class AppointmentListView(StaffRequiredMixin, ListView):
     model = AppointmentRequest
     template_name = "operations/appointments/list.html"
     context_object_name = "appointments"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         qs = AppointmentRequest.objects.order_by("-created_at")
@@ -1214,10 +1438,13 @@ class AppointmentListView(StaffRequiredMixin, ListView):
         ctx["pending_count"] = AppointmentRequest.objects.filter(
             status=AppointmentRequest.Status.PENDING
         ).count()
+        params = self.request.GET.copy()
+        params.pop("page", None)
+        ctx["filter_query"] = params.urlencode()
         return ctx
 
     def post(self, request, *args, **kwargs):
-        appointment = get_object_or_404(AppointmentRequest, pk=request.POST.get("pk"))
+        appointment = get_object_or_404(AppointmentRequest, uuid=request.POST.get("uuid"))
         status = request.POST.get("status")
         if status in AppointmentRequest.Status.values:
             appointment.status = status

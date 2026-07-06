@@ -21,5 +21,5 @@ def safe_redirect(request, next_url, default_name, **default_kwargs):
 def redirect_if_matter_closed(request, matter):
     if matter_is_closed(matter):
         messages.error(request, "This matter is closed and cannot be modified.")
-        return redirect("staff:matter_detail", pk=matter.pk)
+        return redirect("staff:matter_detail", pk=matter.uuid)
     return None

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 01:47+0300\n"
+"POT-Creation-Date: 2026-07-06 16:53+0300\n"
 "PO-Revision-Date: 2026-07-04 00:20+0300\n"
 "Last-Translator: Codex <codex@openai.com>\n"
 "Language-Team: ar <ar@li.org>\n"
@@ -18,6 +18,438 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: .\accounts\admin.py:26
+msgid "Personal info"
+msgstr ""
+
+#: .\accounts\admin.py:28
+msgid "Permissions"
+msgstr ""
+
+#: .\accounts\admin.py:40
+msgid "Important dates"
+msgstr ""
+
+#: .\accounts\admin.py:64
+#: .\operations\templates\operations\appointments\list.html:27
+msgid "Name"
+msgstr ""
+
+#: .\accounts\apps.py:8
+msgid "Accounts"
+msgstr ""
+
+#: .\accounts\forms.py:14 .\accounts\forms.py:69 .\operations\forms.py:51
+#: .\pages\templates\pages\home.html:95 .\pages\templates\pages\home.html:360
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: .\accounts\forms.py:18 .\accounts\forms.py:73 .\operations\forms.py:55
+#: .\operations\forms.py:101 .\pages\forms.py:13
+msgid "you@example.com"
+msgstr ""
+
+#: .\accounts\forms.py:23 .\accounts\forms.py:25
+#: .\operations\templates\operations\profile.html:9
+#, fuzzy
+#| msgid "Full name"
+msgid "First name"
+msgstr "الاسم الكامل"
+
+#: .\accounts\forms.py:28 .\accounts\forms.py:30
+#: .\operations\templates\operations\profile.html:10
+msgid "Last name"
+msgstr ""
+
+#: .\accounts\forms.py:33 .\operations\templates\operations\profile.html:11
+#: .\pages\templates\pages\home.html:87 .\pages\templates\pages\home.html:356
+msgid "Phone"
+msgstr "الهاتف"
+
+#: .\accounts\forms.py:38
+msgid "Phone number"
+msgstr ""
+
+#: .\accounts\forms.py:51
+msgid "Create a password"
+msgstr ""
+
+#: .\accounts\forms.py:52
+msgid "Confirm your password"
+msgstr ""
+
+#: .\accounts\forms.py:57 .\accounts\forms.py:79 .\accounts\forms.py:84
+#: .\accounts\forms.py:130 .\operations\forms.py:61
+#, fuzzy
+#| msgid "Passed"
+msgid "Password"
+msgstr "اجتاز"
+
+#: .\accounts\forms.py:63
+msgid "An account with this email already exists."
+msgstr ""
+
+#: .\accounts\forms.py:91
+msgid ""
+"Please enter a correct email and password. Note that both fields may be case-"
+"sensitive."
+msgstr ""
+
+#: .\accounts\forms.py:93 .\operations\forms.py:73
+msgid "This account is inactive."
+msgstr ""
+
+#: .\accounts\forms.py:103
+msgid "e.g. Ahmed"
+msgstr ""
+
+#: .\accounts\forms.py:106
+msgid "e.g. Hassan"
+msgstr ""
+
+#: .\accounts\forms.py:111 .\operations\forms.py:102
+msgid "+252 61 234 5678"
+msgstr ""
+
+#: .\accounts\forms.py:121
+msgid "Enter current password"
+msgstr ""
+
+#: .\accounts\forms.py:122
+msgid "Enter new password"
+msgstr ""
+
+#: .\accounts\forms.py:123
+msgid "Confirm new password"
+msgstr ""
+
+#: .\accounts\managers.py:10
+msgid "Users must have an email address."
+msgstr ""
+
+#: .\accounts\managers.py:29
+msgid "Superuser must have is_staff=True."
+msgstr ""
+
+#: .\accounts\managers.py:31
+msgid "Superuser must have is_superuser=True."
+msgstr ""
+
+#: .\accounts\models.py:11 .\operations\models.py:10
+msgid "Enter a valid phone number."
+msgstr ""
+
+#: .\accounts\models.py:17 .\operations\forms.py:161 .\operations\models.py:307
+#: .\operations\templates\operations\matters\form.html:13
+#: .\operations\templates\operations\transactions\list.html:64
+#: .\operations\views.py:1057
+#, fuzzy
+#| msgid "Client focus"
+msgid "Client"
+msgstr "تركيز على العميل"
+
+#: .\accounts\models.py:18
+msgid "Staff"
+msgstr ""
+
+#: .\accounts\models.py:19
+msgid "Manager"
+msgstr ""
+
+#: .\accounts\models.py:21
+#, fuzzy
+#| msgid "Email address"
+msgid "email address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: .\accounts\models.py:22
+msgid "first name"
+msgstr ""
+
+#: .\accounts\models.py:23
+#, fuzzy
+#| msgid "Full name"
+msgid "last name"
+msgstr "الاسم الكامل"
+
+#: .\accounts\models.py:25 .\operations\models.py:31
+#, fuzzy
+#| msgid "Phone"
+msgid "phone"
+msgstr "الهاتف"
+
+#: .\accounts\models.py:31
+msgid "role"
+msgstr ""
+
+#: .\accounts\models.py:36
+#, fuzzy
+#| msgid "Verified"
+msgid "email verified"
+msgstr "تم التحقق"
+
+#: .\accounts\models.py:37
+msgid "staff status"
+msgstr ""
+
+#: .\accounts\models.py:38 .\operations\models.py:44 .\operations\models.py:75
+msgid "active"
+msgstr ""
+
+#: .\accounts\models.py:39
+msgid "date joined"
+msgstr ""
+
+#: .\accounts\models.py:47 .\operations\models.py:321
+msgid "user"
+msgstr ""
+
+#: .\accounts\models.py:48
+msgid "users"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:4
+#: .\accounts\templates\accounts\login.html:42
+#: .\accounts\templates\accounts\register.html:22
+#: .\operations\templates\operations\login.html:27
+msgid "Sign in"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:4
+#: .\accounts\templates\accounts\password_change.html:4
+#: .\accounts\templates\accounts\profile.html:4
+#: .\accounts\templates\accounts\register.html:4
+#: .\cms\templates\cms\blog_detail.html:4 .\cms\templates\cms\blog_list.html:4
+#: .\cms\templates\cms\portfolio_detail.html:4
+#: .\cms\templates\cms\portfolio_list.html:4
+#: .\pages\templates\pages\home.html:9 .\pages\templates\pages\home.html:77
+#: .\templates\includes\footer.html:4 .\templates\includes\footer.html:13
+#: .\templates\includes\header.html:4 .\templates\includes\header.html:13
+msgid "Notary"
+msgstr "كاتب عدل"
+
+#: .\accounts\templates\accounts\login.html:5
+msgid "Sign in to your Himilo Notary client account."
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:14
+#: .\accounts\templates\accounts\profile.html:22
+#: .\accounts\templates\accounts\register.html:14
+#, fuzzy
+#| msgid "Client focus"
+msgid "Client account"
+msgstr "تركيز على العميل"
+
+#: .\accounts\templates\accounts\login.html:16
+msgid "Welcome"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:16
+msgid "back"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:17
+msgid "Sign in with the email address linked to your account."
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:19
+msgid "Need an account?"
+msgstr ""
+
+#: .\accounts\templates\accounts\login.html:20
+msgid "Create one"
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:4
+#: .\accounts\templates\accounts\profile.html:44
+msgid "Change password"
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:5
+msgid "Update your Himilo Notary account password."
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:16
+msgid "Back to profile"
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:18
+msgid "Change"
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:18
+msgid "password"
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:19
+msgid "Choose a strong password you do not use on other sites."
+msgstr ""
+
+#: .\accounts\templates\accounts\password_change.html:46
+msgid "Update password"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:4
+#: .\operations\templates\operations\base_staff.html:139
+#: .\operations\templates\operations\profile.html:3
+msgid "My profile"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:5
+msgid "Manage your Himilo Notary client profile."
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:30
+msgid "Member since"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:32
+#, fuzzy
+#| msgid "Verified"
+msgid "Email verified"
+msgstr "تم التحقق"
+
+#: .\accounts\templates\accounts\profile.html:38
+msgid "Last sign in"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:39
+msgid "Not yet recorded"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:47
+#: .\operations\templates\operations\base_staff.html:145
+msgid "Sign out"
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:54
+#, fuzzy
+#| msgid "Office information"
+msgid "Personal information"
+msgstr "معلومات المكتب"
+
+#: .\accounts\templates\accounts\profile.html:55
+msgid "Update the name and phone number on your account."
+msgstr ""
+
+#: .\accounts\templates\accounts\profile.html:76
+#: .\accounts\templates\accounts\register.html:51
+#, fuzzy
+#| msgid "(optional)"
+msgid "optional"
+msgstr "(اختياري)"
+
+#: .\accounts\templates\accounts\profile.html:81
+msgid "Save changes"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:4
+#: .\accounts\templates\accounts\register.html:69
+msgid "Create account"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:5
+msgid ""
+"Create a Himilo Notary client account to manage your profile and stay "
+"connected."
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:16
+msgid "Create your"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:16
+msgid "account"
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:18
+msgid ""
+"Sign up with your email to save your details and manage your profile with "
+"Himilo Notary."
+msgstr ""
+
+#: .\accounts\templates\accounts\register.html:21
+msgid "Already have an account?"
+msgstr ""
+
+#: .\accounts\templates\portal\dashboard.html:4
+msgid "My matters"
+msgstr ""
+
+#: .\accounts\templates\portal\dashboard.html:10
+#: .\accounts\templates\portal\matter_detail.html:4
+#, fuzzy
+#| msgid "Client focus"
+msgid "Client portal"
+msgstr "تركيز على العميل"
+
+#: .\accounts\templates\portal\dashboard.html:11
+msgid "Welcome,"
+msgstr ""
+
+#: .\accounts\templates\portal\dashboard.html:12
+msgid "Track your notary matters, documents, and payment status."
+msgstr ""
+
+#: .\accounts\templates\portal\dashboard.html:28
+#: .\cms\templates\cms\portfolio_detail.html:61
+#: .\cms\templates\cms\portfolio_list.html:36
+#: .\pages\templates\pages\home.html:321
+msgid "View details"
+msgstr ""
+
+#: .\accounts\templates\portal\dashboard.html:35
+msgid "You have no matters on file yet."
+msgstr ""
+
+#: .\accounts\templates\portal\matter_detail.html:15
+msgid "Scheduled:"
+msgstr ""
+
+#: .\accounts\templates\portal\matter_detail.html:18
+#: .\operations\templates\operations\base_staff.html:89
+#: .\pages\templates\pages\home.html:41
+msgid "Documents"
+msgstr "مستندات"
+
+#: .\accounts\templates\portal\matter_detail.html:26
+msgid "No documents uploaded yet."
+msgstr ""
+
+#: .\accounts\templates\portal\matter_detail.html:29
+msgid "Fees"
+msgstr ""
+
+#: .\accounts\templates\portal\matter_detail.html:37
+msgid "No fees recorded yet."
+msgstr ""
+
+#: .\accounts\templates\portal\matter_detail.html:40
+msgid "Back to my matters"
+msgstr ""
+
+#: .\accounts\views.py:45
+#, python-format
+msgid "Welcome, %(name)s! Your account has been created."
+msgstr ""
+
+#: .\accounts\views.py:58
+#, python-format
+msgid "Welcome back, %(name)s."
+msgstr ""
+
+#: .\accounts\views.py:68
+msgid "You have been signed out."
+msgstr ""
+
+#: .\accounts\views.py:82
+msgid "Your profile has been updated."
+msgstr ""
+
+#: .\accounts\views.py:92
+msgid "Your password has been changed."
+msgstr ""
 
 #: .\cms\admin.py:17 .\cms\admin.py:31
 #, fuzzy
@@ -29,75 +461,78 @@ msgstr "تواصل"
 msgid "Publishing"
 msgstr ""
 
-#: .\cms\models.py:9
+#: .\cms\models.py:8 .\notary\settings.py:118
+msgid "English"
+msgstr "الإنجليزية"
+
+#: .\cms\models.py:9 .\notary\settings.py:119
+msgid "Somali"
+msgstr "الصومالية"
+
+#: .\cms\models.py:10 .\notary\settings.py:120
+msgid "Arabic"
+msgstr "العربية"
+
+#: .\cms\models.py:15
 msgid "Blog"
 msgstr ""
 
-#: .\cms\models.py:10 .\templates\includes\footer.html:21
+#: .\cms\models.py:16 .\templates\includes\footer.html:21
 #: .\templates\includes\header.html:21 .\templates\includes\header.html:98
 msgid "News"
 msgstr ""
 
-#: .\cms\models.py:11
+#: .\cms\models.py:17
 msgid "Notice"
 msgstr ""
 
-#: .\cms\models.py:14 .\cms\models.py:64
+#: .\cms\models.py:20 .\cms\models.py:83
 msgid "Draft"
 msgstr ""
 
-#: .\cms\models.py:15 .\cms\models.py:65
+#: .\cms\models.py:21 .\cms\models.py:84
 msgid "Published"
 msgstr ""
 
-#: .\cms\models.py:38
+#: .\cms\models.py:50
 msgid "post"
 msgstr ""
 
-#: .\cms\models.py:39
+#: .\cms\models.py:51
 msgid "posts"
 msgstr ""
 
-#: .\cms\models.py:72
+#: .\cms\models.py:97
 msgid "e.g. Real estate, Affidavit, Business contract"
 msgstr ""
 
-#: .\cms\models.py:77
+#: .\cms\models.py:102
 msgid "Optional longer description. Keep client details anonymous."
 msgstr ""
 
-#: .\cms\models.py:91
+#: .\cms\models.py:117
 msgid "portfolio item"
 msgstr ""
 
-#: .\cms\models.py:92
+#: .\cms\models.py:118
 msgid "portfolio items"
 msgstr ""
-
-#: .\cms\templates\cms\blog_detail.html:4 .\cms\templates\cms\blog_list.html:4
-#: .\cms\templates\cms\portfolio_detail.html:4
-#: .\cms\templates\cms\portfolio_list.html:4
-#: .\pages\templates\pages\home.html:57 .\templates\includes\footer.html:4
-#: .\templates\includes\footer.html:13 .\templates\includes\header.html:4
-#: .\templates\includes\header.html:13
-msgid "Notary"
-msgstr "كاتب عدل"
 
 #: .\cms\templates\cms\blog_detail.html:16
 msgid "All news"
 msgstr ""
 
-#: .\cms\templates\cms\blog_detail.html:38
-#: .\cms\templates\cms\portfolio_detail.html:40
+#: .\cms\templates\cms\blog_detail.html:43
+#: .\cms\templates\cms\portfolio_detail.html:47
 msgid "More"
 msgstr ""
 
-#: .\cms\templates\cms\blog_detail.html:38
+#: .\cms\templates\cms\blog_detail.html:43
 msgid "to read"
 msgstr ""
 
-#: .\cms\templates\cms\blog_detail.html:47
-#: .\cms\templates\cms\blog_list.html:47
+#: .\cms\templates\cms\blog_detail.html:57
+#: .\cms\templates\cms\blog_list.html:50 .\pages\templates\pages\home.html:292
 msgid "Read more"
 msgstr ""
 
@@ -131,15 +566,15 @@ msgid ""
 "stay informed before your visit."
 msgstr ""
 
-#: .\cms\templates\cms\blog_list.html:24
+#: .\cms\templates\cms\blog_list.html:25
 msgid "Filter by category"
 msgstr ""
 
-#: .\cms\templates\cms\blog_list.html:25
+#: .\cms\templates\cms\blog_list.html:26
 msgid "All"
 msgstr ""
 
-#: .\cms\templates\cms\blog_list.html:57
+#: .\cms\templates\cms\blog_list.html:61
 msgid "No posts published yet. Check back soon."
 msgstr ""
 
@@ -147,24 +582,19 @@ msgstr ""
 msgid "All work"
 msgstr ""
 
-#: .\cms\templates\cms\portfolio_detail.html:33
+#: .\cms\templates\cms\portfolio_detail.html:38
 #, fuzzy
 #| msgid "Clear help for the documents"
 msgid "Need similar help with your documents?"
 msgstr "مساعدة واضحة للمستندات"
 
-#: .\cms\templates\cms\portfolio_detail.html:34
+#: .\cms\templates\cms\portfolio_detail.html:39
 #: .\templates\includes\header.html:60 .\templates\includes\header.html:101
 msgid "Contact us"
 msgstr "تواصل معنا"
 
-#: .\cms\templates\cms\portfolio_detail.html:40
+#: .\cms\templates\cms\portfolio_detail.html:47
 msgid "highlights"
-msgstr ""
-
-#: .\cms\templates\cms\portfolio_detail.html:49
-#: .\cms\templates\cms\portfolio_list.html:33
-msgid "View details"
 msgstr ""
 
 #: .\cms\templates\cms\portfolio_list.html:4
@@ -197,39 +627,1241 @@ msgid ""
 "client details, just the kind of work we do every day."
 msgstr ""
 
-#: .\cms\templates\cms\portfolio_list.html:43
+#: .\cms\templates\cms\portfolio_list.html:47
 msgid "Portfolio highlights will appear here once published."
 msgstr ""
 
-#: .\notary\settings.py:108
-msgid "English"
-msgstr "الإنجليزية"
+#: .\cms\views.py:52
+msgid "News & updates | Himilo Notary"
+msgstr ""
 
-#: .\notary\settings.py:109
-msgid "Somali"
-msgstr "الصومالية"
+#: .\cms\views.py:53
+msgid "Latest news, notices, and articles from Himilo Notary."
+msgstr ""
 
-#: .\notary\settings.py:110
-msgid "Arabic"
-msgstr "العربية"
+#: .\cms\views.py:93
+msgid "Portfolio | Himilo Notary"
+msgstr ""
 
-#: .\pages\templates\pages\home.html:18
+#: .\cms\views.py:94
+msgid "Examples of notarial work handled by Himilo Notary."
+msgstr ""
+
+#: .\operations\admin.py:45 .\pages\templates\pages\privacy.html:27
+#: .\pages\templates\pages\terms.html:27 .\templates\includes\footer.html:22
+#: .\templates\includes\header.html:22 .\templates\includes\header.html:99
+msgid "Contact"
+msgstr "تواصل"
+
+#: .\operations\admin.py:46
+#, fuzzy
+#| msgid "Identity"
+msgid "Identification"
+msgstr "الهوية"
+
+#: .\operations\admin.py:47
+#: .\operations\templates\operations\matters\finances.html:34
+#: .\operations\templates\operations\matters\form.html:23
+msgid "Notes"
+msgstr ""
+
+#: .\operations\admin.py:48 .\operations\admin.py:87
+msgid "Timestamps"
+msgstr ""
+
+#: .\operations\admin.py:85
+msgid "Schedule"
+msgstr ""
+
+#: .\operations\admin.py:86
+msgid "Details"
+msgstr ""
+
+#: .\operations\apps.py:8 .\operations\templates\operations\base_staff.html:159
+msgid "Operations"
+msgstr ""
+
+#: .\operations\forms.py:66
+msgid "Enter your password"
+msgstr ""
+
+#: .\operations\forms.py:72
+msgid "Please enter a correct email and password."
+msgstr ""
+
+#: .\operations\forms.py:80
+msgid "This login is for staff only. Contact your administrator."
+msgstr ""
+
+#: .\operations\forms.py:99
+msgid "e.g. Ahmed Hassan"
+msgstr ""
+
+#: .\operations\forms.py:103
+msgid "Passport or national ID number"
+msgstr ""
+
+#: .\operations\forms.py:104
+msgid "Street, district, city"
+msgstr ""
+
+#: .\operations\forms.py:105 .\operations\forms.py:142
+msgid "Internal notes for staff only"
+msgstr ""
+
+#: .\operations\forms.py:127 .\operations\forms.py:167
+msgid "Search for a client…"
+msgstr ""
+
+#: .\operations\forms.py:131 .\operations\forms.py:177 .\pages\forms.py:46
+#: .\pages\forms.py:49 .\pages\forms.py:50
+msgid "Select a service"
+msgstr ""
+
+#: .\operations\forms.py:132 .\operations\forms.py:182
+#, fuzzy
+#| msgid "Start a notarization"
+msgid "e.g. Property sale notarization"
+msgstr "ابدأ التوثيق"
+
+#: .\operations\forms.py:134 .\operations\forms.py:188
+msgid "Brief description of the matter"
+msgstr ""
+
+#: .\operations\forms.py:136 .\operations\forms.py:202
+msgid "Select matter status"
+msgstr ""
+
+#: .\operations\forms.py:138 .\operations\forms.py:195
+#, fuzzy
+#| msgid "See the process"
+msgid "Select date and time"
+msgstr "اطّلع على الإجراءات"
+
+#: .\operations\forms.py:140
+msgid "Assign staff member"
+msgstr ""
+
+#: .\operations\forms.py:163
+msgid "Select a client"
+msgstr ""
+
+#: .\operations\forms.py:175
+#, fuzzy
+#| msgid "Services"
+msgid "Service type"
+msgstr "الخدمات"
+
+#: .\operations\forms.py:180
+msgid "Matter title"
+msgstr ""
+
+#: .\operations\forms.py:185 .\operations\forms.py:256
+#: .\operations\templates\operations\matters\finances.html:25
+#: .\operations\templates\operations\matters\finances.html:43
+#: .\operations\templates\operations\matters\form.html:17
+#: .\operations\templates\operations\transactions\list.html:64
+#, fuzzy
+#| msgid "Bit encryption"
+msgid "Description"
+msgstr "بت تشفير"
+
+#: .\operations\forms.py:192
+#: .\operations\templates\operations\matters\form.html:20
+msgid "Scheduled for"
+msgstr ""
+
+#: .\operations\forms.py:199 .\operations\forms.py:241
+#: .\operations\templates\operations\appointments\list.html:11
+#: .\operations\templates\operations\appointments\list.html:30
+#: .\operations\templates\operations\documents\list.html:16
+#: .\operations\templates\operations\matters\finances.html:23
+#: .\operations\templates\operations\matters\finances.html:43
+#: .\operations\templates\operations\matters\form.html:19
+#: .\operations\templates\operations\matters\list.html:13
+#: .\operations\templates\operations\transactions\list.html:22
+#: .\operations\templates\operations\transactions\list.html:64
+msgid "Status"
+msgstr ""
+
+#: .\operations\forms.py:205
+msgid "Create pending fee from service default"
+msgstr ""
+
+#: .\operations\forms.py:219 .\operations\forms.py:251
+msgid "Skip for now"
+msgstr ""
+
+#: .\operations\forms.py:224
+#, fuzzy
+#| msgid "Documents notarized"
+msgid "Document title"
+msgstr "مستندات موثقة"
+
+#: .\operations\forms.py:227 .\operations\forms.py:289
+msgid "e.g. Sale agreement"
+msgstr ""
+
+#: .\operations\forms.py:230
+#, fuzzy
+#| msgid "Documents"
+msgid "Document type"
+msgstr "مستندات"
+
+#: .\operations\forms.py:233 .\operations\forms.py:290
+msgid "e.g. Contract, ID copy"
+msgstr ""
+
+#: .\operations\forms.py:236
+msgid "File"
+msgstr ""
+
+#: .\operations\forms.py:238
+msgid "Choose PDF, DOC, or image file"
+msgstr ""
+
+#: .\operations\forms.py:245 .\operations\forms.py:292
+msgid "Select document status"
+msgstr ""
+
+#: .\operations\forms.py:258
+#, fuzzy
+#| msgid "Service needed"
+msgid "Service fee"
+msgstr "الخدمة المطلوبة"
+
+#: .\operations\forms.py:260 .\operations\forms.py:320
+#, fuzzy
+#| msgid "Service needed"
+msgid "e.g. Service fee"
+msgstr "الخدمة المطلوبة"
+
+#: .\operations\forms.py:263
+#: .\operations\templates\operations\matters\finances.html:27
+#: .\operations\templates\operations\matters\finances.html:43
+#: .\operations\templates\operations\transactions\list.html:64
+msgid "Amount"
+msgstr ""
+
+#: .\operations\forms.py:270
+#: .\operations\templates\operations\matters\finances.html:31
+#: .\operations\templates\operations\transactions\list.html:50
+msgid "Payment method"
+msgstr ""
+
+#: .\operations\forms.py:271 .\operations\forms.py:273
+#: .\operations\forms.py:323 .\operations\forms.py:333
+msgid "Select payment method"
+msgstr ""
+
+#: .\operations\forms.py:276
+msgid "Payment status"
+msgstr ""
+
+#: .\operations\forms.py:280 .\operations\forms.py:324
+msgid "Select payment status"
+msgstr ""
+
+#: .\operations\forms.py:291
+msgid "Upload PDF, DOC, or image (max 10 MB)"
+msgstr ""
+
+#: .\operations\forms.py:293
+msgid "Optional notes about this document"
+msgstr ""
+
+#: .\operations\forms.py:301
+msgid "Please upload a file."
+msgstr ""
+
+#: .\operations\forms.py:319
+msgid "Income or expense"
+msgstr ""
+
+#: .\operations\forms.py:322
+msgid "e.g. USD"
+msgstr ""
+
+#: .\operations\forms.py:325
+#, fuzzy
+#| msgid "Notarization"
+msgid "Select transaction date"
+msgstr "التوثيق"
+
+#: .\operations\forms.py:326
+msgid "Optional payment notes"
+msgstr ""
+
+#: .\operations\models.py:16
+msgid "uuid"
+msgstr ""
+
+#: .\operations\models.py:28 .\operations\models.py:353
+#, fuzzy
+#| msgid "Full name"
+msgid "full name"
+msgstr "الاسم الكامل"
+
+#: .\operations\models.py:29 .\operations\models.py:354
+#, fuzzy
+#| msgid "Email"
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+#: .\operations\models.py:37
+msgid "ID / passport number"
+msgstr ""
+
+#: .\operations\models.py:40
+msgid "Government ID or passport reference, if provided."
+msgstr ""
+
+#: .\operations\models.py:42
+#, fuzzy
+#| msgid "Address"
+msgid "address"
+msgstr "العنوان"
+
+#: .\operations\models.py:43 .\operations\models.py:133
+msgid "internal notes"
+msgstr ""
+
+#: .\operations\models.py:51
+msgid "portal user"
+msgstr ""
+
+#: .\operations\models.py:53 .\operations\models.py:134
+#: .\operations\models.py:282
+msgid "created"
+msgstr ""
+
+#: .\operations\models.py:54 .\operations\models.py:135
+#: .\operations\models.py:210 .\operations\models.py:283
+#: .\operations\models.py:365
+msgid "updated"
+msgstr ""
+
+#: .\operations\models.py:58 .\operations\models.py:107
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "client"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\operations\models.py:59
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "clients"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\operations\models.py:66
+#, fuzzy
+#| msgid "Full name"
+msgid "name"
+msgstr "الاسم الكامل"
+
+#: .\operations\models.py:67 .\operations\models.py:116
+#: .\operations\models.py:252
+#, fuzzy
+#| msgid "Bit encryption"
+msgid "description"
+msgstr "بت تشفير"
+
+#: .\operations\models.py:69
+msgid "default fee"
+msgstr ""
+
+#: .\operations\models.py:76
+msgid "sort order"
+msgstr ""
+
+#: .\operations\models.py:80 .\operations\models.py:113
+#, fuzzy
+#| msgid "Service needed"
+msgid "service type"
+msgstr "الخدمة المطلوبة"
+
+#: .\operations\models.py:81
+#, fuzzy
+#| msgid "Services"
+msgid "service types"
+msgstr "الخدمات"
+
+#: .\operations\models.py:89
+msgid "Inquiry"
+msgstr ""
+
+#: .\operations\models.py:90
+msgid "Scheduled"
+msgstr ""
+
+#: .\operations\models.py:91
+msgid "In progress"
+msgstr ""
+
+#: .\operations\models.py:92
+#, fuzzy
+#| msgid "Awaiting"
+msgid "Awaiting payment"
+msgstr "في الانتظار"
+
+#: .\operations\models.py:93
+msgid "Completed"
+msgstr ""
+
+#: .\operations\models.py:94 .\operations\models.py:231
+#: .\operations\models.py:351
+msgid "Cancelled"
+msgstr ""
+
+#: .\operations\models.py:97
+#, fuzzy
+#| msgid "Years experience"
+msgid "reference"
+msgstr "سنوات من الخبرة"
+
+#: .\operations\models.py:115 .\operations\models.py:191
+msgid "title"
+msgstr ""
+
+#: .\operations\models.py:118 .\operations\models.py:195
+#: .\operations\models.py:267 .\operations\models.py:359
+msgid "status"
+msgstr ""
+
+#: .\operations\models.py:123
+msgid "scheduled for"
+msgstr ""
+
+#: .\operations\models.py:124
+msgid "completed at"
+msgstr ""
+
+#: .\operations\models.py:131
+msgid "assigned to"
+msgstr ""
+
+#: .\operations\models.py:139 .\operations\models.py:189
+#: .\operations\models.py:244 .\operations\models.py:334
+msgid "matter"
+msgstr ""
+
+#: .\operations\models.py:140
+msgid "matters"
+msgstr ""
+
+#: .\operations\models.py:179 .\operations\models.py:227
+#: .\operations\models.py:349
+msgid "Pending"
+msgstr ""
+
+#: .\operations\models.py:180
+msgid "Received"
+msgstr ""
+
+#: .\operations\models.py:181
+msgid "Verified"
+msgstr "تم التحقق"
+
+#: .\operations\models.py:182
+#, fuzzy
+#| msgid "notarized"
+msgid "Notarized"
+msgstr "موثقة"
+
+#: .\operations\models.py:183
+msgid "Archived"
+msgstr ""
+
+#: .\operations\models.py:192
+#, fuzzy
+#| msgid "Documents"
+msgid "document type"
+msgstr "مستندات"
+
+#: .\operations\models.py:193
+msgid "file"
+msgstr ""
+
+#: .\operations\models.py:200 .\operations\models.py:281
+msgid "notes"
+msgstr ""
+
+#: .\operations\models.py:207
+msgid "uploaded by"
+msgstr ""
+
+#: .\operations\models.py:209
+msgid "uploaded"
+msgstr ""
+
+#: .\operations\models.py:214
+#, fuzzy
+#| msgid "Documents"
+msgid "document"
+msgstr "مستندات"
+
+#: .\operations\models.py:215
+#, fuzzy
+#| msgid "Documents"
+msgid "documents"
+msgstr "مستندات"
+
+#: .\operations\models.py:223
+msgid "Income"
+msgstr ""
+
+#: .\operations\models.py:224
+#, fuzzy
+#| msgid "Experience"
+msgid "Expense"
+msgstr "التجربة"
+
+#: .\operations\models.py:228
+msgid "Partially paid"
+msgstr ""
+
+#: .\operations\models.py:229
+msgid "Paid"
+msgstr ""
+
+#: .\operations\models.py:230
+msgid "Waived"
+msgstr ""
+
+#: .\operations\models.py:234
+msgid "Cash"
+msgstr ""
+
+#: .\operations\models.py:235
+msgid "Bank transfer"
+msgstr ""
+
+#: .\operations\models.py:236
+#, fuzzy
+#| msgid "Mobile navigation"
+msgid "Mobile money"
+msgstr "التنقل على الجوال"
+
+#: .\operations\models.py:237
+msgid "Card"
+msgstr ""
+
+#: .\operations\models.py:238
+msgid "Other"
+msgstr ""
+
+#: .\operations\models.py:247
+msgid "type"
+msgstr ""
+
+#: .\operations\models.py:254
+msgid "amount"
+msgstr ""
+
+#: .\operations\models.py:259
+msgid "currency"
+msgstr ""
+
+#: .\operations\models.py:261
+msgid "payment method"
+msgstr ""
+
+#: .\operations\models.py:272
+msgid "transaction date"
+msgstr ""
+
+#: .\operations\models.py:279
+msgid "recorded by"
+msgstr ""
+
+#: .\operations\models.py:287
+#, fuzzy
+#| msgid "Notarization"
+msgid "transaction"
+msgstr "التوثيق"
+
+#: .\operations\models.py:288
+msgid "transactions"
+msgstr ""
+
+#: .\operations\models.py:304
+#: .\operations\templates\operations\documents\list.html:12
+#: .\operations\templates\operations\transactions\list.html:18
+#: .\operations\templates\operations\transactions\list.html:64
+#: .\operations\views.py:1058
+msgid "Matter"
+msgstr ""
+
+#: .\operations\models.py:305
+#, fuzzy
+#| msgid "Documents"
+msgid "Document"
+msgstr "مستندات"
+
+#: .\operations\models.py:306
+msgid "Transaction"
+msgstr ""
+
+#: .\operations\models.py:310
+msgid "Created"
+msgstr ""
+
+#: .\operations\models.py:311
+msgid "Updated"
+msgstr ""
+
+#: .\operations\models.py:312
+msgid "Deleted"
+msgstr ""
+
+#: .\operations\models.py:313
+msgid "Status changed"
+msgstr ""
+
+#: .\operations\models.py:323
+msgid "action"
+msgstr ""
+
+#: .\operations\models.py:324
+#, fuzzy
+#| msgid "Identity"
+msgid "entity type"
+msgstr "الهوية"
+
+#: .\operations\models.py:325
+#, fuzzy
+#| msgid "Identity"
+msgid "entity id"
+msgstr "الهوية"
+
+#: .\operations\models.py:326
+#, fuzzy
+#| msgid "Identity"
+msgid "entity"
+msgstr "الهوية"
+
+#: .\operations\models.py:327
+msgid "detail"
+msgstr ""
+
+#: .\operations\models.py:336
+msgid "logged at"
+msgstr ""
+
+#: .\operations\models.py:340
+msgid "audit log entry"
+msgstr ""
+
+#: .\operations\models.py:341
+msgid "audit log"
+msgstr ""
+
+#: .\operations\models.py:350
+msgid "Confirmed"
+msgstr ""
+
+#: .\operations\models.py:355
+#, fuzzy
+#| msgid "Service needed"
+msgid "service needed"
+msgstr "الخدمة المطلوبة"
+
+#: .\operations\models.py:356
+#, fuzzy
+#| msgid "Message"
+msgid "message"
+msgstr "رسالة"
+
+#: .\operations\models.py:357
+msgid "preferred date"
+msgstr ""
+
+#: .\operations\models.py:364
+msgid "submitted"
+msgstr ""
+
+#: .\operations\models.py:369
+msgid "appointment request"
+msgstr ""
+
+#: .\operations\models.py:370
+msgid "appointment requests"
+msgstr ""
+
+#: .\operations\notifications.py:21
+#, python-format
+msgid "New appointment request from %(name)s"
+msgstr ""
+
+#: .\operations\notifications.py:36
+#, python-format
+msgid "Update on your matter %(ref)s"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:3
+#: .\operations\templates\operations\base_staff.html:85
+#, fuzzy
+#| msgid "Request appointment"
+msgid "Appointments"
+msgstr "اطلب موعداً"
+
+#: .\operations\templates\operations\appointments\list.html:6
+msgid "Pending requests"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:12
+#: .\operations\templates\operations\documents\list.html:17
+#: .\operations\templates\operations\matters\list.html:14
+#: .\operations\templates\operations\transactions\list.html:23
+msgid "Filter by status"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:13
+#: .\operations\templates\operations\documents\list.html:18
+#: .\operations\templates\operations\matters\list.html:15
+#: .\operations\templates\operations\transactions\list.html:24
+msgid "All statuses"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:26
+msgid "Submitted"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:28
+#: .\operations\templates\operations\matters\form.html:14
+#, fuzzy
+#| msgid "Services"
+msgid "Service"
+msgstr "الخدمات"
+
+#: .\operations\templates\operations\appointments\list.html:29
+#: .\pages\forms.py:29 .\pages\templates\pages\home.html:400
+msgid "Preferred date"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:48
+msgid "Confirm"
+msgstr ""
+
+#: .\operations\templates\operations\appointments\list.html:57
+msgid "No appointment requests yet."
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:5
+#: .\operations\templates\operations\base_staff.html:54
+#: .\operations\templates\operations\base_staff.html:192
+#: .\templates\base.html:5 .\templates\includes\header.html:50
+#: .\templates\includes\header.html:90 .\templates\includes\header.html:91
+msgid "Light mode"
+msgstr "الوضع الفاتح"
+
+#: .\operations\templates\operations\base_staff.html:6 .\templates\base.html:6
+msgid "Dark mode"
+msgstr "الوضع الداكن"
+
+#: .\operations\templates\operations\base_staff.html:10
+#: .\operations\templates\operations\base_staff.html:35
+#: .\operations\templates\operations\base_staff.html:174
+#: .\operations\templates\operations\login.html:9
+msgid "Staff portal"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:40
+#: .\operations\templates\operations\base_staff.html:178
+#: .\templates\includes\header.html:26 .\templates\includes\header.html:70
+msgid "Language"
+msgstr "اللغة"
+
+#: .\operations\templates\operations\base_staff.html:65
+#, fuzzy
+#| msgid "Footer navigation"
+msgid "Staff navigation"
+msgstr "تنقل التذييل"
+
+#: .\operations\templates\operations\base_staff.html:66
+msgid "Main"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:69
+#: .\operations\templates\operations\base_staff.html:160
+#: .\operations\templates\operations\dashboard.html:4
+msgid "Dashboard"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:73
+#: .\operations\templates\operations\clients\list.html:4
+#, fuzzy
+#| msgid "Client focus"
+msgid "Clients"
+msgstr "تركيز على العميل"
+
+#: .\operations\templates\operations\base_staff.html:77
+#: .\operations\templates\operations\matters\list.html:3
+msgid "Matters"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:81
+msgid "Calendar"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:93
+#: .\operations\templates\operations\matters\finances.html:3
+#: .\operations\templates\operations\transactions\list.html:3
+msgid "Finances"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:98
+msgid "Audit log"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:102
+msgid "Links"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:105
+msgid "Public site"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:109
+msgid "Django admin"
+msgstr ""
+
+#: .\operations\templates\operations\base_staff.html:124
+msgid "Signed as"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:5
+#: .\operations\templates\operations\dashboard.html:8
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "Add client"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\operations\templates\operations\clients\list.html:11
+#: .\operations\templates\operations\transactions\list.html:14
+msgid "Search"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:12
+msgid "Name, email, phone, ID…"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:16
+msgid "Filter by active status"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:17
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "All clients"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\operations\templates\operations\clients\list.html:18
+msgid "Active only"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:19
+msgid "Inactive only"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:23
+#, fuzzy
+#| msgid "that matter most."
+msgid "Has matters"
+msgstr "الأكثر أهمية."
+
+#: .\operations\templates\operations\clients\list.html:24
+msgid "Filter by matter count"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:25
+msgid "Any"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:26
+#, fuzzy
+#| msgid "that matter most."
+msgid "With matters"
+msgstr "الأكثر أهمية."
+
+#: .\operations\templates\operations\clients\list.html:27
+#, fuzzy
+#| msgid "See the process"
+msgid "No matters"
+msgstr "اطّلع على الإجراءات"
+
+#: .\operations\templates\operations\clients\list.html:33
+msgid "Added from"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:34
+#: .\operations\templates\operations\documents\list.html:28
+#: .\operations\templates\operations\matters\list.html:38
+#: .\operations\templates\operations\matters\list.html:46
+#: .\operations\templates\operations\transactions\list.html:43
+msgid "Select start date"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:37
+msgid "Added to"
+msgstr ""
+
+#: .\operations\templates\operations\clients\list.html:38
+#: .\operations\templates\operations\documents\list.html:32
+#: .\operations\templates\operations\matters\list.html:42
+#: .\operations\templates\operations\matters\list.html:50
+#: .\operations\templates\operations\transactions\list.html:47
+#, fuzzy
+#| msgid "See the process"
+msgid "Select end date"
+msgstr "اطّلع على الإجراءات"
+
+#: .\operations\templates\operations\dashboard.html:7
+msgid "New matter"
+msgstr ""
+
+#: .\operations\templates\operations\documents\list.html:3
+#, fuzzy
+#| msgid "Documents"
+msgid "All documents"
+msgstr "مستندات"
+
+#: .\operations\templates\operations\documents\list.html:9
+msgid "Title, client, matter ref…"
+msgstr ""
+
+#: .\operations\templates\operations\documents\list.html:13
+#: .\operations\templates\operations\transactions\list.html:19
+msgid "e.g. MAT-2026-0001"
+msgstr ""
+
+#: .\operations\templates\operations\documents\list.html:31
+#: .\operations\templates\operations\transactions\list.html:46
+msgid "To date"
+msgstr ""
+
+#: .\operations\templates\operations\includes\filter_actions.html:3
+msgid "Filter"
+msgstr ""
+
+#: .\operations\templates\operations\includes\filter_actions.html:4
+msgid "Clear"
+msgstr ""
+
+#: .\operations\templates\operations\includes\wizard_stepper.html:2
+#, fuzzy
+#| msgid "See the process"
+msgid "New matter progress"
+msgstr "اطّلع على الإجراءات"
+
+#: .\operations\templates\operations\login.html:4
+msgid "Staff sign in"
+msgstr ""
+
+#: .\operations\templates\operations\login.html:10
+msgid "Sign in to"
+msgstr ""
+
+#: .\operations\templates\operations\login.html:10
+#, fuzzy
+#| msgid "Notarization"
+msgid "operations"
+msgstr "التوثيق"
+
+#: .\operations\templates\operations\login.html:11
+msgid "Manage clients, matters, documents, and finances. Staff accounts only."
+msgstr ""
+
+#: .\operations\templates\operations\login.html:29
+msgid "Back to public site"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:7
+msgid "Income billed"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:8
+msgid "Income paid"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:9
+#, fuzzy
+#| msgid "Experience"
+msgid "Expenses"
+msgstr "التجربة"
+
+#: .\operations\templates\operations\matters\finances.html:10
+msgid "Net (paid)"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:13
+msgid ""
+"This matter is closed. Paid transactions are locked and new entries are "
+"disabled."
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:18
+msgid "Step 3 — Record transaction"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:22
+#: .\operations\templates\operations\matters\finances.html:43
+#: .\operations\templates\operations\transactions\list.html:31
+#: .\operations\templates\operations\transactions\list.html:64
+msgid "Type"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:28
+msgid "Currency"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:32
+#: .\operations\templates\operations\transactions\list.html:64
+msgid "Date"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:35
+msgid "Record transaction"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:40
+msgid "Transaction history"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:47
+#: .\operations\templates\operations\transactions\list.html:76
+msgid "Locked"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:53
+#: .\operations\templates\operations\transactions\list.html:80
+msgid "Receipt"
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:61
+msgid "No transactions yet."
+msgstr ""
+
+#: .\operations\templates\operations\matters\finances.html:63
+msgid "Continue to complete"
+msgstr ""
+
+#: .\operations\templates\operations\matters\form.html:9
+msgid "Step 1 — Setup"
+msgstr ""
+
+#: .\operations\templates\operations\matters\form.html:15
+msgid "Title"
+msgstr ""
+
+#: .\operations\templates\operations\matters\form.html:21
+msgid "Assigned to"
+msgstr ""
+
+#: .\operations\templates\operations\matters\list.html:10
+msgid "Reference, title, client, service…"
+msgstr ""
+
+#: .\operations\templates\operations\matters\list.html:23
+#, fuzzy
+#| msgid "Service needed"
+msgid "Filter by service type"
+msgstr "الخدمة المطلوبة"
+
+#: .\operations\templates\operations\matters\list.html:24
+#, fuzzy
+#| msgid "Our services"
+msgid "All services"
+msgstr "خدماتنا"
+
+#: .\operations\templates\operations\matters\list.html:32
+#, fuzzy
+#| msgid "Client focus"
+msgid "Client name or email"
+msgstr "تركيز على العميل"
+
+#: .\operations\templates\operations\matters\list.html:37
+msgid "Created from"
+msgstr ""
+
+#: .\operations\templates\operations\matters\list.html:41
+msgid "Created to"
+msgstr ""
+
+#: .\operations\templates\operations\matters\list.html:45
+msgid "Scheduled from"
+msgstr ""
+
+#: .\operations\templates\operations\matters\list.html:49
+msgid "Scheduled to"
+msgstr ""
+
+#: .\operations\templates\operations\profile.html:6
+msgid "Account"
+msgstr ""
+
+#: .\operations\templates\operations\profile.html:13
+msgid "Save profile"
+msgstr ""
+
+#: .\operations\templates\operations\profile.html:14
+msgid "Cancel"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:6
+msgid "Paid income"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:7
+msgid "Paid expenses"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:8
+msgid "Net"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:15
+msgid "Description, client, matter ref…"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:32
+msgid "Filter by transaction type"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:33
+msgid "All types"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:42
+msgid "From date"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:51
+msgid "Filter by payment method"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:52
+msgid "Any method"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:85
+msgid "No transactions match your filters."
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:91
+msgid "Previous"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:92
+#, python-format
+msgid "Page %(num)s of %(total)s"
+msgstr ""
+
+#: .\operations\templates\operations\transactions\list.html:93
+msgid "Next"
+msgstr ""
+
+#: .\operations\validators.py:28
+#, python-format
+msgid "Unsupported file type “%(ext)s”. Allowed: PDF, Word, images, or TXT."
+msgstr ""
+
+#: .\operations\validators.py:38
+#, python-format
+msgid "File is too large. Maximum size is %(mb)s MB."
+msgstr ""
+
+#: .\operations\views.py:344
+#, python-format
+msgid "Your matter status is now: %(status)s"
+msgstr ""
+
+#: .\operations\views.py:1057
+#, fuzzy
+#| msgid "See the process"
+msgid "Select the client"
+msgstr "اطّلع على الإجراءات"
+
+#: .\operations\views.py:1058
+msgid "Service, schedule, and details"
+msgstr ""
+
+#: .\operations\views.py:1059
+msgid "Review"
+msgstr ""
+
+#: .\operations\views.py:1059
+msgid "Confirm and create"
+msgstr ""
+
+#: .\operations\views.py:1242
+msgid "Profile updated successfully."
+msgstr ""
+
+#: .\operations\views.py:1274
+msgid "Appointment updated."
+msgstr ""
+
+#: .\pages\forms.py:7 .\pages\templates\pages\home.html:384
+msgid "Full name"
+msgstr "الاسم الكامل"
+
+#: .\pages\forms.py:9
+#, fuzzy
+#| msgid "Full name"
+msgid "Your full name"
+msgstr "الاسم الكامل"
+
+#: .\pages\forms.py:12 .\pages\templates\pages\home.html:389
+msgid "Email address"
+msgstr "عنوان البريد الإلكتروني"
+
+#: .\pages\forms.py:16 .\pages\forms.py:45
+#: .\pages\templates\pages\home.html:395
+msgid "Service needed"
+msgstr "الخدمة المطلوبة"
+
+#: .\pages\forms.py:18
+msgid "Which service do you need?"
+msgstr ""
+
+#: .\pages\forms.py:21 .\pages\templates\pages\home.html:405
+msgid "Message"
+msgstr "رسالة"
+
+#: .\pages\forms.py:25
+msgid "Tell us about your request (optional)"
+msgstr ""
+
+#: .\pages\forms.py:35 .\pages\forms.py:36
+msgid "Select preferred date"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:10
+#, fuzzy
+#| msgid ""
+#| "Himilo Notary — trusted notarial services, a clear process from first "
+#| "contact to sealed documents, and an easy way to book your appointment."
+msgid ""
+"Trusted notarial services with a clear process from first contact to sealed "
+"documents."
+msgstr ""
+"Himilo Notary — خدمات توثيق موثوقة، وإجراءات واضحة من أول تواصل حتى "
+"المستندات المختومة، وطريقة سهلة لحجز موعدك."
+
+#: .\pages\templates\pages\home.html:38
 msgid "Trusted notary services"
 msgstr "خدمات توثيق موثوقة"
 
-#: .\pages\templates\pages\home.html:21
-msgid "Documents"
-msgstr "مستندات"
-
-#: .\pages\templates\pages\home.html:22
+#: .\pages\templates\pages\home.html:42
 msgid "notarized"
 msgstr "موثقة"
 
-#: .\pages\templates\pages\home.html:23
+#: .\pages\templates\pages\home.html:43
 msgid "with clarity and care."
 msgstr "بوضوح وعناية."
 
-#: .\pages\templates\pages\home.html:26
+#: .\pages\templates\pages\home.html:46
 msgid ""
 "Himilo Notary helps you prepare, sign, and certify documents the right way — "
 "with a defined process, transparent policies, and a team that makes visiting "
@@ -238,89 +1870,81 @@ msgstr ""
 "تساعدك Himilo Notary على إعداد المستندات وتوقيعها وتصديقها بالطريقة الصحيحة "
 "— من خلال إجراءات محددة، وسياسات شفافة، وفريق يجعل زيارة المكتب سهلة وواضحة."
 
-#: .\pages\templates\pages\home.html:30 .\pages\templates\pages\home.html:300
+#: .\pages\templates\pages\home.html:50 .\pages\templates\pages\home.html:411
 msgid "Request appointment"
 msgstr "اطلب موعداً"
 
-#: .\pages\templates\pages\home.html:35
+#: .\pages\templates\pages\home.html:55
 msgid "See the process"
 msgstr "اطّلع على الإجراءات"
 
-#: .\pages\templates\pages\home.html:40
+#: .\pages\templates\pages\home.html:60
 msgid "Years experience"
 msgstr "سنوات من الخبرة"
 
-#: .\pages\templates\pages\home.html:44
+#: .\pages\templates\pages\home.html:64
 msgid "Documents notarized"
 msgstr "مستندات موثقة"
 
-#: .\pages\templates\pages\home.html:48
+#: .\pages\templates\pages\home.html:68
 msgid "Client focus"
 msgstr "تركيز على العميل"
 
-#: .\pages\templates\pages\home.html:53
+#: .\pages\templates\pages\home.html:73
 msgid "Office information"
 msgstr "معلومات المكتب"
 
-#: .\pages\templates\pages\home.html:56
+#: .\pages\templates\pages\home.html:76
 msgid "Visit us"
 msgstr "زرنا"
 
-#: .\pages\templates\pages\home.html:67 .\pages\templates\pages\home.html:255
-msgid "Phone"
-msgstr "الهاتف"
-
-#: .\pages\templates\pages\home.html:75 .\pages\templates\pages\home.html:259
-msgid "Email"
-msgstr "البريد الإلكتروني"
-
-#: .\pages\templates\pages\home.html:83 .\pages\templates\pages\home.html:267
+#: .\pages\templates\pages\home.html:103 .\pages\templates\pages\home.html:368
 msgid "Hours"
 msgstr "ساعات العمل"
 
-#: .\pages\templates\pages\home.html:91 .\pages\templates\pages\home.html:263
+#: .\pages\templates\pages\home.html:111 .\pages\templates\pages\home.html:364
 msgid "Address"
 msgstr "العنوان"
 
-#: .\pages\templates\pages\home.html:97
+#: .\pages\templates\pages\home.html:117
 msgid "Send a message"
 msgstr "أرسل رسالة"
 
-#: .\pages\templates\pages\home.html:109
+#: .\pages\templates\pages\home.html:129
 msgid "Scroll"
 msgstr "مرّر"
 
-#: .\pages\templates\pages\home.html:128
+#: .\pages\templates\pages\home.html:148
 msgid "Our services"
 msgstr "خدماتنا"
 
-#: .\pages\templates\pages\home.html:131
+#: .\pages\templates\pages\home.html:151
 msgid "Clear help for the documents"
 msgstr "مساعدة واضحة للمستندات"
 
-#: .\pages\templates\pages\home.html:132
+#: .\pages\templates\pages\home.html:152
 msgid "that matter most."
 msgstr "الأكثر أهمية."
 
-#: .\pages\templates\pages\home.html:135
+#: .\pages\templates\pages\home.html:155
 msgid ""
 "From everyday affidavits to business and property papers — we explain what "
 "you need, prepare you for your visit, and notarize with care."
 msgstr ""
 
-#: .\pages\templates\pages\home.html:156
+#: .\pages\templates\pages\home.html:176
 msgid "Your journey"
 msgstr "رحلتك"
 
-#: .\pages\templates\pages\home.html:159
+#: .\pages\templates\pages\home.html:179
 msgid "From first contact"
 msgstr "من أول تواصل"
 
-#: .\pages\templates\pages\home.html:160
+#: .\pages\templates\pages\home.html:180
 msgid "to notarized documents."
 msgstr "إلى مستندات موثقة."
 
-#: .\pages\templates\pages\home.html:163
+#: .\pages\templates\pages\home.html:183
 msgid ""
 "A simple, defined path so you always know what happens next — before you "
 "visit, during your appointment, and when you leave with your documents."
@@ -328,19 +1952,19 @@ msgstr ""
 "مسار بسيط ومحدد حتى تعرف دائماً ما الخطوة التالية — قبل زيارتك، وأثناء موعدك، "
 "وعندما تغادر ومعك مستنداتك."
 
-#: .\pages\templates\pages\home.html:186
+#: .\pages\templates\pages\home.html:206
 msgid "Experience"
 msgstr "التجربة"
 
-#: .\pages\templates\pages\home.html:189
+#: .\pages\templates\pages\home.html:209
 msgid "A notary office built"
 msgstr "مكتب توثيق مصمم"
 
-#: .\pages\templates\pages\home.html:190
+#: .\pages\templates\pages\home.html:210
 msgid "for everyday clients."
 msgstr "للعملاء في حياتهم اليومية."
 
-#: .\pages\templates\pages\home.html:193
+#: .\pages\templates\pages\home.html:213
 msgid ""
 "Whether you need a single affidavit or a stack of business papers, Himilo "
 "Notary brings the same attention to detail — explaining requirements in "
@@ -350,19 +1974,19 @@ msgstr ""
 "Notary العناية نفسها بالتفاصيل — مع شرح المتطلبات بلغة واضحة وجعل زيارتك "
 "أكثر كفاءة."
 
-#: .\pages\templates\pages\home.html:209
+#: .\pages\templates\pages\home.html:229
 msgid "Trust & policy"
 msgstr "الثقة والسياسات"
 
-#: .\pages\templates\pages\home.html:212
+#: .\pages\templates\pages\home.html:232
 msgid "Professional standards"
 msgstr "معايير مهنية"
 
-#: .\pages\templates\pages\home.html:213
+#: .\pages\templates\pages\home.html:233
 msgid "you can count on."
 msgstr "يمكنك الاعتماد عليها."
 
-#: .\pages\templates\pages\home.html:216
+#: .\pages\templates\pages\home.html:236
 msgid ""
 "We follow proper notarial practice, keep accurate records, and treat every "
 "document with confidentiality — so you leave with confidence, not "
@@ -371,19 +1995,53 @@ msgstr ""
 "نلتزم بالممارسات التوثيقية السليمة، ونحافظ على سجلات دقيقة، ونتعامل مع كل "
 "مستند بسرية — لتغادر بثقة لا بحيرة."
 
-#: .\pages\templates\pages\home.html:239
+#: .\pages\templates\pages\home.html:259
+msgid "News & portfolio"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:262
+msgid "Recent updates"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:263
+msgid "and work highlights."
+msgstr ""
+
+#: .\pages\templates\pages\home.html:266
+msgid ""
+"Stay informed with office news and see examples of the documents we help "
+"clients notarize."
+msgstr ""
+
+#: .\pages\templates\pages\home.html:273
+msgid "Latest news"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:274
+msgid "View all news"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:307
+msgid "Portfolio highlights"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:308
+msgid "View portfolio"
+msgstr ""
+
+#: .\pages\templates\pages\home.html:340
 msgid "Get in touch"
 msgstr "تواصل معنا"
 
-#: .\pages\templates\pages\home.html:242
+#: .\pages\templates\pages\home.html:343
 msgid "Ready to visit"
 msgstr "هل أنت مستعد لزيارة"
 
-#: .\pages\templates\pages\home.html:243
+#: .\pages\templates\pages\home.html:344
 msgid "the notary?"
 msgstr "كاتب العدل؟"
 
-#: .\pages\templates\pages\home.html:246
+#: .\pages\templates\pages\home.html:347
 msgid ""
 "Send us a message with the document type and your preferred time. We will "
 "confirm what to bring and schedule your appointment."
@@ -391,58 +2049,207 @@ msgstr ""
 "أرسل لنا رسالة تتضمن نوع المستند والوقت الذي تفضله. سنؤكد لك ما يجب إحضاره "
 "ونحدد موعدك."
 
-#: .\pages\templates\pages\home.html:249
+#: .\pages\templates\pages\home.html:350
 msgid "Response within one business day"
 msgstr "الرد خلال يوم عمل واحد"
 
-#: .\pages\templates\pages\home.html:250
+#: .\pages\templates\pages\home.html:351
 msgid "No obligation to proceed"
 msgstr "لا يوجد التزام بالمتابعة"
 
-#: .\pages\templates\pages\home.html:251
+#: .\pages\templates\pages\home.html:352
 msgid "Clear guidance before you visit"
 msgstr "إرشادات واضحة قبل زيارتك"
 
-#: .\pages\templates\pages\home.html:276
-msgid "Full name"
-msgstr "الاسم الكامل"
-
-#: .\pages\templates\pages\home.html:280
-msgid "Email address"
-msgstr "عنوان البريد الإلكتروني"
-
-#: .\pages\templates\pages\home.html:285
-msgid "Service needed"
-msgstr "الخدمة المطلوبة"
-
-#: .\pages\templates\pages\home.html:294
-msgid "Message"
-msgstr "رسالة"
-
-#: .\pages\templates\pages\home.html:295
+#: .\pages\templates\pages\home.html:406
 msgid "(optional)"
 msgstr "(اختياري)"
 
-#: .\templates\base.html:5 .\templates\includes\header.html:50
-#: .\templates\includes\header.html:90 .\templates\includes\header.html:91
-msgid "Light mode"
-msgstr "الوضع الفاتح"
+#: .\pages\templates\pages\privacy.html:7 .\pages\templates\pages\terms.html:7
+msgid "Legal"
+msgstr ""
 
-#: .\templates\base.html:6
-msgid "Dark mode"
-msgstr "الوضع الداكن"
+#: .\pages\templates\pages\privacy.html:8
+msgid "Privacy Policy"
+msgstr ""
 
-#: .\templates\base.html:10
+#: .\pages\templates\pages\privacy.html:9 .\pages\templates\pages\terms.html:9
+msgid "Last updated:"
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:12
+msgid "Information we collect"
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:13
+msgid ""
+"When you contact us through this website, we collect the name, email "
+"address, service requested, and any message you provide. If you visit our "
+"office, we may also collect identification and document details required for "
+"notarial services."
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:15
+msgid "How we use your information"
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:16
+msgid ""
+"We use your information to respond to appointment requests, schedule "
+"notarial services, maintain required records, and communicate with you about "
+"your matter. We do not sell your personal information."
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:18
+#, fuzzy
+#| msgid "Documents notarized"
+msgid "Document confidentiality"
+msgstr "مستندات موثقة"
+
+#: .\pages\templates\pages\privacy.html:19
+msgid ""
+"Documents submitted for notarization are handled confidentially and stored "
+"securely. Access is limited to authorized staff who need the information to "
+"perform notarial services and maintain records."
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:21
+#, fuzzy
+#| msgid "Bit encryption"
+msgid "Retention"
+msgstr "بت تشفير"
+
+#: .\pages\templates\pages\privacy.html:22
+msgid ""
+"We retain contact enquiries and notarial records for as long as required by "
+"applicable law and professional practice standards."
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:24
+#, fuzzy
+#| msgid "for everyday clients."
+msgid "Your rights"
+msgstr "للعملاء في حياتهم اليومية."
+
+#: .\pages\templates\pages\privacy.html:25
+msgid ""
+"You may request access to or correction of personal information we hold "
+"about you by contacting us at"
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:28
+msgid "For privacy-related questions, email"
+msgstr ""
+
+#: .\pages\templates\pages\privacy.html:28
+msgid "or call"
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:8
+#, fuzzy
+#| msgid "Trusted notary services"
+msgid "Terms of Service"
+msgstr "خدمات توثيق موثوقة"
+
+#: .\pages\templates\pages\terms.html:12
+msgid "Use of this website"
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:13
+msgid ""
+"This website provides general information about Himilo Notary and a way to "
+"request an appointment. Content is for informational purposes and does not "
+"constitute legal advice."
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:15
+msgid "Appointments and services"
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:16
+msgid ""
+"Submitting a contact form does not create a notarial relationship. We will "
+"confirm availability, required documents, and fees before services are "
+"performed. We reserve the right to decline work that falls outside our scope "
+"or legal requirements."
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:18
+#, fuzzy
+#| msgid "Office information"
+msgid "Accuracy of information"
+msgstr "معلومات المكتب"
+
+#: .\pages\templates\pages\terms.html:19
+msgid ""
+"You are responsible for providing accurate information and valid "
+"identification. We are not responsible for delays or refusal of service "
+"caused by incomplete or incorrect documents."
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:21
+msgid "Limitation of liability"
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:22
+msgid ""
+"To the extent permitted by law, Himilo Notary is not liable for indirect or "
+"consequential damages arising from use of this website. Our liability for "
+"notarial services is governed by applicable professional standards and law."
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:24
+msgid "Changes"
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:25
+msgid ""
+"We may update these terms from time to time. Continued use of the website "
+"after changes are posted constitutes acceptance of the updated terms."
+msgstr ""
+
+#: .\pages\templates\pages\terms.html:28
+msgid "Questions about these terms may be sent to"
+msgstr ""
+
+#: .\pages\views.py:34
+msgid "Thank you — your request was sent. We will contact you shortly."
+msgstr ""
+
+#: .\pages\views.py:37
+msgid "Please correct the errors below and try again."
+msgstr ""
+
+#: .\pages\views.py:49 .\templates\base.html:10 .\templates\base.html:14
+#: .\templates\base.html:19
 msgid "Himilo Notary | The Art of Certainty"
 msgstr "Himilo Notary | فن اليقين"
 
-#: .\templates\base.html:11
+#: .\pages\views.py:51 .\templates\base.html:11 .\templates\base.html:15
+#: .\templates\base.html:20
 msgid ""
 "Himilo Notary — trusted notarial services, a clear process from first "
 "contact to sealed documents, and an easy way to book your appointment."
 msgstr ""
 "Himilo Notary — خدمات توثيق موثوقة، وإجراءات واضحة من أول تواصل حتى "
 "المستندات المختومة، وطريقة سهلة لحجز موعدك."
+
+#: .\pages\views.py:62
+msgid "Privacy Policy | Himilo Notary"
+msgstr ""
+
+#: .\pages\views.py:63
+msgid ""
+"How Himilo Notary collects, uses, and protects your personal information."
+msgstr ""
+
+#: .\pages\views.py:72
+msgid "Terms of Service | Himilo Notary"
+msgstr ""
+
+#: .\pages\views.py:73
+msgid "Terms governing use of the Himilo Notary website and services."
+msgstr ""
 
 #: .\templates\includes\footer.html:16
 msgid "The art of certainty."
@@ -462,11 +2269,6 @@ msgstr "الخدمات"
 msgid "Process"
 msgstr "الإجراءات"
 
-#: .\templates\includes\footer.html:22 .\templates\includes\header.html:22
-#: .\templates\includes\header.html:99
-msgid "Contact"
-msgstr "تواصل"
-
 #: .\templates\includes\footer.html:25
 msgid "Social media"
 msgstr ""
@@ -475,13 +2277,17 @@ msgstr ""
 msgid "Himilo Notary. All rights reserved."
 msgstr "Himilo Notary. جميع الحقوق محفوظة."
 
+#: .\templates\includes\footer.html:48
+msgid "Privacy"
+msgstr ""
+
+#: .\templates\includes\footer.html:49
+msgid "Terms"
+msgstr ""
+
 #: .\templates\includes\header.html:17
 msgid "Primary navigation"
 msgstr "التنقل الرئيسي"
-
-#: .\templates\includes\header.html:26 .\templates\includes\header.html:70
-msgid "Language"
-msgstr "اللغة"
 
 #: .\templates\includes\header.html:61
 msgid "Open menu"
@@ -490,6 +2296,11 @@ msgstr "افتح القائمة"
 #: .\templates\includes\header.html:94
 msgid "Mobile navigation"
 msgstr "التنقل على الجوال"
+
+#, fuzzy
+#~| msgid "(optional)"
+#~ msgid "Optional"
+#~ msgstr "(اختياري)"
 
 #~ msgid "Trust"
 #~ msgstr "الثقة"
@@ -508,9 +2319,6 @@ msgstr "التنقل على الجوال"
 #~ msgid "Digital-first notarial command center"
 #~ msgstr "مركز القيادة الرقمي للتوثيق"
 
-#~ msgid "Notarization"
-#~ msgstr "التوثيق"
-
 #~ msgid "reimagined"
 #~ msgstr "بإعادة ابتكار"
 
@@ -526,29 +2334,14 @@ msgstr "التنقل على الجوال"
 #~ "التوقيعات الإلكترونية، إدارة الأختام، وسجلات الامتثال في مساحة عمل واحدة "
 #~ "تليق بالختم الذي تضعه."
 
-#~ msgid "Start a notarization"
-#~ msgstr "ابدأ التوثيق"
-
 #~ msgid "Step guided flow"
 #~ msgstr "خطوات موجّهة"
-
-#~ msgid "Bit encryption"
-#~ msgstr "بت تشفير"
 
 #~ msgid "Live session preview"
 #~ msgstr "معاينة الجلسة المباشرة"
 
 #~ msgid "Session · Live"
 #~ msgstr "جلسة · مباشرة"
-
-#~ msgid "Verified"
-#~ msgstr "تم التحقق"
-
-#~ msgid "Identity"
-#~ msgstr "الهوية"
-
-#~ msgid "Passed"
-#~ msgstr "اجتاز"
 
 #~ msgid "Journal"
 #~ msgstr "السجل"
@@ -558,9 +2351,6 @@ msgstr "التنقل على الجوال"
 
 #~ msgid "Seal"
 #~ msgstr "الختم"
-
-#~ msgid "Awaiting"
-#~ msgstr "في الانتظار"
 
 #~ msgid "One platform"
 #~ msgstr "منصة واحدة"

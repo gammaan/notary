@@ -28,7 +28,14 @@ class ContactForm(forms.Form):
     preferred_date = forms.DateField(
         label=_("Preferred date"),
         required=False,
-        widget=forms.DateInput(attrs={"type": "date", "class": "staff-date-input"}),
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "class": "staff-date-input",
+                "placeholder": _("Select preferred date"),
+                "title": _("Select preferred date"),
+            }
+        ),
     )
 
     def __init__(self, *args, service_choices=None, **kwargs):
@@ -36,6 +43,11 @@ class ContactForm(forms.Form):
         if service_choices:
             self.fields["service"] = forms.ChoiceField(
                 label=_("Service needed"),
-                choices=[(s, s) for s in service_choices],
-                widget=forms.Select(),
+                choices=[("", _("Select a service"))] + [(s, s) for s in service_choices],
+                widget=forms.Select(
+                    attrs={
+                        "data-placeholder": _("Select a service"),
+                        "title": _("Select a service"),
+                    }
+                ),
             )

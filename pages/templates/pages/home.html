@@ -379,28 +379,31 @@
                             {% for e in contact_form.non_field_errors %}<p>{{ e }}</p>{% endfor %}
                         </div>
                         {% endif %}
-                        <div class="form-row">
-                            <label>
+                        <div class="row">
+                            <label class="col-6">
                                 <span>{% trans "Full name" %}</span>
                                 {{ contact_form.name }}
                                 {% if contact_form.name.errors %}<span class="field-error">{{ contact_form.name.errors.0 }}</span>{% endif %}
                             </label>
-                            <label>
+                            <label class="col-6">
                                 <span>{% trans "Email address" %}</span>
                                 {{ contact_form.email }}
                                 {% if contact_form.email.errors %}<span class="field-error">{{ contact_form.email.errors.0 }}</span>{% endif %}
                             </label>
                         </div>
-                        <label>
-                            <span>{% trans "Service needed" %}</span>
-                            {{ contact_form.service }}
-                            {% if contact_form.service.errors %}<span class="field-error">{{ contact_form.service.errors.0 }}</span>{% endif %}
-                        </label>
-                        <label>
-                            <span>{% trans "Preferred date" %}</span>
-                            {{ contact_form.preferred_date }}
-                        </label>
-                        <label>
+                        <div class="row">
+                            <label class="col-6">
+                                <span>{% trans "Service needed" %}</span>
+                                {{ contact_form.service }}
+                                {% if contact_form.service.errors %}<span class="field-error">{{ contact_form.service.errors.0 }}</span>{% endif %}
+                            </label>
+                            <label class="col-6">
+                                <span>{% trans "Preferred date" %}</span>
+                                {{ contact_form.preferred_date }}
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label class="col-12">
                             <span>
                                 {% trans "Message" %}
                                 <small>{% trans "(optional)" %}</small>

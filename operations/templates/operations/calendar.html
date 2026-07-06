@@ -20,7 +20,7 @@
         <ul class="staff-calendar-day__list">
             {% for m in day.matters %}
             <li>
-                <a href="{% url 'staff:matter_detail' m.pk %}">
+                <a href="{% url 'staff:matter_detail' m.uuid %}">
                     <time>{{ m.scheduled_at|time:"g:i A" }}</time>
                     <span>
                         <strong>{{ m.title }}</strong>

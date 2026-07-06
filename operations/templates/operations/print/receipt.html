@@ -12,6 +12,7 @@
     </div>
 </header>
 
+{% if matter %}
 <section class="print-block">
     <h2>Client &amp; matter</h2>
     <dl class="print-dl">
@@ -20,6 +21,15 @@
         <div><dt>Service</dt><dd>{{ matter.service_type.name }}</dd></div>
     </dl>
 </section>
+{% elif transaction.category %}
+<section class="print-block">
+    <h2>Entry</h2>
+    <dl class="print-dl">
+        <div><dt>Category</dt><dd>{{ transaction.get_category_display }}</dd></div>
+        <div><dt>Type</dt><dd>{{ transaction.get_transaction_type_display }}</dd></div>
+    </dl>
+</section>
+{% endif %}
 
 <section class="print-block">
     <h2>Payment details</h2>
@@ -38,7 +48,6 @@
 </section>
 
 <footer class="print-footer">
-    <p>Recorded by {{ transaction.recorded_by.get_full_name|default:"Staff" }} on {{ transaction.created_at|date:"F j, Y g:i A" }}.</p>
-    <p class="print-footer__note">Thank you for choosing Himilo Notary.</p>
+    <p>Thank you for your business.</p>
 </footer>
 {% endblock %}

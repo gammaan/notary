@@ -29,7 +29,9 @@ REOPEN_STATUSES = frozenset(
 )
 
 
-def transaction_is_locked(transaction):
+def transaction_is_locked(transaction, matter=None):
+    if matter is not None and not matter_is_closed(matter):
+        return False
     return transaction.status in LOCKED_TRANSACTION_STATUSES
 
 

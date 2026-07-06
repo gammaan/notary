@@ -9,12 +9,13 @@ from operations.transaction_rules import (
     finance_step_done,
     matter_finances_settled,
     matter_is_closed,
+    transaction_is_locked,
 )
 
 
 class TransactionRulesTests(TestCase):
     def setUp(self):
-        self.client = Client.objects.create(first_name="A", last_name="B")
+        self.client = Client.objects.create(full_name="A B")
         self.service = ServiceType.objects.create(name="Notarization", default_fee=Decimal("50"))
         self.matter = Matter.objects.create(
             client=self.client,
@@ -59,3 +60,26 @@ class TransactionRulesTests(TestCase):
             status=Transaction.Status.PENDING,
         )
         self.assertFalse(can_manually_complete_matter(self.matter))
+
+    def test_paid_transaction_unlocked_when_matter_open(self):
+        txn = Transaction.objects.create(
+            matter=self.matter,
+            transaction_type=Transaction.Type.INCOME,
+            description="Fee",
+            amount=Decimal("50"),
+            status=Transaction.Status.PAID,
+        )
+        self.assertFalse(transaction_is_locked(txn, self.matter))
+        self.assertTrue(transaction_is_locked(txn))
+
+    def test_paid_transaction_locked_when_matter_closed(self):
+        txn = Transaction.objects.create(
+            matter=self.matter,
+            transaction_type=Transaction.Type.INCOME,
+            description="Fee",
+            amount=Decimal("50"),
+            status=Transaction.Status.PAID,
+        )
+        self.matter.status = Matter.Status.COMPLETED
+        self.matter.save()
+        self.assertTrue(transaction_is_locked(txn, self.matter))

@@ -9,7 +9,7 @@
     <div class="staff-filter-form__row">
         <label class="staff-filter-field">
             <span>{% trans "Status" %}</span>
-            <select name="status" onchange="this.form.submit()">
+            <select name="status" onchange="this.form.submit()" title="{% trans 'Filter by status' %}">
                 <option value="">{% trans "All statuses" %}</option>
                 {% for value, label in status_choices %}
                 <option value="{{ value }}"{% if active_status == value %} selected{% endif %}>{{ label }}</option>
@@ -43,7 +43,7 @@
                     {% if a.status == "pending" %}
                     <form method="post" style="display:inline">
                         {% csrf_token %}
-                        <input type="hidden" name="pk" value="{{ a.pk }}">
+                        <input type="hidden" name="uuid" value="{{ a.uuid }}">
                         <input type="hidden" name="status" value="confirmed">
                         <button class="staff-link" type="submit">{% trans "Confirm" %}</button>
                     </form>
@@ -56,5 +56,6 @@
     {% else %}
     <p class="staff-empty">{% trans "No appointment requests yet." %}</p>
     {% endif %}
+    {% include "operations/includes/pagination.html" %}
 </div>
 {% endblock %}

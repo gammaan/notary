@@ -8,7 +8,7 @@
     <form class="staff-filters" method="get">
         <label>
             <span>Entity</span>
-            <select name="entity" onchange="this.form.submit()">
+            <select name="entity" onchange="this.form.submit()" title="Filter by entity type">
                 <option value="">All</option>
                 {% for value, label in entity_types %}
                 <option value="{{ value }}"{% if active_entity == value %} selected{% endif %}>{{ label }}</option>
@@ -36,7 +36,7 @@
                 <td>
                     {{ entry.get_entity_type_display }}: {{ entry.entity_label }}
                     {% if entry.matter %}
-                    · <a class="staff-link" href="{% url 'staff:matter_detail' entry.matter.pk %}">{{ entry.matter.reference_number }}</a>
+                    · <a class="staff-link" href="{% url 'staff:matter_detail' entry.matter.uuid %}">{{ entry.matter.reference_number }}</a>
                     {% endif %}
                 </td>
                 <td>{{ entry.detail|default:"—" }}</td>
@@ -44,17 +44,7 @@
             {% endfor %}
         </tbody>
     </table>
-    {% if page_obj.paginator.num_pages > 1 %}
-    <nav class="staff-pagination" aria-label="Audit log pages">
-        {% if page_obj.has_previous %}
-        <a class="staff-link" href="?page={{ page_obj.previous_page_number }}{% if active_entity %}&entity={{ active_entity }}{% endif %}">Previous</a>
-        {% endif %}
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-        {% if page_obj.has_next %}
-        <a class="staff-link" href="?page={{ page_obj.next_page_number }}{% if active_entity %}&entity={{ active_entity }}{% endif %}">Next</a>
-        {% endif %}
-    </nav>
-    {% endif %}
+    {% include "operations/includes/pagination.html" %}
     {% else %}
     <p class="staff-empty">No activity recorded yet.</p>
     {% endif %}

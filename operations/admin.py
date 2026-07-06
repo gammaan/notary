@@ -35,22 +35,18 @@ class TransactionInline(admin.TabularInline):
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "email", "phone", "is_active", "created_at")
-    list_filter = ("is_active", "created_at")
-    search_fields = ("first_name", "last_name", "email", "phone", "id_number")
+    list_display = ("full_name", "sex", "email", "phone", "is_active", "created_at")
+    list_filter = ("is_active", "sex", "created_at")
+    search_fields = ("full_name", "email", "phone", "id_number")
     readonly_fields = ("created_at", "updated_at")
     inlines = (MatterInline,)
     fieldsets = (
-        (None, {"fields": ("first_name", "last_name", "is_active")}),
+        (None, {"fields": ("full_name", "sex", "is_active")}),
         (_("Contact"), {"fields": ("email", "phone", "address")}),
         (_("Identification"), {"fields": ("id_number",)}),
         (_("Notes"), {"fields": ("notes",)}),
         (_("Timestamps"), {"fields": ("created_at", "updated_at")}),
     )
-
-    @admin.display(description=_("Name"))
-    def full_name(self, obj):
-        return obj.full_name
 
 
 @admin.register(ServiceType)
@@ -77,8 +73,7 @@ class MatterAdmin(admin.ModelAdmin):
         "reference_number",
         "title",
         "description",
-        "client__first_name",
-        "client__last_name",
+        "client__full_name",
         "client__email",
     )
     readonly_fields = ("reference_number", "created_at", "updated_at", "completed_at")
@@ -107,13 +102,14 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = (
         "matter",
         "transaction_type",
+        "category",
         "description",
         "amount",
         "currency",
         "status",
         "transaction_date",
     )
-    list_filter = ("transaction_type", "status", "payment_method", "transaction_date")
+    list_filter = ("transaction_type", "status", "payment_method", "category", "transaction_date")
     search_fields = ("description", "matter__reference_number", "notes")
     readonly_fields = ("created_at", "updated_at")
     autocomplete_fields = ("matter", "recorded_by")
