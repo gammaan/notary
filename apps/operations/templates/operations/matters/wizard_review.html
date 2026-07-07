@@ -1,0 +1,25 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "New matter" %} — {% trans "Review" %}{% endblock %}
+{% block content %}
+{% include "operations/includes/wizard_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">{% trans "Step 3 — Review" %}</p>
+    <div class="staff-review-card">
+        <h2>{% trans "Review before creating" %}</h2>
+        <dl class="staff-dl staff-dl--compact">
+            <div><dt>{% trans "Client" %}</dt><dd>{{ client.full_name }}</dd></div>
+            <div><dt>{% trans "Service" %}</dt><dd>{{ service.name }} (${{ service.default_fee }})</dd></div>
+            <div><dt>{% trans "Title" %}</dt><dd>{{ details.title }}</dd></div>
+            <div><dt>{% trans "Description" %}</dt><dd>{{ details.description|default:"—" }}</dd></div>
+            <div><dt>{% trans "Status" %}</dt><dd>{{ details.status }}</dd></div>
+            <div><dt>{% trans "Scheduled" %}</dt><dd>{{ details.scheduled_at|default:"—" }}</dd></div>
+        </dl>
+    </div>
+    <form method="post" class="staff-form-actions">
+        {% csrf_token %}
+        <a class="button ghost" href="{% url 'staff:matter_wizard' step='details' %}">← {% trans "Back" %}</a>
+        <button class="button primary" type="submit">{% trans "Create matter & add documents" %}</button>
+    </form>
+</div>
+{% endblock %}

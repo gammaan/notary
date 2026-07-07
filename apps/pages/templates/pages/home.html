@@ -1,0 +1,478 @@
+{% extends "core/base_public.html" %}
+{% load static i18n %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "name": "{{ company.brand.name }} {% trans 'Notary' %}",
+  "description": "{% trans 'Trusted notarial services with a clear process from first contact to sealed documents.' %}",
+  "url": "{{ seo_url|default:'' }}",
+  "telephone": "{{ company.contact.phone_href }}",
+  "email": "{{ company.contact.email }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ company.contact.address }}",
+    "addressCountry": "SO"
+  },
+  "openingHours": "{{ company.contact.hours }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+            <section class="hero" aria-labelledby="hero-heading">
+                <div class="hero-bg" aria-hidden="true">
+                    <div class="hero-orb hero-orb--1"></div>
+                    <div class="hero-orb hero-orb--2"></div>
+                    <div class="hero-orb hero-orb--3"></div>
+                    <div class="hero-grid"></div>
+                    <div class="hero-watermark">{{ company.brand.watermark }}</div>
+                </div>
+
+                <div class="hero-layout">
+                    <div class="hero-content">
+                        <p class="eyebrow" data-reveal>
+                            <span class="eyebrow-line"></span>
+                            {% trans "Trusted notary services" %}
+                        </p>
+                        <h1 id="hero-heading">
+                            <span class="hero-line" data-split>{% trans "Documents" %}</span>
+                            <span class="hero-line hero-line--accent" data-split>{% trans "notarized" %}</span>
+                            <span class="hero-line hero-line--thin" data-split>{% trans "with clarity and care." %}</span>
+                        </h1>
+                        <p class="hero-copy" data-reveal>
+                            {% blocktrans %}Notaria Notary helps you prepare, sign, and certify documents the right way — with a defined process, transparent policies, and a team that makes visiting the office straightforward.{% endblocktrans %}
+                        </p>
+                        <div class="hero-actions" data-reveal>
+                            <a class="button primary magnetic" href="#contact">
+                                <span>{% trans "Request appointment" %}</span>
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a class="button ghost magnetic" href="#workflow">{% trans "See the process" %}</a>
+                        </div>
+                        <dl class="hero-stats" data-reveal>
+                            <div class="stat">
+                                <dt class="stat-value">{{ company.stats.0.value }}</dt>
+                                <dd>{% trans "Years experience" %}</dd>
+                            </div>
+                            <div class="stat">
+                                <dt class="stat-value">{{ company.stats.1.value }}</dt>
+                                <dd>{% trans "Documents notarized" %}</dd>
+                            </div>
+                            <div class="stat">
+                                <dt class="stat-value">{{ company.stats.2.value }}</dt>
+                                <dd>{% trans "Client focus" %}</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <aside class="hero-visit" data-reveal aria-label="{% trans 'Office information' %}">
+                        <div class="hero-visit__top">
+                            <div class="hero-visit__brand">
+                                <span class="hero-visit__badge">{% trans "Visit us" %}</span>
+                                <p class="hero-visit__title">{{ company.brand.name }} {% trans "Notary" %}</p>
+                            </div>
+                            <span class="hero-visit__seal" aria-hidden="true">{{ company.brand.seal_letter }}</span>
+                        </div>
+
+                        <div class="hero-visit__grid">
+                            <a class="hero-visit__cell hero-visit__cell--wide" href="tel:{{ company.contact.phone_href }}">
+                                <svg class="hero-visit__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <path d="M4.2 2.5h2.4l1.2 2.8-1.5 1.1a9.2 9.2 0 0 0 4.5 4.5l1.1-1.5 2.8 1.2v2.4a1.4 1.4 0 0 1-1.4 1.4A11.5 11.5 0 0 1 2.8 3.9a1.4 1.4 0 0 1 1.4-1.4Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="hero-visit__label">{% trans "Phone" %}</span>
+                                <span class="hero-visit__value">{{ company.contact.phone }}</span>
+                            </a>
+                            <a class="hero-visit__cell hero-visit__cell--wide" href="mailto:{{ company.contact.email }}">
+                                <svg class="hero-visit__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <path d="M2.5 5.5 9 10l6.5-4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <rect x="2.5" y="4" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+                                </svg>
+                                <span class="hero-visit__label">{% trans "Email" %}</span>
+                                <span class="hero-visit__value">{{ company.contact.email }}</span>
+                            </a>
+                            <div class="hero-visit__cell hero-visit__cell--wide">
+                                <svg class="hero-visit__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.3"/>
+                                    <path d="M9 5.5V9l2.2 1.2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                                </svg>
+                                <span class="hero-visit__label">{% trans "Hours" %}</span>
+                                <span class="hero-visit__value">{{ company.contact.hours }}</span>
+                            </div>
+                            <div class="hero-visit__cell hero-visit__cell--wide">
+                                <svg class="hero-visit__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <path d="M9 9.8c1.4 0 2.5-1.1 2.5-2.5S10.4 4.8 9 4.8 6.5 5.9 6.5 7.3 7.6 9.8 9 9.8Z" stroke="currentColor" stroke-width="1.3"/>
+                                    <path d="M3.2 7.3c0-3.2 2.6-5.8 5.8-5.8s5.8 2.6 5.8 5.8c0 4.6-5.8 9.7-5.8 9.7S3.2 11.9 3.2 7.3Z" stroke="currentColor" stroke-width="1.3"/>
+                                </svg>
+                                <span class="hero-visit__label">{% trans "Address" %}</span>
+                                <span class="hero-visit__value">{{ company.contact.address }}</span>
+                            </div>
+                        </div>
+
+                        <a class="hero-visit__link" href="#contact">
+                            <span>{% trans "Send a message" %}</span>
+                            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </aside>
+                </div>
+
+                <div class="hero-scroll" data-reveal aria-hidden="true">
+                    <div class="hero-scroll__mouse">
+                        <span class="hero-scroll__wheel"></span>
+                    </div>
+                    <span class="hero-scroll__label">{% trans "Scroll" %}</span>
+                </div>
+            </section>
+
+            <div class="marquee-band marquee-band--solid" aria-hidden="true">
+                <div class="marquee-track">
+                    {% for item in marquee %}
+                    <span>{{ item }}</span>
+                    {% endfor %}
+                    {% for item in marquee %}
+                    <span>{{ item }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <section class="section" id="services">
+                <div class="section-intro" data-reveal>
+                    <p class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        {% trans "Our services" %}
+                    </p>
+                    <h2>
+                        {% trans "Clear help for the documents" %}<br>
+                        <em>{% trans "that matter most." %}</em>
+                    </h2>
+                    <p class="section-lede">
+                        {% blocktrans %}From everyday affidavits to business and property papers — we explain what you need, prepare you for your visit, and notarize with care.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <div class="bento-grid" data-reveal data-stagger>
+                    {% for service in services %}
+                    <article class="bento-card bento-card--{{ forloop.counter }}">
+                        <div class="bento-card__glow" aria-hidden="true"></div>
+                        <span class="bento-metric">{{ service.metric }}</span>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.copy }}</p>
+                        <span class="bento-index">0{{ forloop.counter }}</span>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="workflow-section" id="workflow">
+                <div class="workflow-header" data-reveal>
+                    <p class="eyebrow eyebrow--light">
+                        <span class="eyebrow-line"></span>
+                        {% trans "Your journey" %}
+                    </p>
+                    <h2>
+                        {% trans "From first contact" %}<br>
+                        <em>{% trans "to notarized documents." %}</em>
+                    </h2>
+                    <p class="workflow-lede">
+                        {% blocktrans %}A simple, defined path so you always know what happens next — before you visit, during your appointment, and when you leave with your documents.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <div class="workflow-rail" data-reveal data-stagger>
+                    <div class="workflow-line" aria-hidden="true"></div>
+                    {% for item in workflow %}
+                    <div class="workflow-node" data-step="{{ forloop.counter }}">
+                        <div class="workflow-node__dot">
+                            <span>{{ forloop.counter }}</span>
+                        </div>
+                        <strong>{{ item.title }}</strong>
+                        <p>{{ item.detail }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="section experience-section" id="experience">
+                <div class="experience-layout">
+                    <div class="experience-copy" data-reveal>
+                        <p class="eyebrow">
+                            <span class="eyebrow-line"></span>
+                            {% trans "Experience" %}
+                        </p>
+                        <h2>
+                            {% trans "A notary office built" %}<br>
+                            <em>{% trans "for everyday clients." %}</em>
+                        </h2>
+                        <p class="experience-lede">
+                            {% blocktrans %}Whether you need a single affidavit or a stack of business papers, Notaria Notary brings the same attention to detail — explaining requirements in plain language and making your visit efficient.{% endblocktrans %}
+                        </p>
+                    </div>
+                    <ul class="experience-list" data-reveal data-stagger>
+                        {% for highlight in company.highlights %}
+                        <li class="experience-item">{{ highlight }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section security-section" id="security">
+                <div class="security-layout">
+                    <div class="security-copy" data-reveal>
+                        <p class="eyebrow">
+                            <span class="eyebrow-line"></span>
+                            {% trans "Trust & policy" %}
+                        </p>
+                        <h2>
+                            {% trans "Professional standards" %}<br>
+                            <em>{% trans "you can count on." %}</em>
+                        </h2>
+                        <p class="security-lede">
+                            {% blocktrans %}We follow proper notarial practice, keep accurate records, and treat every document with confidentiality — so you leave with confidence, not uncertainty.{% endblocktrans %}
+                        </p>
+                    </div>
+
+                    <div class="security-cards" data-reveal data-stagger>
+                        {% for feature in security_features %}
+                        <article class="security-card">
+                            <span class="security-icon" aria-hidden="true">{{ feature.icon }}</span>
+                            <div>
+                                <strong>{{ feature.title }}</strong>
+                                <p>{{ feature.detail }}</p>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-preview" id="profile">
+                <div class="profile-preview__layout" data-reveal>
+                    <div class="profile-preview__avatar" aria-hidden="true">{{ profile.initials }}</div>
+                    <div class="profile-preview__copy">
+                        <p class="eyebrow">
+                            <span class="eyebrow-line"></span>
+                            {% trans "Meet your notary" %}
+                        </p>
+                        <h2>{% trans "The person behind" %} <em>{% trans "the seal." %}</em></h2>
+                        <p class="profile-preview__role">{{ profile.title }}</p>
+                        <p class="profile-preview__summary">{{ profile.summary|truncatewords:42 }}</p>
+                        <div class="profile-preview__actions">
+                            <a class="button primary magnetic" href="{% url 'profile' %}">
+                                <span>{% trans "View full profile" %}</span>
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                    <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a class="button ghost magnetic" href="{% url 'home' %}#contact">{% trans "Book appointment" %}</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {% if featured_posts or featured_portfolio %}
+            <section class="section spotlight-section" id="highlights">
+                <div class="section-intro" data-reveal>
+                    <p class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        {% trans "News & portfolio" %}
+                    </p>
+                    <h2>
+                        {% trans "Latest from" %}<br>
+                        <em>{% trans "the office." %}</em>
+                    </h2>
+                    <p class="section-lede">
+                        {% blocktrans %}Three recent updates and three work highlights — a quick look at what we publish and the documents we help clients notarize.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <div class="spotlight-grid">
+                    <div class="spotlight-column" data-reveal>
+                        <div class="spotlight-column__head">
+                            <h3>{% trans "Latest news" %}</h3>
+                            <a class="button ghost" href="{% url 'blog_list' %}">{% trans "View all" %}</a>
+                        </div>
+                        <div class="spotlight-cards">
+                            {% for post in featured_posts %}
+                            <article class="spotlight-card">
+                                <div class="spotlight-card__meta">
+                                    <span class="cms-badge cms-badge--{{ post.category }}">{{ post.get_category_display }}</span>
+                                    {% if post.published_at %}
+                                    <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"M j, Y" }}</time>
+                                    {% endif %}
+                                </div>
+                                <h4 class="spotlight-card__title"><a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a></h4>
+                                {% if post.summary %}
+                                <p class="spotlight-card__excerpt">{{ post.summary|truncatewords:18 }}</p>
+                                {% endif %}
+                                <a class="spotlight-card__link" href="{% url 'blog_detail' slug=post.slug %}">
+                                    {% trans "Read more" %}
+                                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                        <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            </article>
+                            {% empty %}
+                            <p class="spotlight-empty">{% trans "News articles will appear here once published." %}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="spotlight-column" data-reveal>
+                        <div class="spotlight-column__head">
+                            <h3>{% trans "Portfolio" %}</h3>
+                            <a class="button ghost" href="{% url 'portfolio_list' %}">{% trans "View all" %}</a>
+                        </div>
+                        <div class="spotlight-cards">
+                            {% for item in featured_portfolio %}
+                            <article class="spotlight-card">
+                                <div class="spotlight-card__meta">
+                                    {% if item.document_type %}
+                                    <span>{{ item.document_type }}</span>
+                                    {% else %}
+                                    <span>{% trans "Document" %}</span>
+                                    {% endif %}
+                                    {% if item.published_at %}
+                                    <time datetime="{{ item.published_at|date:'c' }}">{{ item.published_at|date:"M j, Y" }}</time>
+                                    {% endif %}
+                                </div>
+                                <h4 class="spotlight-card__title"><a href="{% url 'portfolio_detail' slug=item.slug %}">{{ item.title }}</a></h4>
+                                <p class="spotlight-card__excerpt">{{ item.summary|truncatewords:16 }}</p>
+                                <a class="spotlight-card__link" href="{% url 'portfolio_detail' slug=item.slug %}">
+                                    {% trans "View details" %}
+                                    <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                        <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </a>
+                            </article>
+                            {% empty %}
+                            <p class="spotlight-empty">{% trans "Portfolio highlights will appear here once published." %}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="section clients-showcase" id="clients" aria-labelledby="clients-heading">
+                <div class="section-intro" data-reveal>
+                    <p class="eyebrow">
+                        <span class="eyebrow-line"></span>
+                        {{ clients_marquee.eyebrow }}
+                    </p>
+                    <h2 id="clients-heading">
+                        {{ clients_marquee.headline_prefix }}<br>
+                        <em>{{ clients_marquee.client_count }} {{ clients_marquee.headline_suffix }}</em>
+                    </h2>
+                    <p class="section-lede">{{ clients_marquee.subtext }}</p>
+                </div>
+                <div class="clients-marquee" aria-hidden="true">
+                    <div class="clients-marquee__track">
+                        {% for item in clients_marquee.items %}
+                        <div class="clients-marquee__card">
+                            <span class="clients-marquee__logo">{{ item }}</span>
+                        </div>
+                        {% endfor %}
+                        {% for item in clients_marquee.items %}
+                        <div class="clients-marquee__card">
+                            <span class="clients-marquee__logo">{{ item }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta-section" id="contact">
+                <div class="cta-layout">
+                    <div class="cta-copy" data-reveal>
+                        <p class="eyebrow">
+                            <span class="eyebrow-line"></span>
+                            {% trans "Get in touch" %}
+                        </p>
+                        <h2>
+                            {% trans "Ready to visit" %}<br>
+                            <em>{% trans "the notary?" %}</em>
+                        </h2>
+                        <p>
+                            {% blocktrans %}Send us a message with the document type and your preferred time. We will confirm what to bring and schedule your appointment.{% endblocktrans %}
+                        </p>
+                        <ul class="cta-points">
+                            <li>{% trans "Response within one business day" %}</li>
+                            <li>{% trans "No obligation to proceed" %}</li>
+                            <li>{% trans "Clear guidance before you visit" %}</li>
+                        </ul>
+                        <div class="contact-details">
+                            <a class="contact-details__item" href="tel:{{ company.contact.phone_href }}">
+                                <span>{% trans "Phone" %}</span>
+                                <strong>{{ company.contact.phone }}</strong>
+                            </a>
+                            <a class="contact-details__item" href="mailto:{{ company.contact.email }}">
+                                <span>{% trans "Email" %}</span>
+                                <strong>{{ company.contact.email }}</strong>
+                            </a>
+                            <div class="contact-details__item">
+                                <span>{% trans "Address" %}</span>
+                                <strong>{{ company.contact.address }}</strong>
+                            </div>
+                            <div class="contact-details__item">
+                                <span>{% trans "Hours" %}</span>
+                                <strong>{{ company.contact.hours }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="contact-form" method="post" action="#contact" id="contact" data-reveal>
+                        {% csrf_token %}
+                        <input type="hidden" name="form_type" value="contact">
+                        {% if contact_form.non_field_errors %}
+                        <div class="auth-form__errors">
+                            {% for e in contact_form.non_field_errors %}<p>{{ e }}</p>{% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            <label class="col-6">
+                                <span>{% trans "Full name" %}</span>
+                                {{ contact_form.name }}
+                                {% if contact_form.name.errors %}<span class="field-error">{{ contact_form.name.errors.0 }}</span>{% endif %}
+                            </label>
+                            <label class="col-6">
+                                <span>{% trans "Email address" %}</span>
+                                {{ contact_form.email }}
+                                {% if contact_form.email.errors %}<span class="field-error">{{ contact_form.email.errors.0 }}</span>{% endif %}
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label class="col-6">
+                                <span>{% trans "Service needed" %}</span>
+                                {{ contact_form.service }}
+                                {% if contact_form.service.errors %}<span class="field-error">{{ contact_form.service.errors.0 }}</span>{% endif %}
+                            </label>
+                            <label class="col-6">
+                                <span>{% trans "Preferred date" %}</span>
+                                {{ contact_form.preferred_date }}
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label class="col-12">
+                                <span>
+                                    {% trans "Message" %}
+                                    <small>{% trans "(optional)" %}</small>
+                                </span>
+                                {{ contact_form.message }}
+                            </label>
+                        </div>
+                        <button type="submit" class="button primary magnetic">
+                            <span>{% trans "Request appointment" %}</span>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                                <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </section>
+{% endblock %}

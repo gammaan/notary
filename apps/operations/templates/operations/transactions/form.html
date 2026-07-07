@@ -1,0 +1,90 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}
+{% if matter %}{% trans "Edit transaction" %} — {{ matter.reference_number }}{% else %}{% trans "Edit entry" %}{% endif %}
+{% endblock %}
+{% block content %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    {% if matter %}
+    <p class="staff-step-label">{{ matter.reference_number }} · {{ transaction.description }}</p>
+    {% else %}
+    <p class="staff-step-label">{% trans "General entry" %} · {{ transaction.description }}</p>
+    {% endif %}
+    {% if is_locked %}
+    <p class="staff-message staff-message--info">{% trans "This transaction is locked and cannot be edited." %}</p>
+    {% endif %}
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.transaction_type.id_for_label }}"><span>{% trans "Type" %}</span></label>
+                {{ form.transaction_type }}
+            </div>
+            {% if form.category %}
+            <div class="col-12 col-md-6">
+                <label for="{{ form.category.id_for_label }}"><span>{% trans "Category" %}</span></label>
+                {{ form.category }}
+            </div>
+            {% else %}
+            <div class="col-12 col-md-6">
+                <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                {{ form.status }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.description.id_for_label }}"><span>{% trans "Description" %}</span></label>
+                {{ form.description }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.amount.id_for_label }}"><span>{% trans "Amount" %}</span></label>
+                {{ form.amount }}
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.currency.id_for_label }}"><span>{% trans "Currency" %}</span></label>
+                {{ form.currency }}
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.payment_method.id_for_label }}"><span>{% trans "Payment method" %}</span></label>
+                {{ form.payment_method }}
+            </div>
+            {% if form.category %}
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                {{ form.status }}
+            </div>
+            {% else %}
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.transaction_date.id_for_label }}"><span>{% trans "Date" %}</span></label>
+                {{ form.transaction_date }}
+            </div>
+            {% endif %}
+        </div>
+        {% if form.category %}
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.transaction_date.id_for_label }}"><span>{% trans "Date" %}</span></label>
+                {{ form.transaction_date }}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.notes.id_for_label }}"><span>{% trans "Notes" %}</span></label>
+                {{ form.notes }}
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            {% if not is_locked %}<button class="button primary" type="submit">{% trans "Save transaction" %}</button>{% endif %}
+            {% if matter %}
+            <a class="button ghost" href="{% url 'staff:matter_detail' matter.uuid %}">{% trans "Back to matter" %}</a>
+            {% else %}
+            <a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Back to finances" %}</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

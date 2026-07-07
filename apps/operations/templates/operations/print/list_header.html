@@ -1,0 +1,11 @@
+{% load i18n %}
+<header class="print-header">
+    <div class="print-brand">
+        <strong>Notaria Notary</strong>
+        <span>{{ subtitle }}</span>
+    </div>
+    <div class="print-meta">
+        <p><strong>{% trans "Printed" %}</strong> {{ printed_at|date:"F j, Y g:i A" }}</p>
+        <p><strong>{% trans "Records" %}</strong> {{ record_count }}</p>
+    </div>
+</header>

@@ -1,0 +1,53 @@
+{% extends "operations/print/base.html" %}
+{% block title %}Receipt {{ transaction.id }}{% endblock %}
+{% block content %}
+<header class="print-header">
+    <div class="print-brand">
+        <strong>Notaria Notary</strong>
+        <span>Payment receipt</span>
+    </div>
+    <div class="print-meta">
+        <p><strong>Receipt #</strong> RCP-{{ transaction.id|stringformat:"05d" }}</p>
+        <p><strong>Date</strong> {{ transaction.transaction_date|date:"F j, Y" }}</p>
+    </div>
+</header>
+
+{% if matter %}
+<section class="print-block">
+    <h2>Client &amp; matter</h2>
+    <dl class="print-dl">
+        <div><dt>Client</dt><dd>{{ matter.client.full_name }}</dd></div>
+        <div><dt>Matter</dt><dd>{{ matter.reference_number }} — {{ matter.title }}</dd></div>
+        <div><dt>Service</dt><dd>{{ matter.service_type.name }}</dd></div>
+    </dl>
+</section>
+{% elif transaction.category %}
+<section class="print-block">
+    <h2>Entry</h2>
+    <dl class="print-dl">
+        <div><dt>Category</dt><dd>{{ transaction.get_category_display }}</dd></div>
+        <div><dt>Type</dt><dd>{{ transaction.get_transaction_type_display }}</dd></div>
+    </dl>
+</section>
+{% endif %}
+
+<section class="print-block">
+    <h2>Payment details</h2>
+    <dl class="print-dl">
+        <div><dt>Description</dt><dd>{{ transaction.description }}</dd></div>
+        <div><dt>Type</dt><dd>{{ transaction.get_transaction_type_display }}</dd></div>
+        <div><dt>Amount</dt><dd class="print-amount">{{ transaction.currency }} {{ transaction.amount }}</dd></div>
+        <div><dt>Status</dt><dd>{{ transaction.get_status_display }}</dd></div>
+        {% if transaction.payment_method %}
+        <div><dt>Payment method</dt><dd>{{ transaction.get_payment_method_display }}</dd></div>
+        {% endif %}
+        {% if transaction.notes %}
+        <div><dt>Notes</dt><dd>{{ transaction.notes }}</dd></div>
+        {% endif %}
+    </dl>
+</section>
+
+<footer class="print-footer">
+    <p>Thank you for your business.</p>
+</footer>
+{% endblock %}

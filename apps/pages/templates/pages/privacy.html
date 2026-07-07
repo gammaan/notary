@@ -1,0 +1,32 @@
+{% extends "core/base_public.html" %}
+{% load i18n %}
+
+{% block content %}
+<section class="section cms-section">
+    <div class="cms-page cms-page--legal" data-reveal>
+        <p class="eyebrow"><span class="eyebrow-line"></span>{% trans "Legal" %}</p>
+        <h1>{% trans "Privacy Policy" %}</h1>
+        <p class="section-lede">{% trans "Last updated:" %} {% now "F j, Y" %}</p>
+
+        <div class="legal-body">
+            <h2>{% trans "Information we collect" %}</h2>
+            <p>{% blocktrans %}When you contact us through this website, we collect the name, email address, service requested, and any message you provide. If you visit our office, we may also collect identification and document details required for notarial services.{% endblocktrans %}</p>
+
+            <h2>{% trans "How we use your information" %}</h2>
+            <p>{% blocktrans %}We use your information to respond to appointment requests, schedule notarial services, maintain required records, and communicate with you about your matter. We do not sell your personal information.{% endblocktrans %}</p>
+
+            <h2>{% trans "Document confidentiality" %}</h2>
+            <p>{% blocktrans %}Documents submitted for notarization are handled confidentially and stored securely. Access is limited to authorized staff who need the information to perform notarial services and maintain records.{% endblocktrans %}</p>
+
+            <h2>{% trans "Retention" %}</h2>
+            <p>{% blocktrans %}We retain contact enquiries and notarial records for as long as required by applicable law and professional practice standards.{% endblocktrans %}</p>
+
+            <h2>{% trans "Your rights" %}</h2>
+            <p>{% blocktrans %}You may request access to or correction of personal information we hold about you by contacting us at{% endblocktrans %} <a href="mailto:{{ company.contact.email }}">{{ company.contact.email }}</a>.</p>
+
+            <h2>{% trans "Contact" %}</h2>
+            <p>{% blocktrans %}For privacy-related questions, email{% endblocktrans %} <a href="mailto:{{ company.contact.email }}">{{ company.contact.email }}</a> {% trans "or call" %} <a href="tel:{{ company.contact.phone_href }}">{{ company.contact.phone }}</a>.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

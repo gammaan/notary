@@ -1,0 +1,40 @@
+{% extends "operations/print/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Matters" %}{% endblock %}
+{% block content %}
+{% trans "Matter register" as subtitle %}
+{% include "operations/print/list_header.html" %}
+{% if matters %}
+<table class="print-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans "Reference" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>{% trans "Client" %}</th>
+            <th>{% trans "Service" %}</th>
+            <th>{% trans "Scheduled" %}</th>
+            <th>{% trans "Status" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in matters %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><strong>{{ m.reference_number }}</strong></td>
+            <td>{{ m.title }}</td>
+            <td>{{ m.client.full_name }}</td>
+            <td>{{ m.service_type.name }}</td>
+            <td>{% if m.scheduled_at %}{{ m.scheduled_at|date:"M j, Y" }}{% else %}—{% endif %}</td>
+            <td>{{ m.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{% trans "No matters match your filters." %}</p>
+{% endif %}
+<footer class="print-footer">
+    <p class="print-footer__note">{% trans "Matter register generated from the staff portal." %}</p>
+</footer>
+{% endblock %}

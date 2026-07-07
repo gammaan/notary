@@ -1,0 +1,87 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Appointments" %}{% endblock %}
+{% block topbar_actions %}
+{% include "operations/includes/list_print_button.html" with print_url="staff:appointment_list_print" %}
+{% endblock %}
+{% block content %}
+<div class="staff-finance-stats">
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Pending requests" %}</span><strong>{{ pending_count }}</strong></div>
+</div>
+<form class="staff-filter-form" method="get">
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field staff-filter-field--grow">
+            <span>{% trans "Search" %}</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="{% trans 'Name, email, service…' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Status" %}</span>
+            <select name="status" title="{% trans 'Filter by status' %}">
+                <option value="">{% trans "All statuses" %}</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}"{% if active_status == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field">
+            <span>{% trans "Submitted from" %}</span>
+            <input type="date" name="date_from" value="{{ filters.date_from }}" title="{% trans 'Select start date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Submitted to" %}</span>
+            <input type="date" name="date_to" value="{{ filters.date_to }}" title="{% trans 'Select end date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Preferred from" %}</span>
+            <input type="date" name="preferred_from" value="{{ filters.preferred_from }}" title="{% trans 'Select start date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Preferred to" %}</span>
+            <input type="date" name="preferred_to" value="{{ filters.preferred_to }}" title="{% trans 'Select end date' %}">
+        </label>
+        {% include "operations/includes/filter_actions.html" with clear_url=clear_url %}
+    </div>
+</form>
+<div class="staff-panel">
+    {% if appointments %}
+    <table class="staff-table staff-table--compact">
+        <thead>
+            <tr>
+                <th>{% trans "Submitted" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Service" %}</th>
+                <th>{% trans "Preferred date" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in appointments %}
+            <tr>
+                <td>{{ a.created_at|date:"M j, Y g:i A" }}</td>
+                <td>{{ a.name }}<br><small>{{ a.email }}</small></td>
+                <td>{{ a.service }}</td>
+                <td>{% if a.preferred_date %}{{ a.preferred_date|date:"M j, Y" }}{% else %}—{% endif %}</td>
+                <td><span class="staff-badge">{{ a.get_status_display }}</span></td>
+                <td>
+                    {% if a.status == "pending" %}
+                    <form method="post" style="display:inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="uuid" value="{{ a.uuid }}">
+                        <input type="hidden" name="status" value="confirmed">
+                        <button class="button ghost button--compact" type="submit">{% trans "Confirm" %}</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="staff-empty">{% trans "No appointment requests match your filters." %}</p>
+    {% endif %}
+    {% include "operations/includes/pagination.html" %}
+</div>
+{% endblock %}

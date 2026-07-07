@@ -228,7 +228,7 @@ msgid "Notary"
 msgstr "Nootaayo"
 
 #: .\accounts\templates\accounts\login.html:5
-msgid "Sign in to your Himilo Notary client account."
+msgid "Sign in to your Notaria Notary client account."
 msgstr ""
 
 #: .\accounts\templates\accounts\login.html:14
@@ -265,7 +265,7 @@ msgid "Change password"
 msgstr ""
 
 #: .\accounts\templates\accounts\password_change.html:5
-msgid "Update your Himilo Notary account password."
+msgid "Update your Notaria Notary account password."
 msgstr ""
 
 #: .\accounts\templates\accounts\password_change.html:16
@@ -295,7 +295,7 @@ msgid "My profile"
 msgstr ""
 
 #: .\accounts\templates\accounts\profile.html:5
-msgid "Manage your Himilo Notary client profile."
+msgid "Manage your Notaria Notary client profile."
 msgstr ""
 
 #: .\accounts\templates\accounts\profile.html:30
@@ -349,7 +349,7 @@ msgstr ""
 
 #: .\accounts\templates\accounts\register.html:5
 msgid ""
-"Create a Himilo Notary client account to manage your profile and stay "
+"Create a Notaria Notary client account to manage your profile and stay "
 "connected."
 msgstr ""
 
@@ -364,7 +364,7 @@ msgstr ""
 #: .\accounts\templates\accounts\register.html:18
 msgid ""
 "Sign up with your email to save your details and manage your profile with "
-"Himilo Notary."
+"Notaria Notary."
 msgstr ""
 
 #: .\accounts\templates\accounts\register.html:21
@@ -540,7 +540,7 @@ msgstr ""
 
 #: .\cms\templates\cms\blog_list.html:5
 msgid ""
-"News, blog posts, and notices from Himilo Notary — updates, guidance, and "
+"News, blog posts, and notices from Notaria Notary — updates, guidance, and "
 "announcements for clients."
 msgstr ""
 
@@ -601,7 +601,7 @@ msgstr ""
 
 #: .\cms\templates\cms\portfolio_list.html:5
 msgid ""
-"Anonymized highlights of document types and notarial work handled by Himilo "
+"Anonymized highlights of document types and notarial work handled by Notaria "
 "Notary — experience you can trust."
 msgstr ""
 
@@ -630,19 +630,19 @@ msgid "Portfolio highlights will appear here once published."
 msgstr ""
 
 #: .\cms\views.py:52
-msgid "News & updates | Himilo Notary"
+msgid "News & updates | Notaria Notary"
 msgstr ""
 
 #: .\cms\views.py:53
-msgid "Latest news, notices, and articles from Himilo Notary."
+msgid "Latest news, notices, and articles from Notaria Notary."
 msgstr ""
 
 #: .\cms\views.py:93
-msgid "Portfolio | Himilo Notary"
+msgid "Portfolio | Notaria Notary"
 msgstr ""
 
 #: .\cms\views.py:94
-msgid "Examples of notarial work handled by Himilo Notary."
+msgid "Examples of notarial work handled by Notaria Notary."
 msgstr ""
 
 #: .\operations\admin.py:45 .\pages\templates\pages\privacy.html:27
@@ -1838,13 +1838,13 @@ msgstr ""
 #: .\pages\templates\pages\home.html:10
 #, fuzzy
 #| msgid ""
-#| "Himilo Notary — trusted notarial services, a clear process from first "
+#| "Notaria Notary — trusted notarial services, a clear process from first "
 #| "contact to sealed documents, and an easy way to book your appointment."
 msgid ""
 "Trusted notarial services with a clear process from first contact to sealed "
 "documents."
 msgstr ""
-"Himilo Nootaayo — adeegyo nootaayo oo lagu kalsoon yahay, hannaan cad laga "
+"Notaria Nootaayo — adeegyo nootaayo oo lagu kalsoon yahay, hannaan cad laga "
 "bilaabo xiriirka koowaad ilaa dukumeentiyada la shaabadeeyo, iyo hab fudud "
 "oo aad ballankaaga ku qabsan karto."
 
@@ -1862,11 +1862,11 @@ msgstr "si cad oo daryeel leh."
 
 #: .\pages\templates\pages\home.html:46
 msgid ""
-"Himilo Notary helps you prepare, sign, and certify documents the right way — "
+"Notaria Notary helps you prepare, sign, and certify documents the right way — "
 "with a defined process, transparent policies, and a team that makes visiting "
 "the office straightforward."
 msgstr ""
-"Himilo Nootaayo waxay kaa caawisaa inaad si sax ah u diyaariso, u saxiixdo, "
+"Notaria Nootaayo waxay kaa caawisaa inaad si sax ah u diyaariso, u saxiixdo, "
 "una caddeyso dukumeentiyada — hannaan qeexan, siyaasado hufan, iyo koox ka "
 "dhigta booqashada xafiiska mid fudud."
 
@@ -1966,12 +1966,12 @@ msgstr "macaamiisha maalinlaha ah."
 
 #: .\pages\templates\pages\home.html:213
 msgid ""
-"Whether you need a single affidavit or a stack of business papers, Himilo "
+"Whether you need a single affidavit or a stack of business papers, Notaria "
 "Notary brings the same attention to detail — explaining requirements in "
 "plain language and making your visit efficient."
 msgstr ""
 "Haddii aad u baahan tahay hal dhaar-caddeyn ama xirmo waraaqo ganacsi ah, "
-"Himilo Nootaayo waxay keentaa taxaddar isku mid ah — iyadoo shuruudaha ku "
+"Notaria Nootaayo waxay keentaa taxaddar isku mid ah — iyadoo shuruudaha ku "
 "sharxaysa luqad cad, booqashadaadana ka dhigaysa mid hufan."
 
 #: .\pages\templates\pages\home.html:229
@@ -2159,7 +2159,7 @@ msgstr ""
 
 #: .\pages\templates\pages\terms.html:13
 msgid ""
-"This website provides general information about Himilo Notary and a way to "
+"This website provides general information about Notaria Notary and a way to "
 "request an appointment. Content is for informational purposes and does not "
 "constitute legal advice."
 msgstr ""
@@ -2195,7 +2195,7 @@ msgstr ""
 
 #: .\pages\templates\pages\terms.html:22
 msgid ""
-"To the extent permitted by law, Himilo Notary is not liable for indirect or "
+"To the extent permitted by law, Notaria Notary is not liable for indirect or "
 "consequential damages arising from use of this website. Our liability for "
 "notarial services is governed by applicable professional standards and law."
 msgstr ""
@@ -2224,34 +2224,34 @@ msgstr ""
 
 #: .\pages\views.py:49 .\templates\base.html:10 .\templates\base.html:14
 #: .\templates\base.html:19
-msgid "Himilo Notary | The Art of Certainty"
-msgstr "Himilo Nootaayo | Farshaxanka Hubnida"
+msgid "Notaria Notary | The Art of Certainty"
+msgstr "Notaria Nootaayo | Farshaxanka Hubnida"
 
 #: .\pages\views.py:51 .\templates\base.html:11 .\templates\base.html:15
 #: .\templates\base.html:20
 msgid ""
-"Himilo Notary — trusted notarial services, a clear process from first "
+"Notaria Notary — trusted notarial services, a clear process from first "
 "contact to sealed documents, and an easy way to book your appointment."
 msgstr ""
-"Himilo Nootaayo — adeegyo nootaayo oo lagu kalsoon yahay, hannaan cad laga "
+"Notaria Nootaayo — adeegyo nootaayo oo lagu kalsoon yahay, hannaan cad laga "
 "bilaabo xiriirka koowaad ilaa dukumeentiyada la shaabadeeyo, iyo hab fudud "
 "oo aad ballankaaga ku qabsan karto."
 
 #: .\pages\views.py:62
-msgid "Privacy Policy | Himilo Notary"
+msgid "Privacy Policy | Notaria Notary"
 msgstr ""
 
 #: .\pages\views.py:63
 msgid ""
-"How Himilo Notary collects, uses, and protects your personal information."
+"How Notaria Notary collects, uses, and protects your personal information."
 msgstr ""
 
 #: .\pages\views.py:72
-msgid "Terms of Service | Himilo Notary"
+msgid "Terms of Service | Notaria Notary"
 msgstr ""
 
 #: .\pages\views.py:73
-msgid "Terms governing use of the Himilo Notary website and services."
+msgid "Terms governing use of the Notaria Notary website and services."
 msgstr ""
 
 #: .\templates\includes\footer.html:16
@@ -2277,8 +2277,8 @@ msgid "Social media"
 msgstr ""
 
 #: .\templates\includes\footer.html:47
-msgid "Himilo Notary. All rights reserved."
-msgstr "Himilo Nootaayo. Xuquuqda oo dhan waa la ilaaliyey."
+msgid "Notaria Notary. All rights reserved."
+msgstr "Notaria Nootaayo. Xuquuqda oo dhan waa la ilaaliyey."
 
 #: .\templates\includes\footer.html:48
 msgid "Privacy"
@@ -2330,11 +2330,11 @@ msgstr "Hagitaanka mobilka"
 #~ msgstr "si sax ah oo buuxda."
 
 #~ msgid ""
-#~ "Himilo unites appointment booking, identity verification, live video "
+#~ "Notaria unites appointment booking, identity verification, live video "
 #~ "sessions, e-signatures, seal management, and compliance records into one "
 #~ "workspace worthy of the seal you place."
 #~ msgstr ""
-#~ "Himilo waxay isku xirtaa ballansashada, xaqiijinta aqoonsiga, "
+#~ "Notaria waxay isku xirtaa ballansashada, xaqiijinta aqoonsiga, "
 #~ "kalfadhiyada fiidiyowga tooska ah, saxiixyada elektarooniga ah, maamulka "
 #~ "shaabadada, iyo diiwaannada waafaqsanaanta hal goob shaqo oo mudan "
 #~ "shaabadda aad saarto."
@@ -2390,10 +2390,10 @@ msgstr "Hagitaanka mobilka"
 #~ msgstr "ka dambeysa shaabad kasta."
 
 #~ msgid ""
-#~ "Your reputation rests on proof. Himilo preserves it with bank-grade "
+#~ "Your reputation rests on proof. Notaria preserves it with bank-grade "
 #~ "infrastructure and notary-first compliance design."
 #~ msgstr ""
-#~ "Sumcaddaadu waxay ku tiirsan tahay caddeyn. Himilo waxay ilaalinaysaa "
+#~ "Sumcaddaadu waxay ku tiirsan tahay caddeyn. Notaria waxay ilaalinaysaa "
 #~ "iyadoo la adeegsanayo kaab-dhismeed heer bangi ah iyo naqshad "
 #~ "waafaqsanaan oo nootaayada u horraysa."
 

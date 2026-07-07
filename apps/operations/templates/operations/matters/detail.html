@@ -1,0 +1,255 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{{ matter.reference_number }}{% endblock %}
+{% block topbar_actions %}
+<div class="staff-action-menu" data-staff-action-menu>
+    <button type="button" class="button primary staff-action-menu__trigger" aria-expanded="false" aria-haspopup="menu">
+        <i class="fa-solid fa-bolt" aria-hidden="true"></i> {% trans "Actions" %}
+        <i class="fa-solid fa-chevron-down staff-action-menu__caret" aria-hidden="true"></i>
+    </button>
+    <div class="staff-action-menu__panel" role="menu" hidden>
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_documents' matter.uuid %}" role="menuitem">
+            <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i> {% trans "Documents" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_finances' matter.uuid %}" role="menuitem">
+            <i class="fa-solid fa-receipt" aria-hidden="true"></i> {% trans "Finances" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_complete' matter.uuid %}" role="menuitem">
+            <i class="fa-solid fa-flag-checkered" aria-hidden="true"></i> {% trans "Complete" %}
+        </a>
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_print_documents' matter.uuid %}" target="_blank" rel="noopener" role="menuitem">
+            <i class="fa-solid fa-print" aria-hidden="true"></i> {% trans "Print documents" %}
+        </a>
+        {% if not matter_is_closed %}
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_edit' matter.uuid %}" role="menuitem">
+            <i class="fa-solid fa-sliders" aria-hidden="true"></i> {% trans "Edit setup" %}
+        </a>
+        {% else %}
+        <a class="staff-action-menu__item" href="{% url 'staff:matter_complete' matter.uuid %}" role="menuitem">
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> {% trans "Reopen matter" %}
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+
+<div class="staff-matter-layout staff-matter-layout--full">
+    <div class="staff-matter-main">
+        <header class="staff-matter-hero staff-matter-hero--card">
+            <div class="staff-matter-hero__top">
+                <span class="staff-matter-ref">{{ matter.reference_number }}</span>
+                {% if matter_is_closed %}
+                <span class="staff-badge staff-badge--completed">{{ matter.get_status_display }}</span>
+                {% else %}
+                <form class="staff-inline-status" method="post" action="{% url 'staff:matter_status' matter.uuid %}">
+                    {% csrf_token %}
+                    <label class="staff-inline-status__label" for="matter-status">{% trans "Status" %}</label>
+                    <select id="matter-status" name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                        {% for value, label in matter_status_choices %}
+                        <option value="{{ value }}"{% if matter.status == value %} selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+                {% endif %}
+            </div>
+
+            <div class="staff-matter-hero__body">
+                <div class="staff-matter-hero__primary">
+                    <h2 class="staff-matter-hero__title">{{ matter.title }}</h2>
+                    {% if matter.description %}
+                    <p class="staff-matter-hero__desc">{{ matter.description }}</p>
+                    {% endif %}
+                    {% if matter.notes %}
+                    <p class="staff-matter-hero__notes"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> {{ matter.notes }}</p>
+                    {% endif %}
+
+                    <dl class="staff-matter-meta staff-matter-meta--compact">
+                        <div class="staff-matter-meta__item">
+                            <dt><i class="fa-solid fa-user" aria-hidden="true"></i> {% trans "Client" %}</dt>
+                            <dd><a href="{% url 'staff:client_detail' matter.client.uuid %}">{{ matter.client.full_name }}</a></dd>
+                        </div>
+                        <div class="staff-matter-meta__item">
+                            <dt><i class="fa-solid fa-stamp" aria-hidden="true"></i> {% trans "Service" %}</dt>
+                            <dd>{{ matter.service_type.name }}</dd>
+                        </div>
+                        <div class="staff-matter-meta__item">
+                            <dt><i class="fa-solid fa-calendar" aria-hidden="true"></i> {% trans "Scheduled" %}</dt>
+                            <dd>{% if matter.scheduled_at %}{{ matter.scheduled_at|date:"M j, Y g:i A" }}{% else %}—{% endif %}</dd>
+                        </div>
+                        <div class="staff-matter-meta__item">
+                            <dt><i class="fa-solid fa-user-tie" aria-hidden="true"></i> {% trans "Assigned" %}</dt>
+                            <dd>{{ matter.assigned_to.get_full_name|default:"—" }}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="staff-matter-hero__finance">
+                    <p class="staff-matter-hero__finance-label">{% trans "Finances" %}</p>
+                    <div class="staff-matter-finance-grid">
+                        <div class="staff-matter-finance-stat">
+                            <span>{% trans "Income billed" %}</span>
+                            <strong class="staff-amount--income">${{ total_income }}</strong>
+                        </div>
+                        <div class="staff-matter-finance-stat">
+                            <span>{% trans "Income paid" %}</span>
+                            <strong class="staff-amount--income">${{ total_paid }}</strong>
+                        </div>
+                        <div class="staff-matter-finance-stat">
+                            <span>{% trans "Expenses" %}</span>
+                            <strong class="staff-amount--expense">${{ total_expenses }}</strong>
+                        </div>
+                        <div class="staff-matter-finance-stat">
+                            <span>{% trans "Net (paid)" %}</span>
+                            <strong>${{ net_income }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="staff-section">
+            <div class="staff-section__head">
+                <h4><i class="fa-solid fa-file-lines" aria-hidden="true"></i> {% trans "Documents" %}{% if documents_total > 10 %} <span class="staff-section__count">({{ documents_total }})</span>{% endif %}</h4>
+                <div class="staff-section__head-actions">
+                    <a class="staff-link" href="{% url 'staff:matter_print_documents' matter.uuid %}" target="_blank" rel="noopener"><i class="fa-solid fa-print" aria-hidden="true"></i> {% trans "Print all" %}</a>
+                    {% if not matter_is_closed %}<a class="staff-link" href="{% url 'staff:matter_documents' matter.uuid %}">{% trans "Add document" %}</a>{% endif %}
+                </div>
+            </div>
+            {% if documents %}
+            <ul class="staff-item-list">
+                {% for doc in documents %}
+                <li class="staff-item-row">
+                    <div class="staff-item-row__main">
+                        <strong class="staff-item-row__title">{{ doc.title }}</strong>
+                        <span class="staff-item-row__meta">{{ doc.document_type|default:"Document" }} · {{ doc.created_at|date:"M j, Y" }}</span>
+                    </div>
+                    {% if not matter_is_closed %}
+                    <form class="staff-inline-status staff-inline-status--compact" method="post" action="{% url 'staff:document_action' doc.uuid %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="action" value="status">
+                        <select name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                            {% for value, label in document_status_choices %}
+                            <option value="{{ value }}"{% if doc.status == value %} selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    {% else %}
+                    <span class="staff-badge">{{ doc.get_status_display }}</span>
+                    {% endif %}
+                    <div class="staff-item-row__actions">
+                        {% if not matter_is_closed %}
+                        {% if doc.approve_target %}
+                        <form method="post" action="{% url 'staff:document_action' doc.uuid %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--approve" title="Approve → {{ doc.approve_target_label }}">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                        {% if doc.file %}
+                        <a class="staff-icon-btn" href="{% url 'staff:document_download' doc.uuid %}" title="{% trans 'Download' %}">
+                            <i class="fa-solid fa-download" aria-hidden="true"></i>
+                        </a>
+                        {% endif %}
+                        {% if not matter_is_closed %}
+                        <a class="staff-icon-btn" href="{% url 'staff:document_edit' doc.uuid %}" title="{% trans 'Edit' %}">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                        {% if staff_can_delete %}
+                        <form method="post" action="{% url 'staff:document_action' doc.uuid %}" onsubmit="return confirm('{% trans "Remove this document?" %}');">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--danger" title="{% trans 'Delete' %}">
+                                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% if documents_total > 10 %}
+            <p class="staff-list-more"><a class="staff-link" href="{% url 'staff:matter_documents' matter.uuid %}">{% trans "View all documents" %} →</a></p>
+            {% endif %}
+            {% else %}
+            <p class="staff-empty">{% trans "No documents yet." %} <a href="{% url 'staff:matter_documents' matter.uuid %}">{% trans "Upload the first document" %}</a>.</p>
+            {% endif %}
+        </section>
+
+        <section class="staff-section">
+            <div class="staff-section__head">
+                <h4><i class="fa-solid fa-coins" aria-hidden="true"></i> {% trans "Finances" %}{% if transactions_total > 10 %} <span class="staff-section__count">({{ transactions_total }})</span>{% endif %}</h4>
+                {% if not matter_is_closed %}<a class="staff-link" href="{% url 'staff:matter_finances' matter.uuid %}">{% trans "Add transaction" %}</a>{% endif %}
+            </div>
+            {% if transactions %}
+            <ul class="staff-item-list">
+                {% for txn in transactions %}
+                <li class="staff-item-row">
+                    <div class="staff-item-row__main">
+                        <strong class="staff-item-row__title">{{ txn.description }}</strong>
+                        <span class="staff-item-row__meta">{{ txn.get_transaction_type_display }} · {{ txn.transaction_date|date:"M j, Y" }}</span>
+                    </div>
+                    <span class="staff-item-row__amount{% if txn.transaction_type == 'expense' %} staff-amount--expense{% endif %}">${{ txn.amount }}{% if matter_is_closed and txn.is_locked %} <i class="fa-solid fa-lock staff-lock-icon" title="{% trans 'Locked' %}"></i>{% endif %}</span>
+                    {% if matter_is_closed and txn.is_locked %}
+                    <span class="staff-badge staff-badge--completed">{{ txn.get_status_display }}</span>
+                    {% else %}
+                    <form class="staff-inline-status staff-inline-status--compact" method="post" action="{% url 'staff:transaction_action' txn.uuid %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <input type="hidden" name="action" value="status">
+                        <select name="status" class="staff-inline-status__select" onchange="this.form.submit()">
+                            {% for value, label in transaction_status_choices %}
+                            <option value="{{ value }}"{% if txn.status == value %} selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    {% endif %}
+                    <div class="staff-item-row__actions">
+                        {% if not matter_is_closed %}
+                        <form method="post" action="{% url 'staff:transaction_action' txn.uuid %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="mark_paid">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--approve" title="{% trans 'Mark paid' %}">
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        <a class="staff-icon-btn" href="{% url 'staff:transaction_edit' txn.uuid %}" title="{% trans 'Edit' %}">
+                            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                        </a>
+                        {% if staff_can_delete %}
+                        <form method="post" action="{% url 'staff:transaction_action' txn.uuid %}" onsubmit="return confirm('{% trans "Remove this transaction?" %}');">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="staff-icon-btn staff-icon-btn--danger" title="{% trans 'Delete' %}">
+                                <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                        <a class="staff-icon-btn" href="{% url 'staff:transaction_receipt' txn.uuid %}" target="_blank" rel="noopener" title="{% trans 'Print receipt' %}">
+                            <i class="fa-solid fa-print" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% if transactions_total > 10 %}
+            <p class="staff-list-more"><a class="staff-link" href="{% url 'staff:matter_finances' matter.uuid %}">{% trans "View all transactions" %} →</a></p>
+            {% endif %}
+            {% else %}
+            <p class="staff-empty">{% trans "No transactions yet." %} <a href="{% url 'staff:matter_finances' matter.uuid %}">{% trans "Record a fee or payment" %}</a>.</p>
+            {% endif %}
+        </section>
+    </div>
+</div>
+{% endblock %}

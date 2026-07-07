@@ -1,0 +1,144 @@
+{% extends "core/base_public.html" %}
+{% load i18n %}
+
+{% block title %}{{ profile.name }} | {% trans "Notary Profile" %} | {{ company.brand.name }}{% endblock %}
+{% block meta_description %}{{ profile.summary }}{% endblock %}
+
+{% block content %}
+<section class="profile-hero">
+    <div class="profile-hero__layout">
+        <div class="profile-hero__visual" data-reveal>
+            <div class="profile-hero__avatar" aria-hidden="true">{{ profile.initials }}</div>
+            <div class="profile-hero__seal">
+                <span>{{ company.brand.seal_letter }}</span>
+            </div>
+        </div>
+        <div class="profile-hero__copy" data-reveal>
+            <p class="eyebrow">
+                <span class="eyebrow-line"></span>
+                {% trans "Notary profile" %}
+            </p>
+            <h1>{{ profile.name }}</h1>
+            <p class="profile-hero__title">{{ profile.title }}</p>
+            <p class="profile-hero__headline">{{ profile.headline }}</p>
+            <div class="profile-hero__stats">
+                <div class="profile-stat">
+                    <strong>{{ profile.years_experience }}+</strong>
+                    <span>{% trans "Years experience" %}</span>
+                </div>
+                <div class="profile-stat">
+                    <strong>{{ profile.documents_notarized }}</strong>
+                    <span>{% trans "Documents notarized" %}</span>
+                </div>
+                <div class="profile-stat">
+                    <strong>{{ profile.languages|length }}</strong>
+                    <span>{% trans "Languages" %}</span>
+                </div>
+            </div>
+            <div class="profile-hero__langs">
+                {% for lang_name in profile.languages %}
+                <span class="profile-lang">{{ lang_name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section profile-section">
+    <div class="profile-grid">
+        <article class="profile-panel profile-panel--bio" data-reveal>
+            <h2>{% trans "Background" %} <em>{% trans "& approach" %}</em></h2>
+            <p class="profile-summary">{{ profile.summary }}</p>
+            {% for paragraph in profile.bio %}
+            <p>{{ paragraph }}</p>
+            {% endfor %}
+            <blockquote class="profile-quote">
+                <p>“{{ profile.quote }}”</p>
+                <footer>— {{ profile.name }}</footer>
+            </blockquote>
+        </article>
+
+        <aside class="profile-panel profile-panel--side" data-reveal>
+            <h3>{% trans "Credentials" %}</h3>
+            <ul class="profile-list profile-list--credentials">
+                {% for item in profile.credentials %}
+                <li>
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.detail }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h3>{% trans "Education & training" %}</h3>
+            <ul class="profile-list profile-list--education">
+                {% for item in profile.education %}
+                <li>
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.detail }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            {% if profile.memberships %}
+            <h3>{% trans "Memberships" %}</h3>
+            <ul class="profile-tags">
+                {% for item in profile.memberships %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </aside>
+    </div>
+</section>
+
+<section class="section profile-section profile-section--alt">
+    <div class="profile-split" data-reveal>
+        <div>
+            <p class="eyebrow">
+                <span class="eyebrow-line"></span>
+                {% trans "Focus areas" %}
+            </p>
+            <h2>{% trans "Document types" %} <em>{% trans "handled regularly" %}</em></h2>
+        </div>
+        <ul class="profile-specializations">
+            {% for item in profile.specializations %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+<section class="section profile-section">
+    <div class="profile-timeline-wrap" data-reveal>
+        <p class="eyebrow">
+            <span class="eyebrow-line"></span>
+            {% trans "Career" %}
+        </p>
+        <h2>{% trans "Professional" %} <em>{% trans "milestones" %}</em></h2>
+        <ol class="profile-timeline">
+            {% for item in profile.milestones %}
+            <li>
+                <span class="profile-timeline__year">{{ item.year }}</span>
+                <span class="profile-timeline__title">{{ item.title }}</span>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</section>
+
+<section class="profile-cta">
+    <div class="profile-cta__inner" data-reveal>
+        <h2>{% trans "Ready to work with" %} {{ profile.honorific }} {{ profile.name|truncatewords:2 }}?</h2>
+        <p>{% trans "Book an appointment or send a message — we will confirm what to bring and when to visit." %}</p>
+        <div class="profile-cta__actions">
+            <a class="button primary magnetic" href="{% url 'home' %}#contact">
+                <span>{% trans "Request appointment" %}</span>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <path d="M3 9h12M10 4l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a class="button ghost magnetic" href="tel:{{ company.contact.phone_href }}">{% trans "Call office" %}</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

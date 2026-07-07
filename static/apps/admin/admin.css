@@ -1,0 +1,329 @@
+/**
+ * Staff portal: Bootstrap coexistence and portal-specific overrides.
+ * Core UI components: static/core/css/app-ui.css
+ */
+
+/* ── Bootstrap coexistence (admin.css loads after Bootstrap) ── */
+
+.app-body,
+.staff-body {
+  font-family: var(--font-body);
+  color: var(--paper);
+}
+
+.app-body a.button,
+.app-body .button,
+.app-body a.btn,
+.app-body button.button,
+.app-body .staff-nav__link,
+.app-body .app-nav__link,
+.app-body .staff-brand,
+.app-body .app-brand,
+.app-body .staff-action-menu__item,
+.app-body .app-action-menu__item,
+.app-body .staff-profile-dropdown__item,
+.app-body .app-profile-dropdown__item,
+.app-body .staff-calendar-day__list a,
+.app-body .app-calendar-day__list a,
+.app-body .staff-calendar-day__more,
+.app-body .app-calendar-day__more,
+.app-body .staff-topbar__actions a,
+.app-body .app-topbar__actions a,
+.app-body .staff-filter-form__actions a,
+.app-body .app-filter-form__actions a,
+.app-body .staff-form-actions a,
+.app-body .app-form-actions a,
+.app-body .staff-section__head-actions a,
+.app-body .app-section__head-actions a,
+.app-body .dash-kpi a,
+.app-body .staff-pagination a,
+.app-body .app-pagination a,
+.app-body .staff-breadcrumb a,
+.app-body .app-breadcrumb a,
+.staff-body a.button,
+.staff-body .button,
+.staff-body a.btn,
+.staff-body button.button,
+.staff-body .staff-nav__link,
+.staff-body .staff-brand,
+.staff-body .staff-action-menu__item,
+.staff-body .staff-profile-dropdown__item,
+.staff-body .staff-calendar-day__list a,
+.staff-body .staff-calendar-day__more,
+.staff-body .staff-topbar__actions a,
+.staff-body .staff-filter-form__actions a,
+.staff-body .staff-form-actions a,
+.staff-body .staff-section__head-actions a,
+.staff-body .dash-kpi a,
+.staff-body .staff-pagination a,
+.staff-body .staff-breadcrumb a {
+  text-decoration: none;
+}
+
+.app-body a.button:hover,
+.app-body a.button:focus,
+.app-body a.button:active,
+.app-body .button:hover,
+.app-body .button:focus,
+.app-body .button:active,
+.app-body a.btn:hover,
+.app-body a.btn:focus,
+.app-body .staff-nav__link:hover,
+.app-body .app-nav__link:hover,
+.app-body .staff-nav__link:focus,
+.app-body .app-nav__link:focus,
+.app-body .staff-brand:hover,
+.app-body .app-brand:hover,
+.app-body .staff-action-menu__item:hover,
+.app-body .app-action-menu__item:hover,
+.app-body .staff-profile-dropdown__item:hover,
+.app-body .app-profile-dropdown__item:hover,
+.app-body .staff-calendar-day__list a:hover,
+.app-body .app-calendar-day__list a:hover,
+.app-body .staff-calendar-day__more:hover,
+.app-body .app-calendar-day__more:hover,
+.app-body .staff-topbar__actions a:hover,
+.app-body .app-topbar__actions a:hover,
+.app-body .staff-filter-form__actions a:hover,
+.app-body .app-filter-form__actions a:hover,
+.app-body .staff-form-actions a:hover,
+.app-body .app-form-actions a:hover,
+.app-body .dash-kpi a:hover,
+.app-body .staff-pagination a:hover,
+.app-body .app-pagination a:hover,
+.staff-body a.button:hover,
+.staff-body a.button:focus,
+.staff-body a.button:active,
+.staff-body .button:hover,
+.staff-body .button:focus,
+.staff-body .button:active,
+.staff-body a.btn:hover,
+.staff-body a.btn:focus,
+.staff-body .staff-nav__link:hover,
+.staff-body .staff-nav__link:focus,
+.staff-body .staff-brand:hover,
+.staff-body .staff-action-menu__item:hover,
+.staff-body .staff-profile-dropdown__item:hover,
+.staff-body .staff-calendar-day__list a:hover,
+.staff-body .staff-calendar-day__more:hover,
+.staff-body .staff-topbar__actions a:hover,
+.staff-body .staff-filter-form__actions a:hover,
+.staff-body .staff-form-actions a:hover,
+.staff-body .dash-kpi a:hover,
+.staff-body .staff-pagination a:hover {
+  text-decoration: none;
+}
+
+.app-body .staff-link,
+.app-body .app-link,
+.staff-body .staff-link {
+  text-decoration: none;
+}
+
+.app-body .staff-link:hover,
+.app-body .staff-link:focus-visible,
+.app-body .app-link:hover,
+.app-body .app-link:focus-visible,
+.staff-body .staff-link:hover,
+.staff-body .staff-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+.app-body .staff-wizard-client-change,
+.app-body .app-wizard-client-change,
+.staff-body .staff-wizard-client-change {
+  text-decoration: none;
+}
+
+.app-body .staff-wizard-client-change:hover,
+.app-body .app-wizard-client-change:hover,
+.staff-body .staff-wizard-client-change:hover {
+  text-decoration: underline;
+}
+
+.app-body .staff-topbar__title,
+.app-body .app-topbar__title,
+.app-body .staff-step-label,
+.app-body .app-step-label,
+.app-body .staff-section__head h2,
+.app-body .app-section__head h2,
+.app-body .staff-panel__head h2,
+.app-body .app-panel__head h2,
+.staff-body .staff-topbar__title,
+.staff-body .staff-step-label,
+.staff-body .staff-section__head h2,
+.staff-body .staff-panel__head h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+.app-body .staff-content p,
+.app-body .app-content p,
+.staff-body .staff-content p {
+  margin-bottom: 0;
+}
+
+.app-body .staff-content p + p,
+.app-body .app-content p + p,
+.staff-body .staff-content p + p {
+  margin-top: 0.75rem;
+}
+
+.app-body .staff-form input,
+.app-body .app-form input,
+.app-body .staff-form select,
+.app-body .app-form select,
+.app-body .staff-form textarea,
+.app-body .app-form textarea,
+.app-body .staff-filter-field input,
+.app-body .app-filter-field input,
+.app-body .staff-filter-field select,
+.app-body .app-filter-field select,
+.app-body .staff-search input,
+.app-body .app-search input,
+.staff-body .staff-form input,
+.staff-body .staff-form select,
+.staff-body .staff-form textarea,
+.staff-body .staff-filter-field input,
+.staff-body .staff-filter-field select,
+.staff-body .staff-search input {
+  appearance: none;
+  background-color: var(--surface-inset-strong);
+  border-color: var(--line);
+  color: var(--paper);
+  box-shadow: none;
+}
+
+.app-body .staff-form input:focus,
+.app-body .app-form input:focus,
+.app-body .staff-form select:focus,
+.app-body .app-form select:focus,
+.app-body .staff-form textarea:focus,
+.app-body .app-form textarea:focus,
+.app-body .staff-filter-field input:focus,
+.app-body .app-filter-field input:focus,
+.app-body .staff-filter-field select:focus,
+.app-body .app-filter-field select:focus,
+.app-body .staff-search input:focus,
+.app-body .app-search input:focus,
+.staff-body .staff-form input:focus,
+.staff-body .staff-form select:focus,
+.staff-body .staff-form textarea:focus,
+.staff-body .staff-filter-field input:focus,
+.staff-body .staff-filter-field select:focus,
+.staff-body .staff-search input:focus {
+  background-color: var(--surface-inset-strong);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  color: var(--paper);
+}
+
+.app-body .staff-table,
+.app-body .app-table,
+.staff-body .staff-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: inherit;
+  --bs-table-border-color: color-mix(in srgb, var(--paper-muted) 12%, transparent);
+  margin-bottom: 0;
+}
+
+.app-body .staff-table > :not(caption) > * > *,
+.app-body .app-table > :not(caption) > * > *,
+.staff-body .staff-table > :not(caption) > * > * {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.app-body .button,
+.app-body a.button,
+.staff-body .button,
+.staff-body a.button {
+  text-decoration: none;
+}
+
+.app-body .button.primary,
+.app-body a.button.primary,
+.staff-body .button.primary,
+.staff-body a.button.primary {
+  color: #fff;
+}
+
+.app-body .lang-btn,
+.app-body .theme-toggle,
+.app-body .staff-profile-trigger,
+.app-body .app-profile-trigger,
+.staff-body .lang-btn,
+.staff-body .theme-toggle,
+.staff-body .staff-profile-trigger {
+  text-decoration: none;
+}
+
+.app-body .staff-inline-form button.staff-link,
+.app-body .app-inline-form button.app-link,
+.staff-body .staff-inline-form button.staff-link {
+  text-decoration: none;
+}
+
+.app-body .staff-inline-form button.staff-link:hover,
+.app-body .app-inline-form button.app-link:hover,
+.staff-body .staff-inline-form button.staff-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Bootstrap form layout (opt-in via .staff-form--bootstrap) ──
+   grid.css defines .row as CSS grid; Bootstrap columns need flex rows. */
+
+.staff-form--bootstrap > .row,
+.app-form--bootstrap > .row {
+  display: flex;
+  flex-wrap: wrap;
+  grid-template-columns: unset;
+  gap: 0;
+  width: 100%;
+}
+
+.staff-form--bootstrap > .row > [class*="col"],
+.app-form--bootstrap > .row > [class*="col"] {
+  grid-column: unset;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.staff-form--bootstrap > .row > [class*="col"] > label,
+.app-form--bootstrap > .row > [class*="col"] > label {
+  display: block;
+  margin: 0;
+}
+
+.staff-form--bootstrap > .row > [class*="col"] > label:not(.staff-check) > span,
+.app-form--bootstrap > .row > [class*="col"] > label:not(.staff-check) > span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.staff-form--bootstrap > .row > [class*="col"] > label.staff-check,
+.app-form--bootstrap > .row > [class*="col"] > label.staff-check {
+  display: flex;
+}
+
+.staff-form--bootstrap > .row > [class*="col"] > .staff-muted,
+.app-form--bootstrap > .row > [class*="col"] > .staff-muted,
+.staff-form--bootstrap > .row > [class*="col"] > small,
+.app-form--bootstrap > .row > [class*="col"] > small {
+  margin-top: -4px;
+}
+
+@media (max-width: 900px) {
+  .staff-form--bootstrap > .row > [class*="col-"],
+  .app-form--bootstrap > .row > [class*="col-"] {
+    grid-column: unset;
+  }
+}

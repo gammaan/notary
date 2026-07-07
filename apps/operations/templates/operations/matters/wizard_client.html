@@ -1,0 +1,29 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "New matter" %} — {% trans "Step" %} {{ step_number }}{% endblock %}
+{% block extra_head %}{% include "operations/includes/staff_select2_head.html" %}{% endblock %}
+{% block content %}
+{% include "operations/includes/wizard_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">{% trans "Step 1 — Client" %}</p>
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.client.id_for_label }}"><span>{% trans "Client" %}</span></label>
+                {{ form.client }}
+            </div>
+        </div>
+        <p class="staff-muted">
+            {% url 'staff:client_create' as client_create_url %}
+            {% blocktrans %}
+            Don't see the client? <a href="{{ client_create_url }}">Add a new client</a> first.
+            {% endblocktrans %}
+        </p>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Continue to matter details" %} →</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block extra_js %}{% include "operations/includes/staff_select2_js.html" %}{% endblock %}

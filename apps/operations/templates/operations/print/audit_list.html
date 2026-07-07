@@ -1,0 +1,41 @@
+{% extends "operations/print/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Audit log" %}{% endblock %}
+{% block content %}
+{% trans "Activity log" as subtitle %}
+{% include "operations/print/list_header.html" %}
+{% if entries %}
+<table class="print-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans "When" %}</th>
+            <th>{% trans "User" %}</th>
+            <th>{% trans "Action" %}</th>
+            <th>{% trans "Entity" %}</th>
+            <th>{% trans "Detail" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ entry.created_at|date:"M j, Y g:i A" }}</td>
+            <td>{{ entry.user.get_full_name|default:entry.user.email|default:"—" }}</td>
+            <td>{{ entry.get_action_display }}</td>
+            <td>
+                {{ entry.get_entity_type_display }}: {{ entry.entity_label }}
+                {% if entry.matter %} · {{ entry.matter.reference_number }}{% endif %}
+            </td>
+            <td>{{ entry.detail|default:"—" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{% trans "No activity matches your filters." %}</p>
+{% endif %}
+<footer class="print-footer">
+    <p class="print-footer__note">{% trans "Audit log generated from the staff portal." %}</p>
+</footer>
+{% endblock %}

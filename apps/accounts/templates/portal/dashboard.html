@@ -1,0 +1,39 @@
+{% extends "core/base_public.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My matters" %} | Notaria Notary{% endblock %}
+{% block main_class %}main-inner{% endblock %}
+
+{% block content %}
+<section class="section cms-section">
+    <div class="cms-page" data-reveal>
+        <p class="eyebrow"><span class="eyebrow-line"></span>{% trans "Client portal" %}</p>
+        <h1>{% trans "Welcome," %} {{ portal_client.full_name }}</h1>
+        <p class="section-lede">{% trans "Track your notary matters, documents, and payment status." %}</p>
+
+        {% if matters %}
+        <div class="cms-grid cms-grid--posts">
+            {% for matter in matters %}
+            <article class="cms-card cms-card--post">
+                <div class="cms-card__top">
+                    <span class="cms-badge">{{ matter.get_status_display }}</span>
+                    <time>{{ matter.created_at|date:"M j, Y" }}</time>
+                </div>
+                <h2 class="cms-card__title">
+                    <a href="{% url 'portal:matter_detail' matter.uuid %}">{{ matter.title }}</a>
+                </h2>
+                <p class="cms-card__excerpt">{{ matter.reference_number }} · {{ matter.service_type.name }}</p>
+                <footer class="cms-card__footer">
+                    <a class="cms-card__link" href="{% url 'portal:matter_detail' matter.uuid %}">
+                        {% trans "View details" %}
+                    </a>
+                </footer>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="cms-empty">{% trans "You have no matters on file yet." %}</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

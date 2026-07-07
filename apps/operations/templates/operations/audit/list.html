@@ -1,0 +1,89 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Audit log" %}{% endblock %}
+{% block topbar_actions %}
+{% include "operations/includes/list_print_button.html" with print_url="staff:audit_log_print" %}
+{% endblock %}
+{% block content %}
+<form class="staff-filter-form" method="get">
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field staff-filter-field--grow">
+            <span>{% trans "Search" %}</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="{% trans 'Entity, detail, user, matter ref…' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "User" %}</span>
+            <select name="user" title="{% trans 'Filter by user' %}">
+                <option value="">{% trans "All users" %}</option>
+                {% for u in staff_users %}
+                <option value="{{ u.pk }}"{% if active_user == u.pk|stringformat:"s" %} selected{% endif %}>{{ u.get_full_name|default:u.email }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Action" %}</span>
+            <select name="action" title="{% trans 'Filter by action' %}">
+                <option value="">{% trans "All actions" %}</option>
+                {% for value, label in action_choices %}
+                <option value="{{ value }}"{% if active_action == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Entity" %}</span>
+            <select name="entity" title="{% trans 'Filter by entity type' %}">
+                <option value="">{% trans "All entities" %}</option>
+                {% for value, label in entity_types %}
+                <option value="{{ value }}"{% if active_entity == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field">
+            <span>{% trans "From date" %}</span>
+            <input type="date" name="date_from" value="{{ filters.date_from }}" title="{% trans 'Select start date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "To date" %}</span>
+            <input type="date" name="date_to" value="{{ filters.date_to }}" title="{% trans 'Select end date' %}">
+        </label>
+        {% include "operations/includes/filter_actions.html" with clear_url=clear_url %}
+    </div>
+</form>
+
+<div class="staff-panel">
+    {% if entries %}
+    <table class="staff-table staff-table--compact">
+        <thead>
+            <tr>
+                <th>{% trans "When" %}</th>
+                <th>{% trans "User" %}</th>
+                <th>{% trans "Action" %}</th>
+                <th>{% trans "Entity" %}</th>
+                <th>{% trans "Detail" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{ entry.created_at|date:"M j, Y g:i A" }}</td>
+                <td>{{ entry.user.get_full_name|default:entry.user.email|default:"—" }}</td>
+                <td>{{ entry.get_action_display }}</td>
+                <td>
+                    {{ entry.get_entity_type_display }}: {{ entry.entity_label }}
+                    {% if entry.matter %}
+                    · <a class="staff-link" href="{% url 'staff:matter_detail' entry.matter.uuid %}">{{ entry.matter.reference_number }}</a>
+                    {% endif %}
+                </td>
+                <td>{{ entry.detail|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "operations/includes/pagination.html" %}
+    {% else %}
+    <p class="staff-empty">{% trans "No activity matches your filters." %}</p>
+    {% endif %}
+</div>
+{% endblock %}

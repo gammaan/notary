@@ -1,0 +1,114 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Finances" %} — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-finance-stats">
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Income billed" %}</span><strong class="staff-amount--income">${{ total_income }}</strong></div>
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Income paid" %}</span><strong class="staff-amount--income">${{ total_paid }}</strong></div>
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Expenses" %}</span><strong class="staff-amount--expense">${{ total_expenses }}</strong></div>
+    <div class="staff-stat"><span class="staff-stat__label">{% trans "Net (paid)" %}</span><strong>${{ net_income }}</strong></div>
+</div>
+{% if matter_is_closed %}
+<p class="staff-message staff-message--info">{% trans "This matter is closed. Transactions are locked and new entries are disabled." %}</p>
+{% endif %}
+<div class="staff-grid-2">
+    {% if not matter_is_closed %}
+    <section class="staff-form-wrap">
+        <div class="staff-entry-tabs">
+            <a class="staff-entry-tabs__btn{% if entry_type == 'income' %} is-active{% endif %}" href="?type=income">
+                <i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> {% trans "Record income" %}
+            </a>
+            <a class="staff-entry-tabs__btn{% if entry_type == 'expense' %} is-active{% endif %}" href="?type=expense">
+                <i class="fa-solid fa-arrow-trend-down" aria-hidden="true"></i> {% trans "Record expense" %}
+            </a>
+        </div>
+        <p class="staff-step-label">
+            {% if entry_type == 'expense' %}{% trans "Step 3 — Record expense" %}{% else %}{% trans "Step 3 — Record income" %}{% endif %}
+        </p>
+        <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="entry_type" value="{{ entry_type }}">
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                    {{ form.status }}
+                </div>
+                <div class="col-12 col-md-6">
+                    <label for="{{ form.transaction_date.id_for_label }}"><span>{% trans "Date" %}</span></label>
+                    {{ form.transaction_date }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="{{ form.description.id_for_label }}"><span>{% trans "Description" %}</span></label>
+                    {{ form.description }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                    <label for="{{ form.amount.id_for_label }}"><span>{% trans "Amount" %}</span></label>
+                    {{ form.amount }}
+                </div>
+                <div class="col-12 col-sm-6">
+                    <label for="{{ form.currency.id_for_label }}"><span>{% trans "Currency" %}</span></label>
+                    {{ form.currency }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="{{ form.payment_method.id_for_label }}"><span>{% trans "Payment method" %}</span></label>
+                    {{ form.payment_method }}
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="{{ form.notes.id_for_label }}"><span>{% trans "Notes" %}</span></label>
+                    {{ form.notes }}
+                </div>
+            </div>
+            <button class="button primary" type="submit">
+                {% if entry_type == 'expense' %}{% trans "Record expense" %}{% else %}{% trans "Record income" %}{% endif %}
+            </button>
+        </form>
+    </section>
+    {% endif %}
+    <section class="staff-panel{% if matter_is_closed %} staff-panel--full{% endif %}">
+        <h4>{% trans "Transaction history" %}</h4>
+        {% if transactions %}
+        <table class="staff-table staff-table--compact">
+            <thead><tr><th>{% trans "Description" %}</th><th>{% trans "Type" %}</th><th>{% trans "Amount" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.description }}{% if matter_is_closed and t.is_locked %} <i class="fa-solid fa-lock staff-lock-icon" title="{% trans 'Locked' %}"></i>{% endif %}</td>
+                    <td>{{ t.get_transaction_type_display }}</td>
+                    <td class="{% if t.transaction_type == 'expense' %}staff-amount--expense{% else %}staff-amount--income{% endif %}">${{ t.amount }}</td>
+                    <td><span class="staff-badge">{{ t.get_status_display }}</span></td>
+                    <td class="staff-table__actions">
+                        {% if t.transaction_type == "income" %}
+                        <a class="staff-link" href="{% url 'staff:transaction_receipt' t.uuid %}" target="_blank" rel="noopener">{% trans "Receipt" %}</a>
+                        {% endif %}
+                        {% if not matter_is_closed %}
+                        <a class="staff-link" href="{% url 'staff:transaction_edit' t.uuid %}">{% trans "Edit" %}</a>
+                        {% if staff_can_delete %}
+                        <form method="post" action="{% url 'staff:transaction_action' t.uuid %}" class="staff-inline-form" onsubmit="return confirm('{% trans "Remove this transaction?" %}');">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="action" value="delete">
+                            <button class="staff-link staff-link--danger" type="submit">{% trans "Delete" %}</button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="staff-empty">{% trans "No transactions yet." %}</p>{% endif %}
+        <div class="staff-form-actions">
+            <a class="button primary" href="{% url 'staff:matter_complete' matter.uuid %}">{% trans "Continue to complete" %} →</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

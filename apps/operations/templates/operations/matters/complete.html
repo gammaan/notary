@@ -1,0 +1,37 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Complete" %} — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-panel">
+    <p class="staff-step-label">{% trans "Step 4 — Review & close" %}</p>
+    <h2>{% trans "Checklist" %}</h2>
+    <ul class="staff-checklist">
+        {% for step in workflow_steps %}
+        <li class="{% if step.done %}is-done{% endif %}">{{ step.label }} — {{ step.description }}</li>
+        {% endfor %}
+    </ul>
+
+    <dl class="staff-summary-list">
+        <div><dt>{% trans "Documents on file" %}</dt><dd>{{ document_count }}</dd></div>
+        <div><dt>{% trans "Pending income fees" %}</dt><dd>{{ pending_income }}</dd></div>
+        <div><dt>{% trans "Ready to complete" %}</dt><dd>{% if can_complete %}{% trans "Yes" %}{% else %}{% trans "No — settle all fees first" %}{% endif %}</dd></div>
+    </dl>
+
+    <div class="staff-form-actions">
+        {% if matter_is_closed %}
+        <form method="post" style="display:inline">{% csrf_token %}
+            <button class="button primary" name="action" value="reopen" type="submit">{% trans "Reopen matter" %}</button>
+        </form>
+        {% else %}
+        <form method="post" style="display:inline">{% csrf_token %}
+            <button class="button primary" name="action" value="complete" type="submit"{% if not can_complete %} disabled title="{% trans 'Settle all income fees first' %}"{% endif %}>{% trans "Mark as completed" %}</button>
+        </form>
+        <form method="post" style="display:inline">{% csrf_token %}
+            <button class="button ghost" name="action" value="awaiting_payment" type="submit">{% trans "Set awaiting payment" %}</button>
+        </form>
+        {% endif %}
+        <a class="button ghost" href="{% url 'staff:matter_detail' matter.uuid %}">{% trans "Back to matter" %}</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Edit document" %} — {{ matter.reference_number }}{% endblock %}
+{% block content %}
+<div class="staff-form-wrap">
+    <p class="staff-step-label">{{ matter.reference_number }} · {{ document.title }}</p>
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.title.id_for_label }}"><span>{% trans "Title" %}</span></label>
+                {{ form.title }}
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="{{ form.document_type.id_for_label }}"><span>{% trans "Document type" %}</span></label>
+                {{ form.document_type }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.file.id_for_label }}"><span>{% trans "File" %}</span></label>
+                {{ form.file }}
+                {% if document.file %}<small class="staff-muted">{% trans "Leave blank to keep current file." %}</small>{% endif %}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                {{ form.status }}
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="{{ form.notes.id_for_label }}"><span>{% trans "Notes" %}</span></label>
+                {{ form.notes }}
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Save document" %}</button>
+            <a class="button ghost" href="{% url 'staff:matter_detail' matter.uuid %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

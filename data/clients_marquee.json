@@ -1,0 +1,53 @@
+{
+  "eyebrow": "Our clients",
+  "headline_prefix": "Trusted by over",
+  "client_count": "500+",
+  "headline_suffix": "clients.",
+  "subtext": "Our clients are our top priority, and we are committed to providing them with the highest level of service.",
+  "items": [
+    "Individuals & families",
+    "Diaspora clients",
+    "Local businesses",
+    "Property owners",
+    "Banks & lenders",
+    "Legal firms",
+    "NGOs & institutions",
+    "Immigration applicants"
+  ],
+  "translations": {
+    "so": {
+      "eyebrow": "Macaamiilkeena",
+      "headline_prefix": "Laga aaminay in ka badan",
+      "client_count": "500+",
+      "headline_suffix": "macaamiil.",
+      "subtext": "Macaamiisheena waa mudnaanta koowaad, waxaanan ka go'an inaan siino adeeg heer sare ah.",
+      "items": [
+        "Shakhsiyaad & qoysas",
+        "Macaamiil qurbajoog ah",
+        "Ganacsiyada maxalliga ah",
+        "Milkiilayaasha guryaha",
+        "Bangiyada & deyn-bixiyeyaasha",
+        "Xafiisyada sharciga",
+        "NGOs & hay'ado",
+        "Codsadayaasha socdaalka"
+      ]
+    },
+    "ar": {
+      "eyebrow": "عملاؤنا",
+      "headline_prefix": "موثوق من قبل أكثر من",
+      "client_count": "500+",
+      "headline_suffix": "عميل.",
+      "subtext": "عملاؤنا هم أولويتنا، ونحن ملتزمون بتقديم أعلى مستوى من الخدمة لهم.",
+      "items": [
+        "أفراد وعائلات",
+        "عملاء في الشتات",
+        "شركات محلية",
+        "مالكو العقارات",
+        "بنوك ومقرضون",
+        "مكاتب قانونية",
+        "منظمات ومؤسسات",
+        "طالبو الهجرة"
+      ]
+    }
+  }
+}

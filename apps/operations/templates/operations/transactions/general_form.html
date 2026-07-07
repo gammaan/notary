@@ -1,0 +1,61 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% if entry_type == "income" %}{% trans "Record income" %}{% else %}{% trans "Record expense" %}{% endif %}{% endblock %}
+{% block topbar_actions %}
+<a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Back to finances" %}</a>
+{% endblock %}
+{% block content %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">
+        {% if entry_type == "income" %}{% trans "Other income" %}{% else %}{% trans "General expense" %}{% endif %}
+    </p>
+    <p class="staff-muted staff-form-intro">{% trans "Record office expenses (rent, utilities, salary, etc.) or income from sources outside matters." %}</p>
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="entry_type" value="{{ entry_type }}">
+        <div class="row g-3">
+            <div class="col-12 col-md-3">
+                <label for="{{ form.category.id_for_label }}"><span>{% trans "Category" %}</span></label>
+                {{ form.category }}
+            </div>
+            <div class="col-12 col-md-7">
+                <label for="{{ form.description.id_for_label }}"><span>{% trans "Description" %}</span></label>
+                {{ form.description }}
+            </div>
+            <div class="col-12 col-md-2">
+                <label for="{{ form.transaction_date.id_for_label }}"><span>{% trans "Date" %}</span></label>
+                {{ form.transaction_date }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.amount.id_for_label }}"><span>{% trans "Amount" %}</span></label>
+                {{ form.amount }}
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.currency.id_for_label }}"><span>{% trans "Currency" %}</span></label>
+                {{ form.currency }}
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.payment_method.id_for_label }}"><span>{% trans "Payment method" %}</span></label>
+                {{ form.payment_method }}
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                {{ form.status }}
+            </div>
+        </div>
+        
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.notes.id_for_label }}"><span>{% trans "Notes" %}</span></label>
+                {{ form.notes }}
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Record entry" %}</button>
+            <a class="button ghost" href="{% url 'staff:transaction_list' %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

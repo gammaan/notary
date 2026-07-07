@@ -1,0 +1,99 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Calendar" %}{% endblock %}
+{% block topbar_actions %}
+<a class="button ghost" href="?week={{ prev_week }}{% if focus_date %}&amp;date={{ focus_date|date:'Y-m-d' }}{% endif %}">
+    <i class="fa-solid fa-chevron-left" aria-hidden="true"></i> {% trans "Previous" %}
+</a>
+<a class="button ghost" href="{% url 'staff:calendar' %}">{% trans "This week" %}</a>
+<a class="button ghost" href="?week={{ next_week }}{% if focus_date %}&amp;date={{ focus_date|date:'Y-m-d' }}{% endif %}">
+    {% trans "Next" %} <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+</a>
+{% endblock %}
+{% block content %}
+<header class="staff-calendar-head">
+    <div class="staff-calendar-head__copy">
+        <p class="staff-step-label">{% trans "Week of" %} {{ week_start|date:"M j" }} – {{ week_end|date:"M j, Y" }}</p>
+        {% if focus_date %}
+        <p class="staff-calendar-head__focus">
+            {% blocktrans with day=focus_date|date:"l, M j" %}Showing full schedule for {{ day }}{% endblocktrans %}
+            <a class="staff-link" href="?week={{ week_start|date:'Y-m-d' }}">{% trans "Back to week view" %}</a>
+        </p>
+        {% endif %}
+    </div>
+    <form class="staff-filter-form staff-calendar-filter" method="get">
+        <div class="staff-filter-form__row">
+            <label class="staff-filter-field">
+                <span>{% trans "Jump to date" %}</span>
+                <input type="date" name="date" value="{% if focus_date %}{{ focus_date|date:'Y-m-d' }}{% endif %}">
+            </label>
+            <div class="staff-filter-form__actions">
+                <button class="button primary" type="submit">{% trans "Show day" %}</button>
+                {% if focus_date %}
+                <a class="button ghost" href="?week={{ week_start|date:'Y-m-d' }}">{% trans "Clear" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</header>
+
+<div class="staff-calendar-grid">
+    {% for row in calendar_rows %}
+    <div class="staff-calendar-row staff-calendar-row--{{ row.variant }}">
+        {% for day in row.days %}
+        <section
+            class="staff-calendar-day{% if day.is_today %} is-today{% endif %}{% if day.is_off_day %} is-off-day{% endif %}{% if day.is_expanded %} is-expanded{% endif %}{% if focus_date and day.date == focus_date %} is-focused{% endif %}"
+            id="day-{{ day.date|date:'Y-m-d' }}"
+        >
+            <header class="staff-calendar-day__head">
+                <div class="staff-calendar-day__title">
+                    <strong>{{ day.date|date:"D" }}</strong>
+                    <span>{{ day.date|date:"M j" }}</span>
+                </div>
+                {% if day.is_off_day %}
+                <span class="staff-calendar-day__tag">{% trans "Non-working day" %}</span>
+                {% elif day.matter_count %}
+                <span class="staff-calendar-day__count">{{ day.matter_count }}</span>
+                {% endif %}
+            </header>
+
+            {% if day.preview %}
+            <ul class="staff-calendar-day__list">
+                {% for m in day.preview %}
+                <li>
+                    <a href="{% url 'staff:matter_detail' m.uuid %}">
+                        <div class="staff-calendar-item__top">
+                            <time datetime="{{ m.scheduled_at|date:'c' }}">{{ m.scheduled_at|time:"g:i A" }}</time>
+                            <span class="staff-badge staff-badge--{{ m.status }}">{{ m.get_status_display }}</span>
+                        </div>
+                        <strong class="staff-calendar-item__title">{{ m.title }}</strong>
+                        <small>{{ m.client.full_name }} · {{ m.service_type.name }}</small>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% if day.overflow_count %}
+            <footer class="staff-calendar-day__footer">
+                <a class="staff-calendar-day__more" href="?week={{ week_start|date:'Y-m-d' }}&amp;date={{ day.date|date:'Y-m-d' }}">
+                    {% blocktrans with count=day.overflow_count %}See {{ count }} more{% endblocktrans %}
+                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </footer>
+            {% elif day.is_expanded and day.matter_count %}
+            <footer class="staff-calendar-day__footer">
+                <a class="staff-calendar-day__more staff-calendar-day__more--muted" href="?week={{ week_start|date:'Y-m-d' }}">
+                    {% trans "Show less" %}
+                </a>
+            </footer>
+            {% endif %}
+            {% else %}
+            <p class="staff-empty staff-calendar-day__empty">
+                {% if day.is_off_day %}{% trans "Office closed" %}{% else %}{% trans "No appointments" %}{% endif %}
+            </p>
+            {% endif %}
+        </section>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

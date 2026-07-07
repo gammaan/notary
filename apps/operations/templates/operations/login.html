@@ -1,0 +1,37 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Staff sign in" %}{% endblock %}
+
+{% block content %}
+<div class="staff-login">
+    <div class="staff-login__intro">
+        <p class="eyebrow"><span class="eyebrow-line"></span> {% trans "Staff portal" %}</p>
+        <h1>{% trans "Sign in to" %} <em>{% trans "operations" %}</em></h1>
+        <p>{% trans "Manage clients, matters, documents, and finances. Staff accounts only." %}</p>
+    </div>
+    <div class="staff-form-wrap">
+        <form class="staff-form staff-form--bootstrap" method="post" novalidate>
+            {% csrf_token %}
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+            {% if form.non_field_errors %}
+            <div class="auth-form__errors">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>
+            {% endif %}
+            <div class="row g-3">
+                <div class="col-12">
+                    <label for="{{ form.username.id_for_label }}"><span>{% trans "Email" %}</span></label>
+                    {{ form.username }}
+                </div>
+                <div class="col-12">
+                    <label for="{{ form.password.id_for_label }}"><span>{% trans "Password" %}</span></label>
+                    {{ form.password }}
+                </div>
+            </div>
+            <button class="button primary" type="submit">{% trans "Sign in" %}</button>
+        </form>
+        <p class="staff-login__back"><a href="{% url 'home' %}">← {% trans "Back to public site" %}</a></p>
+    </div>
+</div>
+{% endblock %}

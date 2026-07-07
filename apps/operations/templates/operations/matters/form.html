@@ -1,0 +1,60 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "Edit matter" %}{% endblock %}
+{% block extra_head %}{% include "operations/includes/staff_select2_head.html" %}{% endblock %}
+{% block content %}
+{% with matter=object %}
+{% include "operations/includes/matter_stepper.html" %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <p class="staff-step-label">{% trans "Step 1 — Setup" %}</p>
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label for="{{ form.client.id_for_label }}"><span>{% trans "Client" %}</span></label>
+                {{ form.client }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.service_type.id_for_label }}"><span>{% trans "Service" %}</span></label>
+                {{ form.service_type }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.title.id_for_label }}"><span>{% trans "Title" %}</span></label>
+                {{ form.title }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.description.id_for_label }}"><span>{% trans "Description" %}</span></label>
+                {{ form.description }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label for="{{ form.status.id_for_label }}"><span>{% trans "Status" %}</span></label>
+                {{ form.status }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.scheduled_at.id_for_label }}"><span>{% trans "Scheduled for" %}</span></label>
+                {{ form.scheduled_at }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.assigned_to.id_for_label }}"><span>{% trans "Assigned to" %}</span></label>
+                {{ form.assigned_to }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.notes.id_for_label }}"><span>{% trans "Notes" %}</span></label>
+                {{ form.notes }}
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Save & continue" %}</button>
+            <a class="button ghost" href="{% url 'staff:matter_detail' object.uuid %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endwith %}
+{% endblock %}
+{% block extra_js %}{% include "operations/includes/staff_select2_js.html" %}{% endblock %}

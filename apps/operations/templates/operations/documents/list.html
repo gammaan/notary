@@ -1,0 +1,61 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "All documents" %}{% endblock %}
+{% block content %}
+<form class="staff-filter-form" method="get">
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field staff-filter-field--grow">
+            <span>{% trans "Search" %}</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="{% trans 'Title, client, matter ref…' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Matter" %}</span>
+            <input type="text" name="matter" value="{{ filters.matter }}" placeholder="{% trans 'e.g. MAT-2026-0001' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Status" %}</span>
+            <select name="status" title="{% trans 'Filter by status' %}">
+                <option value="">{% trans "All statuses" %}</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}"{% if active_status == value %} selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field">
+            <span>{% trans "From date" %}</span>
+            <input type="date" name="date_from" value="{{ filters.date_from }}" placeholder="{% trans 'Select start date' %}" title="{% trans 'Select start date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "To date" %}</span>
+            <input type="date" name="date_to" value="{{ filters.date_to }}" placeholder="{% trans 'Select end date' %}" title="{% trans 'Select end date' %}">
+        </label>
+        <div class="staff-filter-form__actions">
+            <button class="button primary button--compact" type="submit">Filter</button>
+            <a class="button ghost button--compact" href="{% url 'staff:document_list' %}">Clear</a>
+        </div>
+    </div>
+</form>
+
+<div class="staff-panel">
+    <table class="staff-table">
+        <thead><tr><th>{% trans "Title" %}</th><th>{% trans "Matter" %}</th><th>{% trans "Client" %}</th><th>{% trans "Status" %}</th><th>{% trans "Uploaded" %}</th><th></th></tr></thead>
+        <tbody>
+            {% for d in documents %}
+            <tr>
+                <td><strong>{{ d.title }}</strong>{% if d.document_type %}<br><span class="staff-table__sub">{{ d.document_type }}</span>{% endif %}</td>
+                <td><a class="staff-link" href="{% url 'staff:matter_detail' d.matter.uuid %}">{{ d.matter.reference_number }}</a></td>
+                <td>{{ d.matter.client.full_name }}</td>
+                <td><span class="staff-badge">{{ d.get_status_display }}</span></td>
+                <td>{{ d.created_at|date:"M j, Y" }}</td>
+                <td><a class="staff-link" href="{% url 'staff:matter_detail' d.matter.uuid %}">{% trans "Open" %}</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="staff-empty">{% trans "No documents match your filters." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% include "operations/includes/pagination.html" %}
+</div>
+{% endblock %}

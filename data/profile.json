@@ -1,0 +1,106 @@
+{
+  "name": "Notaria Abukar",
+  "honorific": "Mr.",
+  "title": "Licensed Notary Public",
+  "headline": "Dedicated to clear, lawful, and confidential notarial practice.",
+  "initials": "AH",
+  "years_experience": 15,
+  "documents_notarized": "5,000+",
+  "languages": ["English", "Somali", "Arabic"],
+  "summary": "Notaria Abukar is a registered notary public with more than fifteen years of experience serving individuals, families, and businesses across Mogadishu. He is known for explaining requirements in plain language, maintaining meticulous records, and treating every document with the confidentiality it deserves.",
+  "bio": [
+    "After qualifying as a notary public, Notaria built his practice around a simple principle: clients should always know what happens next. From affidavits and powers of attorney to property deeds and commercial contracts, he guides people through each step before they sign.",
+    "His office maintains a secure journal of every notarial act, follows professional standards for identity verification, and keeps clear fee and timeline policies so there are no surprises on appointment day.",
+    "Notaria regularly assists diaspora clients, local businesses, and property owners who need documents prepared correctly the first time — whether for court, immigration, banking, or everyday personal matters."
+  ],
+  "quote": "Every signature should be understood, every record should be accurate, and every client should leave with confidence.",
+  "credentials": [
+    {
+      "title": "Licensed Notary Public",
+      "detail": "Registered with the competent authority in Somalia and bound by professional conduct standards."
+    },
+    {
+      "title": "Official notarial journal",
+      "detail": "Maintains complete records of every act as required for audit and legal proof."
+    },
+    {
+      "title": "Identity verification",
+      "detail": "Follows strict ID checks and witness procedures for every appointment."
+    }
+  ],
+  "education": [
+    {
+      "title": "Legal studies & notarial practice",
+      "detail": "Formal training in document law, witnessing procedures, and record-keeping."
+    },
+    {
+      "title": "Continuing professional development",
+      "detail": "Regular updates on real estate, commercial, and cross-border documentation standards."
+    }
+  ],
+  "specializations": [
+    "Affidavits & statutory declarations",
+    "Powers of attorney",
+    "Real estate deeds & leases",
+    "Business contracts & resolutions",
+    "Certified copies & identity records"
+  ],
+  "milestones": [
+    { "year": "2025", "title": "Licensed as notary public" },
+    { "year": "2025", "title": "Opened Notaria Notary office in Hamar Weyne" },
+    { "year": "2025", "title": "Expanded business & property document services" },
+    { "year": "2026", "title": "1,000+ documents notarized for local & diaspora clients" }
+  ],
+  "memberships": [
+    "Professional notary association (Somalia)",
+    "Local business chamber — legal services committee"
+  ],
+  "translations": {
+    "so": {
+      "title": "Nootaayo Dadweyne oo Ruqsad Haysta",
+      "headline": "U heellan dhaqanka notaayada ee cad, sharciga ah, iyo qarsoodiga ah.",
+      "summary": "Notaria Abukar waa notaayo dadweyne oo diiwaangashan oo leh in ka badan shan iyo toban sano oo khibrad ah, isagoo u adeega shakhsiyaadka, qoysaska, iyo ganacsiyada Muqdisho.",
+      "bio": [
+        "Ka dib markii uu noqday notaayo dadweyne, Notaria wuxuu dhisay dhaqankiisa mabaadi'dan fudud: macaamiishu waa inay had iyo jeer ogaadaan waxa xiga.",
+        "Xafiiskiisu wuxuu hayaa diiwaan ammaan ah oo dhamaystiran, wuxuu raacaa heerarka aqoonsi-xaqiijinta, wuxuuna hayaa siyaasado cad oo ku saabsan khidmadaha iyo waqtiga.",
+        "Notaria si joogto ah ayuu u caawiyaa macaamiisha qurbajoogta ah, ganacsiyada maxalliga ah, iyo milkiilayaasha guryaha."
+      ],
+      "quote": "Saxiix kasta waa in la fahmaa, diiwaan kasta waa inuu sax yahay, macmiil kastana waa inuu kalsooni la baxo.",
+      "credentials": [
+        { "title": "Nootaayo Dadweyne oo Ruqsad Haysta", "detail": "Diiwaangashan hay'adda mas'uulka ah ee Soomaaliya." },
+        { "title": "Diiwaanka rasmiga ah ee notaayada", "detail": "Diiwaangelin buuxda oo dhammaan ficillada notaayada ah." },
+        { "title": "Xaqiijinta aqoonsiga", "detail": "Hubinta aqoonsiga adag iyo nidaamyada markhaatiga." }
+      ],
+      "specializations": [
+        "Dhaar-caddeynno & bayaanno sharci",
+        "Wakiilasho sharci",
+        "Heshiisyada guryaha & kirada",
+        "Qandaraasyada ganacsiga",
+        "Nuqullo la caddeeyey & diiwaannada aqoonsiga"
+      ]
+    },
+    "ar": {
+      "title": "كاتب عدل مرخص",
+      "headline": "ملتزم بممارسة التوثيق الواضحة وال lawful والسرية.",
+      "summary": "أحمد حسن محمد كاتب عدل مرخص يمتلك أكثر من خمس عشرة سنة من الخبرة في خدمة الأفراد والعائلات والشركات في مقديشو.",
+      "bio": [
+        "بعد حصوله على ترخيص كاتب عدل، بنى أحمد ممارسته على مبدأ بسيط: يجب أن يعرف العملاء دائماً ما الذي يلي.",
+        "يحتفظ مكتبه بسجل آمن لكل عمل توثيقي ويتبع معايير صارمة للتحقق من الهوية.",
+        "يساعد أحمد بانتظام العملاء في الم diaspora والشركات المحلية ومالكي العقارات."
+      ],
+      "quote": "يجب أن يُفهم كل توقيع، وأن يكون كل سجل دقيقاً، وأن يغادر كل عميل بثقة.",
+      "credentials": [
+        { "title": "كاتب عدل مرخص", "detail": "مسجل لدى السلطة المختصة في الصومال." },
+        { "title": "السجل العدلي الرسمي", "detail": "سجلات كاملة لكل عمل توثيقي." },
+        { "title": "التحقق من الهوية", "detail": "إجراءات صارمة للتحقق من الهوية والشهود." }
+      ],
+      "specializations": [
+        "إفادات خطية وتصريحات",
+        "توكيل رسمي",
+        "صكوك عقارية وعقود إيجار",
+        "عقود تجارية",
+        "نسخ مصدقة وسجلات الهوية"
+      ]
+    }
+  }
+}

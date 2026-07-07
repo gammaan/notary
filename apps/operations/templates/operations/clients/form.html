@@ -1,0 +1,58 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% if object %}{% trans "Edit client" %}{% else %}{% trans "New client" %}{% endif %}{% endblock %}
+{% block content %}
+<div class="staff-form-wrap staff-form-wrap--wide">
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12 col-md-8">
+                <label for="{{ form.full_name.id_for_label }}"><span>{% trans "Full name" %}</span></label>
+                {{ form.full_name }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.sex.id_for_label }}"><span>{% trans "Sex" %}</span></label>
+                {{ form.sex }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label for="{{ form.email.id_for_label }}"><span>{% trans "Email" %}</span></label>
+                {{ form.email }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.phone.id_for_label }}"><span>{% trans "Phone" %}</span></label>
+                {{ form.phone }}
+            </div>
+            <div class="col-12 col-md-4">
+                <label for="{{ form.id_number.id_for_label }}"><span>{% trans "ID / passport" %}</span></label>
+                {{ form.id_number }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.address.id_for_label }}"><span>{% trans "Address" %}</span></label>
+                {{ form.address }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="{{ form.notes.id_for_label }}"><span>{% trans "Internal notes" %}</span></label>
+                {{ form.notes }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="staff-check staff-check--block">
+                    {{ form.is_active }}
+                    <span>{% trans "Active client" %}</span>
+                </label>
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Save client" %}</button>
+            <a class="button ghost" href="{% url 'staff:client_list' %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

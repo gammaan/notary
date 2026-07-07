@@ -1,0 +1,31 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+{% block page_title %}{% trans "My profile" %}{% endblock %}
+{% block content %}
+<div class="staff-form-wrap">
+    <p class="staff-step-label">{% trans "Account" %}</p>
+    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.first_name.id_for_label }}"><span>{% trans "First name" %}</span></label>
+                {{ form.first_name }}
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="{{ form.last_name.id_for_label }}"><span>{% trans "Last name" %}</span></label>
+                {{ form.last_name }}
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label for="{{ form.phone.id_for_label }}"><span>{% trans "Phone" %}</span></label>
+                {{ form.phone }}
+            </div>
+        </div>
+        <div class="staff-form-actions">
+            <button class="button primary" type="submit">{% trans "Save profile" %}</button>
+            <a class="button ghost" href="{% url 'staff:dashboard' %}">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

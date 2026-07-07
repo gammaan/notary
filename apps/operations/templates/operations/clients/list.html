@@ -1,0 +1,70 @@
+{% extends "core/base_admin.html" %}
+{% load i18n %}
+
+{% block page_title %}{% trans "Clients" %}{% endblock %}
+{% block topbar_actions %}
+{% include "operations/includes/list_print_button.html" with print_url="staff:client_list_print" %}
+<a class="button primary" href="{% url 'staff:client_create' %}">{% trans "Add client" %}</a>
+{% endblock %}
+
+{% block content %}
+<form class="staff-filter-form" method="get">
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field staff-filter-field--grow">
+            <span>{% trans "Search" %}</span>
+            <input type="search" name="q" value="{{ filters.q }}" placeholder="{% trans 'Name, email, phone, ID…' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Active" %}</span>
+            <select name="active" title="{% trans 'Filter by active status' %}">
+                <option value="">{% trans "All clients" %}</option>
+                <option value="yes"{% if filters.active == "yes" %} selected{% endif %}>{% trans "Active only" %}</option>
+                <option value="no"{% if filters.active == "no" %} selected{% endif %}>{% trans "Inactive only" %}</option>
+            </select>
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Has matters" %}</span>
+            <select name="has_matters" title="{% trans 'Filter by matter count' %}">
+                <option value="">{% trans "Any" %}</option>
+                <option value="yes"{% if filters.has_matters == "yes" %} selected{% endif %}>{% trans "With matters" %}</option>
+                <option value="no"{% if filters.has_matters == "no" %} selected{% endif %}>{% trans "No matters" %}</option>
+            </select>
+        </label>
+    </div>
+    <div class="staff-filter-form__row">
+        <label class="staff-filter-field">
+            <span>{% trans "Added from" %}</span>
+            <input type="date" name="date_from" value="{{ filters.date_from }}" title="{% trans 'Select start date' %}">
+        </label>
+        <label class="staff-filter-field">
+            <span>{% trans "Added to" %}</span>
+            <input type="date" name="date_to" value="{{ filters.date_to }}" title="{% trans 'Select end date' %}">
+        </label>
+        {% include "operations/includes/filter_actions.html" with clear_url=clear_url %}
+    </div>
+</form>
+
+<div class="staff-panel">
+    <table class="staff-table">
+        <thead>
+            <tr><th>{% trans "Name" %}</th><th>{% trans "Phone" %}</th><th>{% trans "Email" %}</th><th>{% trans "Status" %}</th><th>{% trans "Matters" %}</th><th>{% trans "Added" %}</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td><a class="staff-link" href="{% url 'staff:client_detail' client.uuid %}"><strong>{{ client.full_name }}</strong></a></td>
+                <td>{{ client.phone|default:"—" }}</td>
+                <td>{{ client.email|default:"—" }}</td>
+                <td>{% if client.is_active %}<span class="staff-badge staff-badge--completed">{% trans "Active" %}</span>{% else %}<span class="staff-badge">{% trans "Inactive" %}</span>{% endif %}</td>
+                <td>{{ client.matter_count }}</td>
+                <td>{{ client.created_at|date:"M j, Y" }}</td>
+                <td><a class="staff-link" href="{% url 'staff:client_edit' client.uuid %}">{% trans "Edit" %}</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="staff-empty">{% trans "No clients match your filters." %}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include "operations/includes/pagination.html" %}
+{% endblock %}

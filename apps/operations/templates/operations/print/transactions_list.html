@@ -1,0 +1,56 @@
+{% extends "operations/print/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Finances" %}{% endblock %}
+{% block content %}
+{% trans "Financial transactions" as subtitle %}
+{% include "operations/print/list_header.html" %}
+<section class="print-block">
+    <div class="print-stats-row">
+        <div class="print-stat">
+            <p class="print-stat__label">{% trans "Paid income" %}</p>
+            <p class="print-stat__value">${{ income_paid }}</p>
+        </div>
+        <div class="print-stat">
+            <p class="print-stat__label">{% trans "Paid expenses" %}</p>
+            <p class="print-stat__value">${{ expenses_paid }}</p>
+        </div>
+        <div class="print-stat">
+            <p class="print-stat__label">{% trans "Net" %}</p>
+            <p class="print-stat__value">${{ net }}</p>
+        </div>
+    </div>
+</section>
+{% if transactions %}
+<table class="print-table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Description" %}</th>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "Source" %}</th>
+            <th>{% trans "Amount" %}</th>
+            <th>{% trans "Status" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in transactions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ t.transaction_date|date:"M j, Y" }}</td>
+            <td>{{ t.description }}{% if t.category %}<br><small>{{ t.get_category_display }}</small>{% endif %}</td>
+            <td>{{ t.get_transaction_type_display }}</td>
+            <td>{% if t.matter %}{{ t.matter.reference_number }} · {{ t.matter.client.full_name }}{% else %}{% trans "General" %}{% endif %}</td>
+            <td>${{ t.amount }}</td>
+            <td>{{ t.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{% trans "No transactions match your filters." %}</p>
+{% endif %}
+<footer class="print-footer">
+    <p class="print-footer__note">{% trans "Financial report generated from the staff portal." %}</p>
+</footer>
+{% endblock %}
