@@ -2,30 +2,131 @@
 {% load i18n %}
 {% block page_title %}{% trans "My profile" %}{% endblock %}
 {% block content %}
-<div class="staff-form-wrap">
-    <p class="staff-step-label">{% trans "Account" %}</p>
-    <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" novalidate>
-        {% csrf_token %}
-        <div class="row g-3">
-            <div class="col-12 col-md-6">
-                <label for="{{ form.first_name.id_for_label }}"><span>{% trans "First name" %}</span></label>
-                {{ form.first_name }}
-            </div>
-            <div class="col-12 col-md-6">
-                <label for="{{ form.last_name.id_for_label }}"><span>{% trans "Last name" %}</span></label>
-                {{ form.last_name }}
+<div class="staff-profile-page">
+    <header class="staff-profile-hero">
+        <div class="staff-profile-hero__avatar-wrap">
+            {% if user.avatar %}
+            <img class="staff-profile-hero__avatar staff-profile-hero__avatar--photo"
+                 src="{{ user.avatar.url }}"
+                 alt="{% trans 'Profile photo' %}"
+                 data-profile-avatar-preview>
+            {% else %}
+            <span class="staff-profile-hero__avatar" data-profile-avatar-preview aria-hidden="true">{{ user.get_initials }}</span>
+            {% endif %}
+        </div>
+        <div class="staff-profile-hero__meta">
+            <p class="staff-step-label">{% trans "Staff profile" %}</p>
+            <h2 class="staff-profile-hero__name">{{ user.get_full_name|default:user.email }}</h2>
+            <p class="staff-muted staff-profile-hero__email">{{ user.email }}</p>
+            <div class="staff-profile-hero__tags">
+                <span class="staff-badge">{{ user.get_role_display }}</span>
+                <span class="staff-badge staff-badge--muted">{% trans "Member since" %} {{ user.date_joined|date:"M Y" }}</span>
             </div>
         </div>
-        <div class="row g-3">
-            <div class="col-12 col-md-6">
-                <label for="{{ form.phone.id_for_label }}"><span>{% trans "Phone" %}</span></label>
-                {{ form.phone }}
+    </header>
+
+    <div class="staff-stats staff-stats--profile">
+        {% for stat in profile_stats %}
+        <div class="staff-stat staff-stat--profile">
+            <span class="staff-stat__label"><i class="fa-solid {{ stat.icon }}" aria-hidden="true"></i> {{ stat.label }}</span>
+            <strong>{{ stat.value }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="staff-grid-2 staff-grid-2--profile">
+        <section class="staff-panel">
+            <div class="staff-section__head">
+                <h2>{% trans "Personal details" %}</h2>
             </div>
-        </div>
-        <div class="staff-form-actions">
-            <button class="button primary" type="submit">{% trans "Save profile" %}</button>
-            <a class="button ghost" href="{% url 'staff:dashboard' %}">{% trans "Cancel" %}</a>
-        </div>
-    </form>
+            <form class="staff-form staff-form--compact staff-form--bootstrap" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="{{ form.avatar.id_for_label }}"><span>{% trans "Profile photo" %}</span></label>
+                        {{ form.avatar }}
+                    </div>
+                </div>
+                {% if form.clear_avatar %}
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="staff-check staff-check--block">
+                            {{ form.clear_avatar }}
+                            <span>{{ form.clear_avatar.label }}</span>
+                        </label>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.first_name.id_for_label }}"><span>{% trans "First name" %}</span></label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.last_name.id_for_label }}"><span>{% trans "Last name" %}</span></label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="{{ form.phone.id_for_label }}"><span>{% trans "Phone" %}</span></label>
+                        {{ form.phone }}
+                    </div>
+                </div>
+                <div class="staff-form-actions">
+                    <button class="button primary" type="submit">{% trans "Save profile" %}</button>
+                    <a class="button ghost" href="{% url 'staff:dashboard' %}">{% trans "Cancel" %}</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="staff-panel">
+            <div class="staff-section__head">
+                <h2>{% trans "Account" %}</h2>
+            </div>
+            <dl class="staff-dl staff-dl--profile">
+                <div>
+                    <dt>{% trans "Email" %}</dt>
+                    <dd>{{ user.email }}</dd>
+                </div>
+                <div>
+                    <dt>{% trans "Role" %}</dt>
+                    <dd>{{ user.get_role_display }}</dd>
+                </div>
+                <div>
+                    <dt>{% trans "Last sign-in" %}</dt>
+                    <dd>{% if user.last_login %}{{ user.last_login|date:"M j, Y g:i A" }}{% else %}{% trans "Not yet" %}{% endif %}</dd>
+                </div>
+                <div>
+                    <dt>{% trans "Joined" %}</dt>
+                    <dd>{{ user.date_joined|date:"M j, Y" }}</dd>
+                </div>
+            </dl>
+            <p class="staff-muted staff-profile-note">{% trans "Your email and role are managed by an administrator." %}</p>
+        </section>
+    </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script>
+(function () {
+  var input = document.getElementById("{{ form.avatar.id_for_label }}");
+  var preview = document.querySelector("[data-profile-avatar-preview]");
+  if (!input || !preview) return;
+  input.addEventListener("change", function () {
+    var file = input.files && input.files[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    if (preview.tagName === "IMG") {
+      preview.src = URL.createObjectURL(file);
+      return;
+    }
+    var img = document.createElement("img");
+    img.className = "staff-profile-hero__avatar staff-profile-hero__avatar--photo";
+    img.alt = "";
+    img.setAttribute("data-profile-avatar-preview", "");
+    img.src = URL.createObjectURL(file);
+    preview.replaceWith(img);
+  });
+})();
+</script>
 {% endblock %}

@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from accounts.managers import UserManager
+from accounts.validators import validate_avatar_upload
 
 phone_validator = RegexValidator(
     regex=r"^\+?[\d\s\-().]{7,20}$",
@@ -26,6 +27,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=20,
         blank=True,
         validators=[phone_validator],
+    )
+    avatar = models.ImageField(
+        _("profile photo"),
+        upload_to="avatars/%Y/%m/",
+        blank=True,
+        null=True,
+        validators=[validate_avatar_upload],
     )
     role = models.CharField(
         _("role"),
@@ -60,3 +68,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.full_name
+
+    def get_initials(self):
+        if self.first_name:
+            initial = self.first_name.strip()[:1]
+            if self.last_name:
+                return f"{initial}{self.last_name.strip()[:1]}".upper()
+            return initial.upper()
+        if self.email:
+            return self.email[:1].upper()
+        return "?"

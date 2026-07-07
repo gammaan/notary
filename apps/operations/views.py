@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DetailView, ListView, TemplateView, UpdateView, View
 
-from accounts.forms import UserProfileForm
+from accounts.forms import StaffProfileForm, UserProfileForm
 from accounts.permissions import can_delete_records
 from operations.audit import log_audit, log_status_change
 from operations.finance import global_finance_summary, matter_finance_summary
@@ -1521,7 +1521,7 @@ class AuditLogListPrintView(StaffListPrintMixin, ManagerRequiredMixin, ListView)
 
 
 class StaffProfileView(StaffRequiredMixin, UpdateView):
-    form_class = UserProfileForm
+    form_class = StaffProfileForm
     template_name = "operations/profile.html"
 
     def get_object(self, queryset=None):
@@ -1529,6 +1529,33 @@ class StaffProfileView(StaffRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("staff:profile")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        user = self.request.user
+        ctx["profile_stats"] = [
+            {
+                "label": _("Matters assigned"),
+                "value": Matter.objects.filter(assigned_to=user).count(),
+                "icon": "fa-briefcase",
+            },
+            {
+                "label": _("Transactions recorded"),
+                "value": Transaction.objects.filter(recorded_by=user).count(),
+                "icon": "fa-wallet",
+            },
+            {
+                "label": _("Documents uploaded"),
+                "value": Document.objects.filter(uploaded_by=user).count(),
+                "icon": "fa-file-lines",
+            },
+            {
+                "label": _("Actions logged"),
+                "value": AuditLog.objects.filter(user=user).count(),
+                "icon": "fa-clipboard-list",
+            },
+        ]
+        return ctx
 
     def form_valid(self, form):
         messages.success(self.request, _("Profile updated successfully."))

@@ -114,6 +114,38 @@ class UserProfileForm(forms.ModelForm):
         }
 
 
+class StaffProfileForm(UserProfileForm):
+    clear_avatar = forms.BooleanField(
+        label=_("Remove current photo"),
+        required=False,
+    )
+
+    class Meta(UserProfileForm.Meta):
+        fields = UserProfileForm.Meta.fields + ("avatar",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from operations.widgets import StaffFileUploadWidget
+
+        self.fields["avatar"].required = False
+        self.fields["avatar"].widget = StaffFileUploadWidget(
+            layout="zone",
+            drop_label=_("Upload profile photo"),
+            hint=_("JPG, PNG or WebP · max 2 MB"),
+        )
+        if not self.instance.avatar:
+            del self.fields["clear_avatar"]
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if self.cleaned_data.get("clear_avatar") and user.avatar:
+            user.avatar.delete(save=False)
+            user.avatar = None
+        if commit:
+            user.save()
+        return user
+
+
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

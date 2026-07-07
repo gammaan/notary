@@ -122,7 +122,9 @@
                             aria-expanded="false"
                             aria-controls="staff-profile-dropdown"
                             aria-haspopup="menu">
-                        <span class="staff-profile-trigger__avatar" aria-hidden="true">{{ user.first_name|first|default:user.email|first|upper }}</span>
+                        <span class="staff-profile-trigger__avatar{% if user.avatar %} staff-profile-trigger__avatar--photo{% endif %}" aria-hidden="true">
+                            {% if user.avatar %}<img src="{{ user.avatar.url }}" alt="">{% else %}{{ user.get_initials }}{% endif %}
+                        </span>
                         <span class="staff-profile-trigger__info">
                             <strong>{{ user.get_full_name|default:user.email }}</strong>
                             <small>{% trans "Signed as" %} {{ user.get_role_display }}</small>
@@ -130,7 +132,9 @@
                     </button>
                     <div class="staff-profile-dropdown" id="staff-profile-dropdown" role="menu" hidden>
                         <div class="staff-profile-dropdown__header">
-                            <span class="staff-profile-dropdown__avatar" aria-hidden="true">{{ user.first_name|first|default:user.email|first|upper }}</span>
+                            <span class="staff-profile-dropdown__avatar{% if user.avatar %} staff-profile-dropdown__avatar--photo{% endif %}" aria-hidden="true">
+                                {% if user.avatar %}<img src="{{ user.avatar.url }}" alt="">{% else %}{{ user.get_initials }}{% endif %}
+                            </span>
                             <div>
                                 <strong>{{ user.get_full_name|default:user.email }}</strong>
                                 <small>{{ user.email }}</small>

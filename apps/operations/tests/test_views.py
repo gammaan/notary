@@ -96,3 +96,19 @@ class StaffPortalTests(TestCase):
         )
         self.assertRedirects(response, target)
         self.assertEqual(anon.get(target).status_code, 200)
+
+    def test_staff_profile_page_shows_stats(self):
+        Matter.objects.filter(pk=self.matter.pk).update(assigned_to=self.staff)
+        Transaction.objects.create(
+            matter=self.matter,
+            transaction_type=Transaction.Type.INCOME,
+            description="Fee",
+            amount=Decimal("50"),
+            status=Transaction.Status.PAID,
+            recorded_by=self.staff,
+        )
+        response = self.http.get(reverse("staff:profile"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Matters assigned")
+        self.assertContains(response, "Transactions recorded")
+        self.assertContains(response, self.staff.email)

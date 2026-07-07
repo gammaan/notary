@@ -273,6 +273,16 @@ html[dir="rtl"] .staff-profile-trigger, html[dir="rtl"] .app-profile-trigger{
   font-size: 0.95rem;
   font-weight: 800;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.staff-profile-trigger__avatar--photo img,
+.staff-profile-dropdown__avatar--photo img,
+.app-profile-trigger__avatar--photo img,
+.app-profile-dropdown__avatar--photo img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .staff-profile-trigger__info, .app-profile-trigger__info{
@@ -334,6 +344,7 @@ html[dir="rtl"] .staff-profile-trigger, html[dir="rtl"] .app-profile-trigger{
   color: var(--accent-light);
   font-weight: 800;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .staff-profile-dropdown__header strong, .app-profile-dropdown__header strong{
@@ -2869,6 +2880,128 @@ html[dir="rtl"] .staff-action-menu__panel, html[dir="rtl"] .app-action-menu__pan
 
 .staff-matter-meta--compact, .app-matter-meta--compact{
     grid-template-columns: 1fr;
+  }
+}
+
+/* ── Staff profile page ── */
+
+.staff-profile-page, .app-profile-page{
+  display: grid;
+  gap: 28px;
+}
+
+.staff-profile-hero, .app-profile-hero{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 12%, transparent), transparent 55%),
+    color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.staff-profile-hero__avatar-wrap, .app-profile-hero__avatar-wrap{
+  flex-shrink: 0;
+}
+
+.staff-profile-hero__avatar, .app-profile-hero__avatar{
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--surface-raised);
+  color: var(--accent-light);
+  font-size: 2rem;
+  font-weight: 800;
+  overflow: hidden;
+}
+
+.staff-profile-hero__avatar--photo, .app-profile-hero__avatar--photo{
+  object-fit: cover;
+}
+
+.staff-profile-hero__meta, .app-profile-hero__meta{
+  min-width: 0;
+}
+
+.staff-profile-hero__name, .app-profile-hero__name{
+  margin: 6px 0 4px;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 500;
+}
+
+.staff-profile-hero__email, .app-profile-hero__email{
+  margin: 0 0 14px;
+}
+
+.staff-profile-hero__tags, .app-profile-hero__tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.staff-stats--profile, .app-stats--profile{
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 0;
+}
+
+.staff-stat--profile .staff-stat__label i, .app-stat--profile .app-stat__label i{
+  margin-inline-end: 6px;
+  opacity: 0.75;
+}
+
+.staff-grid-2--profile, .app-grid-2--profile{
+  align-items: start;
+}
+
+.staff-dl--profile, .app-dl--profile{
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.staff-dl--profile dt, .app-dl--profile dt{
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.staff-dl--profile dd, .app-dl--profile dd{
+  margin: 4px 0 0;
+  font-size: 1rem;
+}
+
+.staff-profile-note, .app-profile-note{
+  margin-top: 20px;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 900px) {
+  .staff-stats--profile, .app-stats--profile{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .staff-stats--profile, .app-stats--profile{
+    grid-template-columns: 1fr;
+  }
+
+  .staff-profile-hero, .app-profile-hero{
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .staff-profile-hero__tags, .app-profile-hero__tags{
+    justify-content: center;
   }
 }
 
