@@ -26,8 +26,10 @@ COPY . .
 RUN DJANGO_DEBUG=true python manage.py collectstatic --noinput \
     && chmod +x scripts/entrypoint.sh \
     && adduser --disabled-password --gecos "" appuser \
-    && mkdir -p /data/media media staticfiles \
-    && chown -R appuser:appuser /app /data
+    && mkdir -p /app/data/media media staticfiles \
+    && chown -R appuser:appuser /app
+
+ENV DATA_DIR=/app/data
 
 USER appuser
 

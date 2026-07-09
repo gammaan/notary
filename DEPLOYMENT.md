@@ -87,11 +87,11 @@ If you use `USE_SQLITE=true`, mount a **persistent volume**:
 
 | Container path | Purpose |
 |----------------|---------|
-| `/data` | SQLite database (`db.sqlite3`) and `media/` uploads |
+| `/app/data` | SQLite database (`db.sqlite3`) and `media/` uploads |
 
-Set `DATA_DIR=/data` in your environment variables.
+Set `DATA_DIR=/app/data` in your environment variables (this is the default).
 
-Without the volume, every redeploy gives you an empty database (causing errors like `no such table: cms_post`) and no uploaded files.
+Do **not** use `/data` unless you mount and permission that path yourself. Coolify/Nixpacks often make `/app` read-only, so the database cannot live in `/app/db.sqlite3`.
 
 ### Why styles disappear
 

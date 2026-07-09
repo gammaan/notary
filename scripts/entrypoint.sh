@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DATA_DIR="${DATA_DIR:-/app}"
-mkdir -p "$DATA_DIR" "$DATA_DIR/media"
+export DATA_DIR="${DATA_DIR:-/app/data}"
+export MEDIA_ROOT="${MEDIA_ROOT:-$DATA_DIR/media}"
+
+mkdir -p "$DATA_DIR" "$MEDIA_ROOT"
+
+if ! touch "$DATA_DIR/.write-test" 2>/dev/null; then
+  echo "ERROR: DATA_DIR ($DATA_DIR) is not writable by $(whoami)." >&2
+  echo "Mount a persistent volume at /app/data or fix volume permissions." >&2
+  exit 1
+fi
+rm -f "$DATA_DIR/.write-test"
 
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput

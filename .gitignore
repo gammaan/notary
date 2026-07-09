@@ -12,6 +12,7 @@ ENV/
 # Django
 db.sqlite3
 db.sqlite3-journal
+data/
 *.log
 local_settings.py
 media/
