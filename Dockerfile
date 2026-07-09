@@ -23,10 +23,11 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN chmod +x scripts/entrypoint.sh \
+RUN DJANGO_DEBUG=true python manage.py collectstatic --noinput \
+    && chmod +x scripts/entrypoint.sh \
     && adduser --disabled-password --gecos "" appuser \
-    && mkdir -p media staticfiles \
-    && chown -R appuser:appuser /app
+    && mkdir -p /data/media media staticfiles \
+    && chown -R appuser:appuser /app /data
 
 USER appuser
 

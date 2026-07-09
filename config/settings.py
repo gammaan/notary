@@ -144,6 +144,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+_data_dir = _env("DATA_DIR")
+DATA_DIR = Path(_data_dir) if _data_dir else BASE_DIR
+
 _database_url = resolve_database_url()
 _use_sqlite = env_bool("USE_SQLITE", False)
 
@@ -160,7 +163,7 @@ elif DEBUG or _use_sqlite:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": DATA_DIR / "db.sqlite3",
         }
     }
 else:
@@ -216,7 +219,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / os.environ.get("STATIC_ROOT", "staticfiles")
 
 MEDIA_URL = os.environ.get("MEDIA_URL", "/media/")
-MEDIA_ROOT = BASE_DIR / os.environ.get("MEDIA_ROOT", "media")
+_media_root = _env("MEDIA_ROOT")
+MEDIA_ROOT = Path(_media_root) if _media_root else DATA_DIR / "media"
 
 STORAGES = {
     "default": {

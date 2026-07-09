@@ -60,6 +60,43 @@ See [.env.example](.env.example) for the full variable list.
 
 **Quick demo without Postgres:** set `USE_SQLITE=true` (ephemeral — data resets on redeploy unless you attach persistent storage).
 
+## Coolify
+
+Coolify runs your app in a **disposable container**. Anything written inside the container (SQLite file, uploads) is **deleted on every redeploy or restart** unless you attach persistent storage.
+
+### Recommended: PostgreSQL
+
+1. Add a **PostgreSQL** database in Coolify and copy its connection URL.
+2. Set on your app:
+   ```env
+   DJANGO_DEBUG=false
+   DATABASE_URL=postgres://user:pass@host:5432/notary
+   DJANGO_SECRET_KEY=<long-random-key>
+   DJANGO_ALLOWED_HOSTS=notary.gammaan.com
+   SITE_URL=https://notary.gammaan.com
+   CSRF_TRUSTED_ORIGINS=https://notary.gammaan.com
+   ```
+3. Use the **Dockerfile** build (not a bare Procfile start command).
+4. Start command: `./scripts/entrypoint.sh` (runs migrations + collectstatic, then Gunicorn).
+
+PostgreSQL keeps your data across redeploys. Static CSS/JS is baked into the Docker image at build time.
+
+### SQLite demo (with persistence)
+
+If you use `USE_SQLITE=true`, mount a **persistent volume**:
+
+| Container path | Purpose |
+|----------------|---------|
+| `/data` | SQLite database (`db.sqlite3`) and `media/` uploads |
+
+Set `DATA_DIR=/data` in your environment variables.
+
+Without the volume, every redeploy gives you an empty database (causing errors like `no such table: cms_post`) and no uploaded files.
+
+### Why styles disappear
+
+Static files live in `staticfiles/` inside the container. If Coolify starts Gunicorn directly (skipping `entrypoint.sh`) and does not run `collectstatic` during the Docker build, CSS/JS return 404 after redeploy. The Dockerfile now runs `collectstatic` at build time; `entrypoint.sh` runs it again on startup as a safety net.
+
 ## Static and media
 
 - **Static** — collected to `staticfiles/`; served by WhiteNoise or nginx
