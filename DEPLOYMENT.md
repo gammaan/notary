@@ -41,6 +41,25 @@ USE_PROXY_SSL_HEADER=true
 
 See [.env.example](.env.example) for the full variable list.
 
+## Railway
+
+1. Create a **PostgreSQL** service in the same project.
+2. In your **web service** → **Variables**, reference the database URL:
+   - Add variable `DATABASE_URL` → value `${{Postgres.DATABASE_URL}}`  
+     (use your Postgres service name if different)
+3. Do **not** set `DATABASE_URL` to an empty string — that overrides the linked value.
+4. Set at minimum:
+   ```env
+   DJANGO_DEBUG=false
+   DJANGO_SECRET_KEY=<long-random-key>
+   DJANGO_ALLOWED_HOSTS=your-app.up.railway.app
+   SITE_URL=https://your-app.up.railway.app
+   CSRF_TRUSTED_ORIGINS=https://your-app.up.railway.app
+   ```
+5. Redeploy. Migrations run via `scripts/entrypoint.sh` on startup.
+
+**Quick demo without Postgres:** set `USE_SQLITE=true` (ephemeral — data resets on redeploy unless you attach persistent storage).
+
 ## Static and media
 
 - **Static** — collected to `staticfiles/`; served by WhiteNoise or nginx

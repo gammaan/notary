@@ -1,6 +1,7 @@
 ﻿from pathlib import Path
 import os
 import sys
+import urllib.parse as up
 
 import django.conf.locale
 from django.core.exceptions import ImproperlyConfigured
@@ -25,6 +26,57 @@ def env_bool(name, default=False):
 
 def env_list(name, default=""):
     return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
+
+
+def _env(name):
+    value = os.environ.get(name, "").strip()
+    return value or None
+
+
+def resolve_database_url():
+    """Resolve PostgreSQL URL from common hosting env var names."""
+    for name in ("DATABASE_URL", "POSTGRES_URL", "DATABASE_PRIVATE_URL"):
+        url = _env(name)
+        if url:
+            return url
+
+    host = _env("PGHOST")
+    user = _env("PGUSER")
+    database = _env("PGDATABASE")
+    if host and user and database:
+        password = _env("PGPASSWORD") or ""
+        port = _env("PGPORT") or "5432"
+        password_part = f":{up.quote(password, safe='')}" if password else ""
+        return (
+            f"postgres://{up.quote(user, safe='')}{password_part}"
+            f"@{host}:{port}/{database}"
+        )
+
+    return None
+
+
+def configure_postgres_database(database_url):
+    url = up.urlparse(database_url)
+    options = {}
+    query = up.parse_qs(url.query)
+
+    if env_bool("DATABASE_SSL", False):
+        options["sslmode"] = "require"
+    elif "sslmode" in query:
+        options["sslmode"] = query["sslmode"][0]
+
+    return {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": url.path.lstrip("/"),
+            "USER": up.unquote(url.username or ""),
+            "PASSWORD": up.unquote(url.password or ""),
+            "HOST": url.hostname,
+            "PORT": url.port or 5432,
+            "CONN_MAX_AGE": int(os.environ.get("DATABASE_CONN_MAX_AGE", "600")),
+            "OPTIONS": options,
+        }
+    }
 
 
 DEBUG = env_bool("DJANGO_DEBUG", True)
@@ -92,25 +144,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-if os.environ.get("DATABASE_URL"):
-    import urllib.parse as up
+_database_url = resolve_database_url()
+_use_sqlite = env_bool("USE_SQLITE", False)
 
-    url = up.urlparse(os.environ["DATABASE_URL"])
+if TESTING:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": url.path[1:],
-            "USER": url.username,
-            "PASSWORD": url.password,
-            "HOST": url.hostname,
-            "PORT": url.port or 5432,
-            "CONN_MAX_AGE": int(os.environ.get("DATABASE_CONN_MAX_AGE", "600")),
-            "OPTIONS": {},
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-    if env_bool("DATABASE_SSL", False):
-        DATABASES["default"]["OPTIONS"]["sslmode"] = "require"
-elif DEBUG or TESTING:
+elif _database_url:
+    DATABASES = configure_postgres_database(_database_url)
+elif DEBUG or _use_sqlite:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -119,7 +165,10 @@ elif DEBUG or TESTING:
     }
 else:
     raise ImproperlyConfigured(
-        "DATABASE_URL is required when DJANGO_DEBUG is false (use PostgreSQL in production)."
+        "DATABASE_URL is required when DJANGO_DEBUG is false. "
+        "Add PostgreSQL and set DATABASE_URL (on Railway: create a Postgres "
+        "service and reference its DATABASE_URL in your web service variables). "
+        "For a short-lived demo only, set USE_SQLITE=true — not for real production."
     )
 
 AUTH_PASSWORD_VALIDATORS = [
