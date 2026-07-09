@@ -8,6 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="any">
     <title>{% block title %}{% if seo_title %}{{ seo_title }}{% else %}{% trans "Notaria Notary | The Art of Certainty" %}{% endif %}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{% if seo_description %}{{ seo_description }}{% else %}{% trans 'Notaria Notary — trusted notarial services, a clear process from first contact to sealed documents, and an easy way to book your appointment.' %}{% endif %}{% endblock %}">
     {% if seo_url %}<link rel="canonical" href="{{ seo_url }}">{% endif %}

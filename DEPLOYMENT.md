@@ -77,7 +77,7 @@ If you see `ModuleNotFoundError: No module named 'gammaan'`:
 
 **Better:** switch the build pack to **Dockerfile** (uses our `Dockerfile` + `ENTRYPOINT` automatically).
 
-The repo includes `nixpacks.toml` so Nixpacks builds also use the correct start command. A `gammaan/wsgi.py` shim also exists so an incorrect `gammaan.wsgi:application` start command still works after redeploy.
+The repo includes `nixpacks.toml` so Nixpacks builds also use the correct start command.
 
 **Correct start command** (paste in Coolify → General → Start Command):
 

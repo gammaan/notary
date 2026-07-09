@@ -238,6 +238,11 @@
   box-shadow: 0 24px 48px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
+.profile-hero__avatar--photo {
+  display: block;
+  object-fit: cover;
+}
+
 .profile-hero__seal {
   position: absolute;
   right: -8px;

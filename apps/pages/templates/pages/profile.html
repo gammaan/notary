@@ -1,5 +1,5 @@
 {% extends "core/base_public.html" %}
-{% load i18n %}
+{% load static i18n %}
 
 {% block title %}{{ profile.name }} | {% trans "Notary Profile" %} | {{ company.brand.name }}{% endblock %}
 {% block meta_description %}{{ profile.summary }}{% endblock %}
@@ -8,7 +8,11 @@
 <section class="profile-hero">
     <div class="profile-hero__layout">
         <div class="profile-hero__visual" data-reveal>
-            <div class="profile-hero__avatar" aria-hidden="true">{{ profile.initials }}</div>
+            <img class="profile-hero__avatar profile-hero__avatar--photo"
+                 src="{% static 'images/profile.jpg' %}"
+                 alt="{{ profile.name }}"
+                 width="168"
+                 height="168">
             <div class="profile-hero__seal">
                 <span>{{ company.brand.seal_letter }}</span>
             </div>

@@ -1,4 +1,2 @@
-# Coolify/Railway Nixpacks: override auto-detected WSGI module (often wrong).
-# This project uses config/wsgi.py — not gammaan.wsgi or notary.wsgi.
 [start]
 cmd = "bash scripts/entrypoint.sh"
