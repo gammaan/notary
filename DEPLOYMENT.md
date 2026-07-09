@@ -64,6 +64,33 @@ See [.env.example](.env.example) for the full variable list.
 
 Coolify runs your app in a **disposable container**. Anything written inside the container (SQLite file, uploads) is **deleted on every redeploy or restart** unless you attach persistent storage.
 
+### Build pack and start command (important)
+
+Nixpacks often **guesses the wrong WSGI module** (e.g. `gammaan.wsgi` from the GitHub org name). This project uses **`config.wsgi:application`**.
+
+If you see `ModuleNotFoundError: No module named 'gammaan'`:
+
+1. Open your app in Coolify → **General** → **Start Command**
+2. Set it to: `bash scripts/entrypoint.sh`
+3. Clear any custom command like `gunicorn gammaan.wsgi:application`
+4. Redeploy
+
+**Better:** switch the build pack to **Dockerfile** (uses our `Dockerfile` + `ENTRYPOINT` automatically).
+
+The repo includes `nixpacks.toml` so Nixpacks builds also use the correct start command. A `gammaan/wsgi.py` shim also exists so an incorrect `gammaan.wsgi:application` start command still works after redeploy.
+
+**Correct start command** (paste in Coolify → General → Start Command):
+
+```bash
+bash scripts/entrypoint.sh
+```
+
+Or inline:
+
+```bash
+python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3 --timeout 120 --access-logfile - --error-logfile -
+```
+
 ### Recommended: PostgreSQL
 
 1. Add a **PostgreSQL** database in Coolify and copy its connection URL.
