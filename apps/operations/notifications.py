@@ -13,7 +13,7 @@ def _send(subject, body, recipients):
         body,
         settings.DEFAULT_FROM_EMAIL,
         recipients,
-        fail_silently=True,
+        fail_silently=getattr(settings, "DEBUG", True),
     )
 
 

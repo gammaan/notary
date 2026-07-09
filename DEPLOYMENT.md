@@ -1,0 +1,80 @@
+# Production deployment guide
+
+This document covers everything required to run Notaria Notary safely in production.
+
+## Pre-flight checklist
+
+- [ ] Copy `.env.example` to `.env` and fill in all production values
+- [ ] `DJANGO_DEBUG=false`
+- [ ] Strong `DJANGO_SECRET_KEY` (never commit or reuse across environments)
+- [ ] PostgreSQL via `DATABASE_URL` (do not use SQLite in production)
+- [ ] `SITE_URL` set to your public HTTPS URL (no trailing slash)
+- [ ] `DJANGO_ALLOWED_HOSTS` includes your domain(s)
+- [ ] `CSRF_TRUSTED_ORIGINS` includes your HTTPS origin(s)
+- [ ] SMTP email configured
+- [ ] Run `python manage.py migrate`
+- [ ] Run `python manage.py collectstatic --noinput`
+- [ ] Create staff users and seed service types
+- [ ] Reverse proxy terminates TLS and sets `X-Forwarded-Proto`
+- [ ] Persistent volume for `media/`
+- [ ] Backups for PostgreSQL and media
+- [ ] Verify `GET /health/` returns OK
+
+## Minimum production `.env`
+
+```env
+DJANGO_SECRET_KEY=<generate-a-long-random-key>
+DJANGO_DEBUG=false
+DJANGO_ALLOWED_HOSTS=notary.example.com
+SITE_URL=https://notary.example.com
+CSRF_TRUSTED_ORIGINS=https://notary.example.com
+DATABASE_URL=postgres://user:pass@host:5432/notary
+CONTACT_EMAIL=office@notary.example.com
+DEFAULT_FROM_EMAIL=noreply@notary.example.com
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=...
+EMAIL_HOST_PASSWORD=...
+EMAIL_USE_TLS=true
+USE_PROXY_SSL_HEADER=true
+```
+
+See [.env.example](.env.example) for the full variable list.
+
+## Static and media
+
+- **Static** — collected to `staticfiles/`; served by WhiteNoise or nginx
+- **Media** — user uploads in `media/`; serve via nginx (see `scripts/nginx.conf.example`)
+
+## Gunicorn
+
+```bash
+gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+```
+
+Or use `Procfile`, `scripts/entrypoint.sh`, or Docker Compose.
+
+## Docker Compose
+
+```bash
+cp .env.example .env
+docker compose up --build -d
+docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py seed_service_types
+```
+
+## Security (when `DJANGO_DEBUG=false`)
+
+- HTTPS redirect, secure cookies, HSTS
+- Required secret key, database URL, and site URL
+- Proxy SSL header support for reverse proxies
+
+Run before go-live:
+
+```bash
+DJANGO_DEBUG=false python manage.py check --deploy
+```
+
+## Health check
+
+`GET /health/` — JSON status with database connectivity.

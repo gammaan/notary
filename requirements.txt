@@ -1,2 +1,6 @@
 Django>=4.2,<5.0
+gunicorn>=21.2,<24
+whitenoise>=6.6,<7
+psycopg2-binary>=2.9,<3
 xhtml2pdf>=0.2.13
+python-dotenv>=1.0,<2

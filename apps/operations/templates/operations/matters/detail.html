@@ -68,7 +68,7 @@
                     <dl class="staff-matter-meta staff-matter-meta--compact">
                         <div class="staff-matter-meta__item">
                             <dt><i class="fa-solid fa-user" aria-hidden="true"></i> {% trans "Client" %}</dt>
-                            <dd><a href="{% url 'staff:client_detail' matter.client.uuid %}">{{ matter.client.full_name }}</a></dd>
+                            <dd><a class="staff-link" href="{% url 'staff:client_detail' matter.client.uuid %}">{{ matter.client.full_name }}</a></dd>
                         </div>
                         <div class="staff-matter-meta__item">
                             <dt><i class="fa-solid fa-stamp" aria-hidden="true"></i> {% trans "Service" %}</dt>

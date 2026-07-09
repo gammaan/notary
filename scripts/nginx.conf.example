@@ -1,0 +1,47 @@
+# Example nginx site config for production (place in /etc/nginx/sites-available/)
+#
+# Replace YOUR_DOMAIN with your hostname. Ensure Django env has:
+#   DJANGO_DEBUG=false
+#   SITE_URL=https://YOUR_DOMAIN
+#   CSRF_TRUSTED_ORIGINS=https://YOUR_DOMAIN
+#   USE_PROXY_SSL_HEADER=true
+
+upstream notary_app {
+    server 127.0.0.1:8000;
+}
+
+server {
+    listen 80;
+    server_name YOUR_DOMAIN www.YOUR_DOMAIN;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name YOUR_DOMAIN www.YOUR_DOMAIN;
+
+    # ssl_certificate     /etc/letsencrypt/live/YOUR_DOMAIN/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/YOUR_DOMAIN/privkey.pem;
+
+    client_max_body_size 12M;
+
+    location /static/ {
+        alias /var/www/notary/staticfiles/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /media/ {
+        alias /var/www/notary/media/;
+        expires 7d;
+    }
+
+    location / {
+        proxy_pass http://notary_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+}

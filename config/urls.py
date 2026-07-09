@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 
 from cms.views import blog_detail, blog_list, portfolio_detail, portfolio_list
+from config.views import health_check
 from config.sitemaps import PortfolioSitemap, PostSitemap, StaticViewSitemap
 from pages.robots import robots_txt
 from pages.views import home, privacy, profile_page, terms
@@ -16,6 +17,7 @@ sitemaps = {
 }
 
 urlpatterns = [
+    path("health/", health_check, name="health"),
     path("i18n/", include("django.conf.urls.i18n")),
     path("robots.txt", robots_txt, name="robots"),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
@@ -28,7 +30,8 @@ urlpatterns += i18n_patterns(
     path("profile/", profile_page, name="profile"),
     path("account/", include("accounts.urls")),
     path("portal/", include("accounts.portal_urls")),
-    path("staff/", include("operations.urls")),    path("news/", blog_list, name="blog_list"),
+    path("staff/", include("operations.urls")),
+    path("news/", blog_list, name="blog_list"),
     path("news/<slug:slug>/", blog_detail, name="blog_detail"),
     path("portfolio/", portfolio_list, name="portfolio_list"),
     path("portfolio/<slug:slug>/", portfolio_detail, name="portfolio_detail"),

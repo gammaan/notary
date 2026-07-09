@@ -19,7 +19,9 @@ staticfiles/
 
 # Environment
 .env
-.env.*
+.env.local
+.env.*.local
+!.env.example
 
 # IDE / OS
 .idea/
