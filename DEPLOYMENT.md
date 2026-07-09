@@ -91,24 +91,73 @@ Or inline:
 python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3 --timeout 120 --access-logfile - --error-logfile -
 ```
 
-### Recommended: PostgreSQL
+### PostgreSQL on Coolify (recommended)
 
-1. Add a **PostgreSQL** database in Coolify and copy its connection URL.
-2. Set on your app:
-   ```env
-   DJANGO_DEBUG=false
-   DATABASE_URL=postgres://user:pass@host:5432/notary
-   DJANGO_SECRET_KEY=<long-random-key>
-   DJANGO_ALLOWED_HOSTS=notary.gammaan.com
-   SITE_URL=https://notary.gammaan.com
-   CSRF_TRUSTED_ORIGINS=https://notary.gammaan.com
-   ```
-3. Use the **Dockerfile** build (not a bare Procfile start command).
-4. Start command: `./scripts/entrypoint.sh` (runs migrations + collectstatic, then Gunicorn).
+SQLite inside the app container is **wiped on every redeploy**. Use a separate **PostgreSQL** service so database data survives restarts. This project supports PostgreSQL out of the box (`DATABASE_URL` in settings); MySQL is not configured.
 
-PostgreSQL keeps your data across redeploys. Static CSS/JS is baked into the Docker image at build time.
+#### Checklist
 
-### SQLite demo (with persistence)
+- [ ] Create a **PostgreSQL** database service in the same Coolify project
+- [ ] Copy the **internal** connection URL from the database service (host is usually the DB container name, not `localhost`)
+- [ ] In the **web app** → **Environment Variables**, set `DATABASE_URL` (see below)
+- [ ] **Remove** `USE_SQLITE=true` if it is set
+- [ ] **Remove** any empty `DATABASE_URL=` variable that would override a linked value
+- [ ] Set production vars: `DJANGO_DEBUG=false`, `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `SITE_URL`, `CSRF_TRUSTED_ORIGINS`
+- [ ] Build pack: **Dockerfile** (recommended) or Nixpacks with start command `bash scripts/entrypoint.sh`
+- [ ] Mount a persistent volume at **`/app/data`** and set `DATA_DIR=/app/data` for user uploads (avatars, documents)
+- [ ] Redeploy — `entrypoint.sh` runs `migrate` automatically on startup
+- [ ] Run once on the new database: `python manage.py createsuperuser` and `python manage.py seed_service_types`
+- [ ] Verify `GET /health/` returns OK
+
+#### Environment variables
+
+```env
+DJANGO_DEBUG=false
+DATABASE_URL=postgres://postgres:YOUR_PASSWORD@YOUR_DB_HOST:5432/notary
+DJANGO_SECRET_KEY=<long-random-key>
+DJANGO_ALLOWED_HOSTS=notary.gammaan.com
+SITE_URL=https://notary.gammaan.com
+CSRF_TRUSTED_ORIGINS=https://notary.gammaan.com
+DATA_DIR=/app/data
+```
+
+Coolify often provides a URL ending in `/postgres`. Change the database name to `/notary`, or create a `notary` database in Postgres first.
+
+If Coolify supports referencing the database service, you can link it (adjust the service name if different):
+
+```env
+DATABASE_URL=postgres://postgres:password@your-postgres-container:5432/notary
+```
+
+#### After switching from SQLite
+
+PostgreSQL starts **empty**. You must recreate staff users and seed data. Existing SQLite data is not migrated automatically.
+
+Run via Coolify **Execute Command** on the web container:
+
+```bash
+python manage.py createsuperuser
+python manage.py seed_service_types
+```
+
+#### What persists where
+
+| Data | Storage | Survives redeploy? |
+|------|---------|-------------------|
+| Users, matters, clients, CMS | PostgreSQL service | Yes |
+| Staff avatars, uploaded documents | `/app/data/media` volume | Yes (if volume mounted) |
+| Static CSS/JS | Baked into Docker image + `collectstatic` | Yes |
+| SQLite in container | `/app/data/db.sqlite3` | Only with volume; not for production |
+
+#### Start command
+
+Use the **Dockerfile** build pack (uses `ENTRYPOINT` automatically), or set **Start Command** to:
+
+```bash
+bash scripts/entrypoint.sh
+```
+
+### SQLite demo (not for production)
 
 If you use `USE_SQLITE=true`, mount a **persistent volume**:
 
